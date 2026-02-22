@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Save Meme logo">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#d6d8e0" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0a0a12" stop-opacity="1"/>
+    </radialGradient>
+    <linearGradient id="ringWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#faf8f0"/>
+      <stop offset="100%" stop-color="#ece8de"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff9d44"/>
+      <stop offset="100%" stop-color="#ff5a2b"/>
+    </linearGradient>
+    <linearGradient id="dolphin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b8c8d5"/>
+      <stop offset="100%" stop-color="#7c91a4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bgGlow)"/>
+
+  <circle cx="256" cy="256" r="230" fill="url(#ringWhite)" stroke="#122d4f" stroke-width="8"/>
+  <path d="M40 326 A230 230 0 0 1 472 326 L434 348 A186 186 0 0 0 78 348 Z" fill="#ff5e4b"/>
+  <path d="M168 471 A230 230 0 0 1 344 471 L332 437 A188 188 0 0 0 180 437 Z" fill="#ff5e4b"/>
+
+  <path d="M124 186 C165 142, 240 132, 312 150 C370 166, 410 202, 390 240 C370 279, 311 294, 244 292 C182 291, 128 268, 109 233 C98 213, 107 200, 124 186 Z"
+        fill="url(#dolphin)" stroke="#15325a" stroke-width="6"/>
+  <path d="M174 346 C214 324, 302 314, 356 330 C382 338, 382 372, 348 388 C298 411, 222 413, 174 396 C147 387, 146 361, 174 346 Z"
+        fill="url(#orange)" stroke="#15325a" stroke-width="6"/>
+  <path d="M197 318 C221 334, 300 351, 346 351" fill="none" stroke="#15325a" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="235" cy="186" r="7" fill="#0d2544"/>
+  <circle cx="238" cy="183" r="2.5" fill="#ffffff"/>
+
+  <text x="256" y="88" text-anchor="middle" font-size="52" font-weight="700" fill="#102b4d" font-family="Trebuchet MS, Arial, sans-serif" letter-spacing="2">
+    SAVE MEME
+  </text>
+</svg>

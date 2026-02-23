@@ -30,6 +30,8 @@ export default function SwapCard({ onSwapDataChange }) {
    const PLATFORM_FEE_PERCENT = 0.5;
    const PLATFORM_FEE_RATE = PLATFORM_FEE_PERCENT / 100;
    const { selectedNetwork, accountBalances, account, walletType, connectWallet, isConnecting } = useWallet();
+   const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+   const evmConnectType = isMobile ? 'walletconnect' : 'bnb';
    const [fromToken, setFromToken] = useState(null);
    const [toToken, setToToken] = useState(null);
    const [fromAmount, setFromAmount] = useState('');
@@ -1121,7 +1123,7 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             </button>
 
             <button
-              onClick={() => handleWalletSelect('bnb', 'Binance Web3')}
+              onClick={() => handleWalletSelect(evmConnectType, 'Binance Web3')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
@@ -1134,7 +1136,7 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             </button>
 
             <button
-              onClick={() => handleWalletSelect('bnb', 'MetaMask')}
+              onClick={() => handleWalletSelect(evmConnectType, 'MetaMask')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
@@ -1147,7 +1149,7 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             </button>
 
             <button
-              onClick={() => handleWalletSelect('bnb', 'Trust Wallet')}
+              onClick={() => handleWalletSelect(evmConnectType, 'Trust Wallet')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-lime-500 flex items-center justify-center">
@@ -1160,7 +1162,7 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             </button>
 
             <button
-              onClick={() => handleWalletSelect('bnb', 'Ethereum')}
+              onClick={() => handleWalletSelect(evmConnectType, 'Ethereum')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-blue-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">

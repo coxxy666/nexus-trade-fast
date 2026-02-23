@@ -111,7 +111,7 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Network & Wallet Controls */}
             <div className="flex items-center gap-3">
-              <div className="sm:hidden">
+              <div className="sm:hidden relative z-[70] shrink-0 pointer-events-auto">
                 <WalletButton compact />
               </div>
               <div className="hidden sm:block">
@@ -120,8 +120,9 @@ export default function Layout({ children, currentPageName }) {
 
               {/* Mobile menu button */}
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
+                className="md:hidden relative z-[70] p-2 rounded-lg hover:bg-white/5 transition-colors"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>

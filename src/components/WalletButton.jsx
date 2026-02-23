@@ -44,15 +44,17 @@ export default function WalletButton({ compact = false }) {
   return (
     <>
       <Button 
-        onClick={() => setShowWalletModal(true)}
-        disabled={isConnecting}
-        className={`bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium transition-all duration-300 hover:scale-105 ${compact ? 'px-3' : 'px-6'}`}
+        type="button"
+        onClick={() => {
+          if (!isConnecting) setShowWalletModal(true);
+        }}
+        className={`relative z-[80] pointer-events-auto touch-manipulation bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium transition-all duration-300 hover:scale-105 ${compact ? 'px-3' : 'px-6'}`}
       >
-        {isConnecting ? 'Connecting...' : (compact ? 'Wallet' : 'Connect Wallet')}
+        {isConnecting ? 'Connecting...' : (compact ? 'Connect' : 'Connect Wallet')}
       </Button>
 
       <Dialog open={showWalletModal} onOpenChange={setShowWalletModal}>
-        <DialogContent className="bg-[#12121a] border-white/10 text-white max-h-[80vh] overflow-y-auto">
+        <DialogContent className="z-[120] bg-[#12121a] border-white/10 text-white w-[95vw] max-w-md max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Connect Wallet</DialogTitle>
           </DialogHeader>

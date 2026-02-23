@@ -214,7 +214,7 @@ const entities = new Proxy(
 );
 
 const endpointMap = {
-  fetchMemeTokens: { method: 'GET', path: '/api/meme-tokens' },
+  fetchMemeTokens: { method: 'GET', path: '/api/meme-tokens-proxy' },
   fetchMemeTokensProxy: { method: 'GET', path: '/api/meme-tokens-proxy' },
   getAccountBalances: { method: 'POST', path: '/api/balances' },
   monitorTransaction: { method: 'POST', path: '/api/monitor' },

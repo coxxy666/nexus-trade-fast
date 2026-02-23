@@ -1,4 +1,4 @@
-﻿import { serve } from "https://deno.land/std/http/server.ts";
+import { serve } from "https://deno.land/std/http/server.ts";
 
 // Import your functions
 import { fetchMemeTokens } from "./functions/fetchMemeTokens.ts";
@@ -55,8 +55,9 @@ async function handler(req: Request): Promise<Response> {
   try {
     // Route to appropriate function
     if (path === "/api/meme-tokens") {
-      console.error(" Fetching meme tokens...");
-      return await fetchMemeTokens(req);
+      console.error(" Fetching meme tokens (proxy aggregator)...");
+      // Use proxy pipeline to avoid empty results when a single upstream fails.
+      return await fetchMemeTokensProxy(req);
     }
     
     if (path === "/api/meme-tokens-proxy") {

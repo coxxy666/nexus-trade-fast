@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, Settings, Info, Loader2, AlertCircle, ExternalLink, Copy } from 'lucide-react';
+import { ArrowDown, Settings, Info, Loader2, AlertCircle, ExternalLink, Copy, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -24,11 +24,12 @@ import { useMemeTokens } from '@/components/services/useMemeTokens';
 import { createLocalTransaction, updateLocalTransaction } from '@/lib/localTransactions';
 import { listLocalPools, updateLocalPool } from '@/lib/localPools';
 import { apiUrl } from '@/lib/apiUrl';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function SwapCard({ onSwapDataChange }) {
    const PLATFORM_FEE_PERCENT = 0.5;
    const PLATFORM_FEE_RATE = PLATFORM_FEE_PERCENT / 100;
-   const { selectedNetwork, accountBalances, account, walletType } = useWallet();
+   const { selectedNetwork, accountBalances, account, walletType, connectWallet, isConnecting } = useWallet();
    const [fromToken, setFromToken] = useState(null);
    const [toToken, setToToken] = useState(null);
    const [fromAmount, setFromAmount] = useState('');
@@ -51,6 +52,7 @@ export default function SwapCard({ onSwapDataChange }) {
    const [selectedRoute, setSelectedRoute] = useState(null);
    const [swapError, setSwapError] = useState('');
    const [activeTxRecordId, setActiveTxRecordId] = useState(null);
+   const [showConnectModal, setShowConnectModal] = useState(false);
    const queryClient = useQueryClient();
   
   const isCrossChain = selectedNetwork !== toNetwork;
@@ -612,6 +614,20 @@ export default function SwapCard({ onSwapDataChange }) {
     }
   };
 
+  const handleConnectWallet = async () => {
+    setSwapError('');
+    setShowConnectModal(true);
+  };
+
+  const handleWalletSelect = async (type, walletName) => {
+    try {
+      await connectWallet(type, walletName);
+      setShowConnectModal(false);
+    } catch {
+      // errors are handled by WalletContext alerts/toasts
+    }
+  };
+
 const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
   try {
     const { Connection, VersionedTransaction } = await import('@solana/web3.js');
@@ -730,7 +746,6 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
         const hasKnownPositiveBalance = Number.isFinite(balanceValue) && balanceValue > 0;
         const insufficientBalance = hasKnownPositiveBalance && amountValue > balanceValue;
         const disableSwap =
-          !account ||
           !fromAmount ||
           isSwapping ||
           !fromToken ||
@@ -998,11 +1013,11 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
           </div>
         )}
         <Button
-          onClick={handleSwap}
-          disabled={disableSwap}
+          onClick={!account ? handleConnectWallet : handleSwap}
+          disabled={!account ? isConnecting : disableSwap}
           className={cn(
             "w-full mt-6 h-14 rounded-2xl text-lg font-semibold transition-all duration-300",
-            fromAmount && !insufficientBalance
+            (!account || (fromAmount && !insufficientBalance))
               ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 hover:scale-[1.02]"
               : "bg-white/10 text-gray-500 cursor-not-allowed"
           )}
@@ -1011,6 +1026,11 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             <span className="flex items-center gap-2">
               <Loader2 className="w-5 h-5 animate-spin" />
               {txLoading || 'Swapping...'}
+            </span>
+          ) : !account && isConnecting ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Connecting...
             </span>
           ) : !account ? (
             "Connect wallet"
@@ -1065,6 +1085,93 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
         swapData={{ fromChain: selectedNetwork, toChain: toNetwork, amount: fromAmount, fromToken }}
         txHash={crossChainTxHash}
       />
+
+      <Dialog open={showConnectModal} onOpenChange={setShowConnectModal}>
+        <DialogContent className="bg-[#12121a] border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle>Connect Wallet</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 mt-4">
+            <button
+              onClick={() => handleWalletSelect('solana', 'phantom')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">Phantom Wallet</p>
+                <p className="text-xs text-gray-400">Connect to Solana network</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleWalletSelect('solana', 'solflare')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">Solflare Wallet</p>
+                <p className="text-xs text-gray-400">Connect to Solana network</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleWalletSelect('bnb', 'Binance Web3')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">Binance Web3</p>
+                <p className="text-xs text-gray-400">Connect to BNB Smart Chain</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleWalletSelect('bnb', 'MetaMask')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">MetaMask</p>
+                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleWalletSelect('bnb', 'Trust Wallet')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-lime-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">Trust Wallet</p>
+                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => handleWalletSelect('bnb', 'Ethereum')}
+              className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-blue-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
+            >
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold">Ethereum Wallet</p>
+                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+              </div>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

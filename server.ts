@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 
 // Import your functions
-import { fetchMemeTokens } from "./functions/fetchMemeTokens.ts";
 import { fetchMemeTokensProxy } from "./functions/fetchMemeTokensProxy.ts";
 import { getSwapQuote } from "./functions/getSwapQuote.ts";
 import { executeSwap } from "./functions/executeSwap.ts";
@@ -52,57 +51,67 @@ async function handler(req: Request): Promise<Response> {
     return new Response(null, { headers });
   }
 
+  const withCors = (res: Response) => {
+    const mergedHeaders = new Headers(res.headers);
+    Object.entries(headers).forEach(([key, value]) => mergedHeaders.set(key, value));
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers: mergedHeaders,
+    });
+  };
+
   try {
     // Route to appropriate function
     if (path === "/api/meme-tokens") {
       console.error(" Fetching meme tokens (proxy aggregator)...");
       // Use proxy pipeline to avoid empty results when a single upstream fails.
-      return await fetchMemeTokensProxy(req);
+      return withCors(await fetchMemeTokensProxy(req));
     }
     
     if (path === "/api/meme-tokens-proxy") {
       console.error(" Fetching meme tokens via proxy...");
-      return await fetchMemeTokensProxy(req);
+      return withCors(await fetchMemeTokensProxy(req));
     }
     
     if (path === "/api/swap-quote") {
       console.error(" Getting swap quote...");
-      return await getSwapQuote(req);
+      return withCors(await getSwapQuote(req));
     }
     
     if (path === "/api/execute-swap") {
       console.error(" Executing swap...");
-      return await executeSwap(req);
+      return withCors(await executeSwap(req));
     }
     
     if (path === "/api/balances") {
       console.error(" Getting account balances...");
-      return await getAccountBalances(req);
+      return withCors(await getAccountBalances(req));
     }
     
     if (path === "/api/monitor") {
       console.error(" Monitoring transaction...");
-      return await monitorTransaction(req);
+      return withCors(await monitorTransaction(req));
     }
 
     if (path === "/api/rate-comparison") {
       console.error(" Getting rate comparison...");
-      return await getRateComparison(req);
+      return withCors(await getRateComparison(req));
     }
 
     if (path === "/api/cross-chain-swap") {
       console.error(" Getting cross-chain estimate...");
-      return await crossChainSwap(req);
+      return withCors(await crossChainSwap(req));
     }
 
     if (path === "/api/solana-swap") {
       console.error(" Getting Solana swap transaction...");
-      return await solanaDexSwap(req);
+      return withCors(await solanaDexSwap(req));
     }
 
     if (path === "/api/token-sentiment") {
       console.error(" Getting token sentiment and direct quotes...");
-      return await getTokenSentiment(req);
+      return withCors(await getTokenSentiment(req));
     }
 
     // Default response

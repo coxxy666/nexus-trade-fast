@@ -1015,7 +1015,7 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
         <div className="sticky bottom-2 z-20 md:static bg-[#0a0a0f]/80 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none rounded-xl p-2 md:p-0">
           <Button
             onClick={!account ? handleConnectWallet : handleSwap}
-            disabled={!account ? isConnecting : disableSwap}
+            disabled={account ? disableSwap : false}
             className={cn(
               "w-full h-14 rounded-2xl text-lg font-semibold transition-all duration-300",
               (!account || (fromAmount && !insufficientBalance))

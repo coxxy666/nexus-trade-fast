@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-export default function WalletButton() {
+export default function WalletButton({ compact = false }) {
   const { account, walletType, isConnecting, connectWallet, disconnectWallet, formatAddress } = useWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
 
@@ -21,11 +21,11 @@ export default function WalletButton() {
 
   if (account) {
     return (
-      <DropdownMenu>
+        <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl px-4 font-medium">
+          <Button className={`bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium ${compact ? 'px-3' : 'px-4'}`}>
             <Wallet className="w-4 h-4 mr-2" />
-            {formatAddress(account)}
+            {compact ? 'Wallet' : formatAddress(account)}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#12121a] border-white/10 text-white">
@@ -46,13 +46,13 @@ export default function WalletButton() {
       <Button 
         onClick={() => setShowWalletModal(true)}
         disabled={isConnecting}
-        className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl px-6 font-medium transition-all duration-300 hover:scale-105"
+        className={`bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium transition-all duration-300 hover:scale-105 ${compact ? 'px-3' : 'px-6'}`}
       >
-        {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+        {isConnecting ? 'Connecting...' : (compact ? 'Wallet' : 'Connect Wallet')}
       </Button>
 
       <Dialog open={showWalletModal} onOpenChange={setShowWalletModal}>
-        <DialogContent className="bg-[#12121a] border-white/10 text-white">
+        <DialogContent className="bg-[#12121a] border-white/10 text-white max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Connect Wallet</DialogTitle>
           </DialogHeader>

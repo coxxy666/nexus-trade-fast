@@ -1012,36 +1012,38 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
             {swapError}
           </div>
         )}
-        <Button
-          onClick={!account ? handleConnectWallet : handleSwap}
-          disabled={!account ? isConnecting : disableSwap}
-          className={cn(
-            "w-full mt-6 h-14 rounded-2xl text-lg font-semibold transition-all duration-300",
-            (!account || (fromAmount && !insufficientBalance))
-              ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 hover:scale-[1.02]"
-              : "bg-white/10 text-gray-500 cursor-not-allowed"
-          )}
-        >
-          {isSwapping ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              {txLoading || 'Swapping...'}
-            </span>
-          ) : !account && isConnecting ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Connecting...
-            </span>
-          ) : !account ? (
-            "Connect wallet"
-          ) : !fromAmount ? (
-            "Enter an amount"
-          ) : insufficientBalance ? (
-            "Insufficient balance"
-          ) : (
-            "Swap"
-          )}
-        </Button>
+        <div className="sticky bottom-2 z-20 md:static bg-[#0a0a0f]/80 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none rounded-xl p-2 md:p-0">
+          <Button
+            onClick={!account ? handleConnectWallet : handleSwap}
+            disabled={!account ? isConnecting : disableSwap}
+            className={cn(
+              "w-full h-14 rounded-2xl text-lg font-semibold transition-all duration-300",
+              (!account || (fromAmount && !insufficientBalance))
+                ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 hover:scale-[1.02]"
+                : "bg-white/10 text-gray-500 cursor-not-allowed"
+            )}
+          >
+            {isSwapping ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                {txLoading || 'Swapping...'}
+              </span>
+            ) : !account && isConnecting ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Connecting...
+              </span>
+            ) : !account ? (
+              "Connect wallet"
+            ) : !fromAmount ? (
+              "Enter an amount"
+            ) : insufficientBalance ? (
+              "Insufficient balance"
+            ) : (
+              "Swap"
+            )}
+          </Button>
+        </div>
       </div>
         );
       })()}

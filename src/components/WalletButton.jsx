@@ -13,6 +13,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 export default function WalletButton({ compact = false }) {
   const { account, walletType, isConnecting, connectWallet, disconnectWallet, formatAddress } = useWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+  const evmConnectType = isMobile ? 'walletconnect' : 'bnb';
 
   const handleConnect = (type, walletName = null) => {
     connectWallet(type, walletName);
@@ -86,7 +88,7 @@ export default function WalletButton({ compact = false }) {
             </button>
 
             <button
-              onClick={() => handleConnect('bnb', 'Binance Web3')}
+              onClick={() => handleConnect(evmConnectType, 'Binance Web3')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
@@ -99,7 +101,7 @@ export default function WalletButton({ compact = false }) {
             </button>
 
             <button
-              onClick={() => handleConnect('bnb', 'MetaMask')}
+              onClick={() => handleConnect(evmConnectType, 'MetaMask')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
@@ -112,7 +114,7 @@ export default function WalletButton({ compact = false }) {
             </button>
 
             <button
-              onClick={() => handleConnect('bnb', 'Trust Wallet')}
+              onClick={() => handleConnect(evmConnectType, 'Trust Wallet')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-yellow-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-lime-500 flex items-center justify-center">
@@ -125,7 +127,7 @@ export default function WalletButton({ compact = false }) {
             </button>
 
             <button
-              onClick={() => handleConnect('bnb', 'Ethereum')}
+              onClick={() => handleConnect(evmConnectType, 'Ethereum')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-blue-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">

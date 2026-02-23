@@ -1,10 +1,15 @@
 FROM denoland/deno:2.5.0
 
 WORKDIR /app
-COPY . .
 
-# Install npm: dependencies used by Deno
-RUN deno install --allow-scripts
+# Copy ONLY backend files (avoid frontend package.json deps)
+COPY server.ts ./
+COPY functions ./functions
+COPY data ./data
+COPY deno.json ./
+COPY deno.lock ./
+
+# Cache backend dependency graph only
 RUN deno cache server.ts
 
 EXPOSE 8000

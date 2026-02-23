@@ -1087,11 +1087,11 @@ const executeSolanaSwap = async (inputMintAddress, outputMintAddress) => {
       />
 
       <Dialog open={showConnectModal} onOpenChange={setShowConnectModal}>
-        <DialogContent className="bg-[#12121a] border-white/10 text-white">
+        <DialogContent className="bg-[#12121a] border-white/10 text-white w-[95vw] max-w-md max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Connect Wallet</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3 mt-4">
+          <div className="space-y-3 mt-4 pb-1">
             <button
               onClick={() => handleWalletSelect('solana', 'phantom')}
               className="w-full p-4 rounded-xl border-2 border-white/10 hover:border-cyan-500/30 bg-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-3"

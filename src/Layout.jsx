@@ -130,6 +130,9 @@ export default function Layout({ children, currentPageName }) {
         {/* Mobile Nav */}
         {mobileMenuOpen && (
           <div className="md:hidden glass-card border-t border-white/5">
+            <div className="px-4 pt-4 pb-2 sm:hidden">
+              <WalletButton />
+            </div>
             <nav className="px-4 py-4 space-y-1">
               {navItems.map((item) => (
                 <Link

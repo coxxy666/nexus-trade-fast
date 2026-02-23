@@ -365,7 +365,7 @@ const fetchFromCoinMarketCap = async () => {
 
   if (!Array.isArray(list)) return [];
 
-  return list
+  const memeTokens = list
     .filter((coin: any) => {
       const name = (coin.name || '').toLowerCase();
       const symbol = (coin.symbol || '').toLowerCase();
@@ -403,6 +403,48 @@ const fetchFromCoinMarketCap = async () => {
         market_cap_rank: Number(coin.cmcRank) || 999,
       };
     });
+
+  const coreTokens = list
+    .filter((coin: any) => {
+      const symbol = String(coin?.symbol || '').toUpperCase();
+      return symbol === 'SOL' || symbol === 'BNB' || symbol === 'ETH';
+    })
+    .map((coin: any) => {
+      const quote = coin.quotes?.[0] || {};
+      const symbol = String(coin?.symbol || '').toUpperCase();
+
+      const fallbackAddress =
+        symbol === 'SOL'
+          ? 'So11111111111111111111111111111111111111112'
+          : symbol === 'BNB'
+            ? '0xbb4CdB9CBd36B01bD1cbaB777c5e04c0334f63C3'
+            : '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
+
+      const fallbackNetwork =
+        symbol === 'SOL' ? 'solana' : symbol === 'BNB' ? 'bsc' : 'ethereum';
+
+      return {
+        symbol,
+        name: coin?.name || symbol,
+        address: String(coin?.platform?.contract_address || '').trim() || fallbackAddress,
+        price_usd: Number(quote?.price) || 0,
+        price_change_24h: Number(quote?.percentChange24h) || 0,
+        volume_24h: Number(quote?.volume24h) || 0,
+        liquidity: Number(quote?.marketCap) || 0,
+        market_cap: Number(quote?.marketCap) || 0,
+        logo_url:
+          symbol === 'SOL'
+            ? 'https://assets.coingecko.com/coins/images/4128/standard/solana.png'
+            : symbol === 'BNB'
+              ? 'https://assets.coingecko.com/coins/images/825/standard/bnb-icon2_2x.png'
+              : 'https://assets.coingecko.com/coins/images/279/standard/ethereum.png',
+        network: inferNetworkFromCmcPlatform(coin?.platform, fallbackAddress) || fallbackNetwork,
+        fdv: Number(quote?.fullyDilutedMarketCap) || 0,
+        market_cap_rank: Number(coin?.cmcRank) || 999,
+      };
+    });
+
+  return [...coreTokens, ...memeTokens];
 };
 
 const enrichMissingAddresses = async (tokens: any[]) => {

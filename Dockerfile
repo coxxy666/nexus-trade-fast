@@ -1,8 +1,8 @@
-FROM denoland/deno:2.2.12
+FROM denoland/deno:latest
 
 WORKDIR /app
 COPY . .
 
 EXPOSE 8000
 
-CMD ["run", "--allow-net", "--allow-env", "--allow-read", "--allow-write", "server.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-read", "--allow-write", "server.ts"]

@@ -6,7 +6,6 @@ import {
   Droplets, 
   BarChart3, 
   Shield,
-  Zap,
   Menu, 
   X
 } from 'lucide-react';
@@ -112,6 +111,9 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Network & Wallet Controls */}
             <div className="flex items-center gap-3">
+              <div className="sm:hidden">
+                <WalletButton compact />
+              </div>
               <div className="hidden sm:block">
                 <WalletButton />
               </div>

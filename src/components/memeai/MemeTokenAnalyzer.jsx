@@ -4,123 +4,158 @@ import { apiUrl } from '@/lib/apiUrl';
 // Comprehensive AI analysis of meme token
 export const analyzeMemeToken = async (tokenData) => {
   try {
-    const prompt = `Analyze this meme cryptocurrency token comprehensively:
+    const clamp = (v, min = 0, max = 100) => Math.max(min, Math.min(max, v));
+    const safe = (v) => Number(v || 0);
 
-Token: ${tokenData.name} (${tokenData.symbol})
-Price: $${tokenData.price_usd}
-24h Change: ${tokenData.price_change_24h}%
-24h Volume: $${tokenData.volume_24h?.toLocaleString()}
-Liquidity: $${tokenData.liquidity?.toLocaleString()}
-Market Cap: $${tokenData.market_cap?.toLocaleString()}
-Network: ${tokenData.network}
+    const name = tokenData?.name || 'Unknown Token';
+    const symbol = tokenData?.symbol || 'UNKNOWN';
+    const network = String(tokenData?.network || 'unknown');
+    const price = safe(tokenData?.price_usd);
+    const change24h = safe(tokenData?.price_change_24h);
+    const volume24h = safe(tokenData?.volume_24h);
+    const liquidity = safe(tokenData?.liquidity);
+    const marketCap = safe(tokenData?.market_cap);
+    const volumeToMcap = marketCap > 0 ? volume24h / marketCap : 0;
 
-Provide detailed analysis including:
-1. Overall risk level and detailed risk breakdown
-2. Rug pull probability
-3. Tokenomics analysis (distribution, burn mechanisms, transaction taxes if available)
-4. Pump-and-dump scheme detection based on price patterns and social media
-5. Sentiment and meme virality
-6. Key risks and strengths
-7. Moonshot potential prediction (SPECULATIVE) with confidence level
-8. Token outlook`;
+    const liquidityRisk =
+      liquidity <= 0 ? 95 :
+      liquidity < 50000 ? 90 :
+      liquidity < 200000 ? 75 :
+      liquidity < 1000000 ? 55 : 30;
+    const volatilityRisk = clamp(Math.abs(change24h) * 1.8, 10, 95);
+    const tokenomicsRisk =
+      marketCap <= 0 ? 85 :
+      marketCap < 1000000 ? 75 :
+      marketCap < 10000000 ? 58 :
+      marketCap < 100000000 ? 45 : 30;
+    const socialRisk =
+      volumeToMcap <= 0 ? 70 :
+      volumeToMcap < 0.03 ? 68 :
+      volumeToMcap < 0.12 ? 52 :
+      volumeToMcap < 0.45 ? 38 : 30;
+    const technicalRisk =
+      network.includes('solana') || network.includes('bsc') || network.includes('ethereum')
+        ? 35
+        : 55;
 
-    const analysis = await appClient.integrations.Core.InvokeLLM({
-      prompt: prompt,
-      add_context_from_internet: true,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          confidence_score: {
-            type: "number",
-            description: "How confident the AI is about this analysis 0-100",
-            minimum: 0,
-            maximum: 100
-          },
-          risk_level: {
-            type: "string",
-            enum: ["low", "medium", "high"]
-          },
-          risk_score: {
-            type: "number",
-            description: "Overall risk score 0-100"
-          },
-          risk_breakdown: {
-            type: "object",
-            properties: {
-              liquidity_risk: { type: "number" },
-              volatility_risk: { type: "number" },
-              tokenomics_risk: { type: "number" },
-              social_risk: { type: "number" },
-              technical_risk: { type: "number" }
-            }
-          },
-          rug_pull_probability: {
-            type: "number",
-            description: "Probability of rug pull 0-100"
-          },
-          pump_dump_score: {
-            type: "number",
-            description: "Pump and dump likelihood 0-100"
-          },
-          pump_dump_indicators: {
-            type: "array",
-            items: { type: "string" }
-          },
-          meme_score: {
-            type: "number",
-            description: "Meme virality score 0-100"
-          },
-          sentiment: {
-            type: "string",
-            enum: ["very_positive", "positive", "neutral", "negative", "very_negative"]
-          },
-          tokenomics: {
-            type: "object",
-            properties: {
-              distribution_score: { type: "number" },
-              has_burn_mechanism: { type: "boolean" },
-              transaction_tax: { type: "string" },
-              holder_concentration: { type: "string" }
-            }
-          },
-          moonshot_potential: {
-            type: "object",
-            properties: {
-              score: { type: "number" },
-              confidence: { type: "string", enum: ["very_low", "low", "medium", "high", "very_high"] },
-              reasoning: { type: "string" },
-              speculative_price_target: { type: "string" }
-            }
-          },
-          liquidity_locked: {
-            type: "boolean"
-          },
-          contract_verified: {
-            type: "boolean"
-          },
-          vulnerabilities: {
-            type: "array",
-            items: { type: "string" }
-          },
-          analysis_summary: {
-            type: "string"
-          },
-          detailed_analysis: {
-            type: "string"
-          },
-          key_risks: {
-            type: "array",
-            items: { type: "string" }
-          },
-          strengths: {
-            type: "array",
-            items: { type: "string" }
-          }
-        }
-      }
-    });
+    const riskScore = clamp(
+      liquidityRisk * 0.3 +
+      volatilityRisk * 0.25 +
+      tokenomicsRisk * 0.25 +
+      socialRisk * 0.1 +
+      technicalRisk * 0.1
+    );
 
-    return analysis;
+    const riskLevel = riskScore >= 67 ? 'high' : riskScore >= 42 ? 'medium' : 'low';
+    const rugPullProbability = clamp(
+      liquidityRisk * 0.45 + tokenomicsRisk * 0.3 + technicalRisk * 0.15 + volatilityRisk * 0.1
+    );
+    const pumpDumpScore = clamp(volatilityRisk * 0.55 + clamp(volumeToMcap * 130, 0, 100) * 0.45);
+    const memeScore = clamp(
+      40 +
+      clamp((volume24h / 1000000) * 6, 0, 24) +
+      clamp(change24h, -20, 20) * 0.8 +
+      (riskLevel === 'low' ? 10 : riskLevel === 'medium' ? 4 : -6)
+    );
+
+    const sentiment =
+      change24h >= 18 ? 'very_positive' :
+      change24h >= 5 ? 'positive' :
+      change24h <= -18 ? 'very_negative' :
+      change24h <= -5 ? 'negative' :
+      'neutral';
+
+    const confidenceScore = clamp(
+      35 +
+      (price > 0 ? 12 : 0) +
+      (marketCap > 0 ? 18 : 0) +
+      (liquidity > 0 ? 18 : 0) +
+      (volume24h > 0 ? 12 : 0)
+    );
+
+    const keyRisks = [];
+    const strengths = [];
+    const vulnerabilities = [];
+    const pumpDumpIndicators = [];
+
+    if (liquidityRisk >= 75) {
+      keyRisks.push('Low liquidity can enable sharp slippage and manipulation.');
+      vulnerabilities.push('Liquidity depth is limited for larger orders.');
+    } else {
+      strengths.push('Liquidity is relatively stronger versus typical meme tokens.');
+    }
+    if (volatilityRisk >= 70) {
+      keyRisks.push('High short-term volatility increases downside risk.');
+      pumpDumpIndicators.push('Large 24h price swings detected.');
+    } else {
+      strengths.push('Recent volatility is within a manageable range.');
+    }
+    if (tokenomicsRisk >= 65) {
+      keyRisks.push('Small market cap profile can amplify adverse moves.');
+    } else {
+      strengths.push('Market-cap scale provides better resilience than micro-caps.');
+    }
+    if (volumeToMcap > 0.5) {
+      pumpDumpIndicators.push('Very high turnover ratio may indicate speculative rotations.');
+    }
+    if (volumeToMcap < 0.03 && marketCap > 0) {
+      keyRisks.push('Low turnover relative to market cap may reduce exit liquidity.');
+    }
+
+    const moonshotScore = clamp(memeScore * 0.6 + (100 - riskScore) * 0.25 + clamp(change24h + 20, 0, 40) * 0.5);
+    const moonshotConfidence =
+      moonshotScore >= 80 ? 'high' :
+      moonshotScore >= 65 ? 'medium' :
+      moonshotScore >= 50 ? 'low' :
+      'very_low';
+
+    const analysisSummary =
+      `${name} (${symbol}) currently screens as ${riskLevel.toUpperCase()} risk with a score of ${Math.round(riskScore)}/100. ` +
+      `Liquidity ${liquidity > 0 ? `~$${Math.round(liquidity).toLocaleString()}` : 'is limited'}, ` +
+      `24h move ${change24h.toFixed(2)}%, and turnover ratio ${(volumeToMcap * 100).toFixed(2)}% are the main drivers.`;
+
+    const detailedAnalysis =
+      `Token ${symbol} on ${network} shows liquidity risk ${Math.round(liquidityRisk)}/100, volatility risk ${Math.round(volatilityRisk)}/100, ` +
+      `and tokenomics risk ${Math.round(tokenomicsRisk)}/100. Rug-pull probability is estimated at ${Math.round(rugPullProbability)}% from ` +
+      `liquidity depth and market-cap profile. Pump-and-dump likelihood is ${Math.round(pumpDumpScore)}% based on 24h momentum and turnover. ` +
+      `This model is heuristic and should be combined with contract, holder, and liquidity-lock verification before trading.`;
+
+    return {
+      confidence_score: confidenceScore,
+      risk_level: riskLevel,
+      risk_score: riskScore,
+      risk_breakdown: {
+        liquidity_risk: liquidityRisk,
+        volatility_risk: volatilityRisk,
+        tokenomics_risk: tokenomicsRisk,
+        social_risk: socialRisk,
+        technical_risk: technicalRisk,
+      },
+      rug_pull_probability: rugPullProbability,
+      pump_dump_score: pumpDumpScore,
+      pump_dump_indicators: pumpDumpIndicators,
+      meme_score: memeScore,
+      sentiment,
+      tokenomics: {
+        distribution_score: clamp(100 - tokenomicsRisk),
+        has_burn_mechanism: false,
+        transaction_tax: 'Unknown',
+        holder_concentration: marketCap < 5000000 ? 'Potentially high' : 'Moderate',
+      },
+      moonshot_potential: {
+        score: moonshotScore,
+        confidence: moonshotConfidence,
+        reasoning: 'Based on momentum, turnover, and risk-adjusted meme strength.',
+        speculative_price_target: price > 0 ? `~$${(price * 1.5).toFixed(8)} (speculative)` : 'N/A',
+      },
+      liquidity_locked: false,
+      contract_verified: false,
+      vulnerabilities,
+      analysis_summary: analysisSummary,
+      detailed_analysis: detailedAnalysis,
+      key_risks: keyRisks,
+      strengths,
+    };
   } catch (error) {
     console.error('Error analyzing token:', error);
     return null;

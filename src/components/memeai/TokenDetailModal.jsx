@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,23 +17,31 @@ export default function TokenDetailModal({ token, isOpen, onClose }) {
   const [analysis, setAnalysis] = useState(null);
   const [sentiment, setSentiment] = useState(null);
   const [loading, setLoading] = useState(false);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     if (isOpen && token) {
-      analyzeToken();
+      setAnalysis(null);
+      setSentiment(null);
+      analyzeToken(token);
     }
   }, [isOpen, token]);
 
-  const analyzeToken = async () => {
+  const analyzeToken = async (activeToken) => {
+    const requestId = Date.now();
+    requestIdRef.current = requestId;
     setLoading(true);
     try {
       const [aiAnalysis, sentimentData] = await Promise.all([
-        analyzeMemeToken(token),
-        getTokenSentiment(token.symbol, token.name)
+        analyzeMemeToken(activeToken),
+        getTokenSentiment(activeToken.symbol, activeToken.name)
       ]);
 
-      const rugPullData = detectRugPullRisks(token, aiAnalysis);
-      const memeScore = calculateMemeScore(token, sentimentData);
+      // Ignore stale analysis responses if user switched tokens quickly.
+      if (requestIdRef.current !== requestId) return;
+
+      const rugPullData = detectRugPullRisks(activeToken, aiAnalysis);
+      const memeScore = calculateMemeScore(activeToken, sentimentData);
 
       setAnalysis({
         ...aiAnalysis,
@@ -44,7 +52,9 @@ export default function TokenDetailModal({ token, isOpen, onClose }) {
     } catch (error) {
       console.error('Analysis error:', error);
     } finally {
-      setLoading(false);
+      if (requestIdRef.current === requestId) {
+        setLoading(false);
+      }
     }
   };
 

@@ -163,7 +163,48 @@ export const analyzeMemeToken = async (tokenData) => {
 };
 
 // Get sentiment from social media and news
-export const getTokenSentiment = async (symbol, name) => {
+export const getTokenSentiment = async (symbol, name, tokenData = null) => {
+  const deriveLocalSentiment = (data = {}) => {
+    const change = Number(data?.price_change_24h || 0);
+    const volume = Number(data?.volume_24h || 0);
+    const marketCap = Number(data?.market_cap || 0);
+    const turnover = marketCap > 0 ? volume / marketCap : 0;
+
+    const score = Math.max(
+      0,
+      Math.min(
+        100,
+        50 + change * 1.2 + Math.min(20, turnover * 100)
+      )
+    );
+
+    const label =
+      score >= 70 ? 'positive' :
+      score <= 35 ? 'negative' :
+      'neutral';
+
+    const buzz =
+      turnover >= 0.4 ? 'very_high' :
+      turnover >= 0.2 ? 'high' :
+      turnover >= 0.08 ? 'moderate' :
+      turnover > 0 ? 'low' :
+      'very_low';
+
+    return {
+      sentiment_score: Math.round(score),
+      sentiment_label: label,
+      buzz_level: buzz,
+      news_highlights: [
+        `Local market signal: 24h change ${change.toFixed(2)}%.`,
+        `Turnover ratio: ${(turnover * 100).toFixed(2)}% of market cap.`,
+      ],
+      news_quotes: [],
+      community_strength: Math.max(5, Math.min(100, Math.round((turnover * 120) + 20))),
+      concerns: change < -10 ? ['Strong negative momentum detected in the last 24h.'] : [],
+      positive_signals: change > 10 ? ['Strong positive momentum detected in the last 24h.'] : [],
+    };
+  };
+
   // Primary path: direct quotes from backend news/social aggregators.
   try {
     const response = await fetch(apiUrl('/api/token-sentiment'), {
@@ -174,6 +215,12 @@ export const getTokenSentiment = async (symbol, name) => {
     if (response.ok) {
       const data = await response.json();
       if (data && (Array.isArray(data.news_quotes) || Array.isArray(data.news_highlights))) {
+        const quoteCount = Array.isArray(data.news_quotes) ? data.news_quotes.length : 0;
+        const highlightCount = Array.isArray(data.news_highlights) ? data.news_highlights.length : 0;
+        const isGenericFallback = Number(data?.sentiment_score) === 50 && quoteCount === 0 && highlightCount === 0;
+        if (isGenericFallback) {
+          return deriveLocalSentiment(tokenData || {});
+        }
         return data;
       }
     }
@@ -234,10 +281,14 @@ Focus on Twitter, Reddit, Telegram, and crypto news sources.`;
       }
     });
 
+    // If LLM returns generic neutral defaults, derive token-specific local sentiment.
+    if (Number(sentiment?.sentiment_score) === 50 && (!sentiment?.news_quotes || sentiment.news_quotes.length === 0)) {
+      return deriveLocalSentiment(tokenData || {});
+    }
     return sentiment;
   } catch (error) {
     console.error('Error fetching sentiment:', error);
-    return null;
+    return deriveLocalSentiment(tokenData || {});
   }
 };
 

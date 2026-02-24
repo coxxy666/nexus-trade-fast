@@ -20,6 +20,7 @@ export function WalletProvider({ children }) {
   const [web3, setWeb3] = useState(null);
   const [selectedNetwork, setSelectedNetwork] = useState('bsc');
   const [accountBalances, setAccountBalances] = useState({});
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
   const getSolanaProvider = useCallback((preferred = '') => {
     const want = String(preferred || '').toLowerCase();
@@ -200,6 +201,29 @@ export function WalletProvider({ children }) {
     return fallback ? `${fallback}?uri=${encoded}` : null;
   }, []);
 
+  const getMobileBrowserDeepLink = useCallback((walletName) => {
+    const currentUrl = encodeURIComponent(window.location.href);
+    const ref = encodeURIComponent(window.location.origin);
+    const wallet = String(walletName || '').toLowerCase();
+
+    if (wallet.includes('phantom')) {
+      return `https://phantom.app/ul/browse/${currentUrl}?ref=${ref}`;
+    }
+    if (wallet.includes('solflare')) {
+      return `https://solflare.com/ul/v1/browse/${currentUrl}?ref=${ref}`;
+    }
+    if (wallet.includes('trust')) {
+      return `https://link.trustwallet.com/open_url?url=${currentUrl}`;
+    }
+    if (wallet.includes('metamask')) {
+      return `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
+    }
+    if (wallet.includes('binance')) {
+      return `https://bnbchain.wallet/binance-wallet/dapp?url=${currentUrl}`;
+    }
+    return null;
+  }, []);
+
   const connectWallet = async (type = 'solana', walletName = null) => {
     setIsConnecting(true);
     try {
@@ -207,6 +231,14 @@ export function WalletProvider({ children }) {
         const solanaProvider = getSolanaProvider(walletName);
 
         if (!solanaProvider) {
+          if (isMobile) {
+            const deepLink = getMobileBrowserDeepLink(walletName);
+            if (deepLink) {
+              window.location.href = deepLink;
+              setIsConnecting(false);
+              return;
+            }
+          }
           alert('No Solana wallet detected. Install Phantom, Solflare, or Backpack and refresh.');
           setIsConnecting(false);
           return;
@@ -234,6 +266,10 @@ export function WalletProvider({ children }) {
       } else if (type === 'bnb') {
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
+          if (isMobile) {
+            await connectWallet('walletconnect', walletName);
+            return;
+          }
           if (String(walletName || '').toLowerCase().includes('binance')) {
             alert('Binance Web3 wallet was not detected. Install/enable Binance Wallet extension or app and try again.');
           } else {

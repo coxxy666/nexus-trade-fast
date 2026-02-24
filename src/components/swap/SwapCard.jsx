@@ -29,7 +29,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 export default function SwapCard({ onSwapDataChange }) {
    const PLATFORM_FEE_PERCENT = 0.5;
    const PLATFORM_FEE_RATE = PLATFORM_FEE_PERCENT / 100;
-   const { selectedNetwork, accountBalances, account, walletType, connectWallet, isConnecting } = useWallet();
+   const { selectedNetwork, accountBalances, account, walletType, connectWallet, isConnecting, wcProvider } = useWallet();
    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
    const evmConnectType = isMobile ? 'walletconnect' : 'bnb';
    const [fromToken, setFromToken] = useState(null);
@@ -558,15 +558,30 @@ export default function SwapCard({ onSwapDataChange }) {
         if (!tx?.to || !tx?.data) {
           throw new Error('Swap provider did not return executable transaction');
         }
-        if (!window.ethereum) {
+        const evmProvider =
+          walletType === 'walletconnect' && wcProvider?.request
+            ? wcProvider
+            : window.ethereum;
+
+        if (!evmProvider || typeof evmProvider.request !== 'function') {
           throw new Error('EVM wallet not detected');
         }
 
-        const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const currentChainId = await evmProvider.request({ method: 'eth_chainId' });
+        const normalizedCurrentChainId = typeof currentChainId === 'number'
+          ? `0x${currentChainId.toString(16)}`
+          : String(currentChainId || '').toLowerCase();
         const desiredChainId = selectedNetwork === 'ethereum' ? '0x1' : '0x38';
-        if (currentChainId !== desiredChainId) {
+        if (normalizedCurrentChainId !== desiredChainId) {
+          if (walletType === 'walletconnect') {
+            throw new Error(
+              selectedNetwork === 'ethereum'
+                ? 'Reconnect WalletConnect on Ethereum Mainnet'
+                : 'Reconnect WalletConnect on BNB Smart Chain'
+            );
+          }
           try {
-            await window.ethereum.request({
+            await evmProvider.request({
               method: 'wallet_switchEthereumChain',
               params: [{ chainId: desiredChainId }],
             });
@@ -590,7 +605,7 @@ export default function SwapCard({ onSwapDataChange }) {
         }
 
         setTxLoading('Confirm transaction in wallet...');
-        const submittedHash = await window.ethereum.request({
+        const submittedHash = await evmProvider.request({
           method: 'eth_sendTransaction',
           params: [txParams],
         });

@@ -34,7 +34,7 @@ export default function TokenDetailModal({ token, isOpen, onClose }) {
     try {
       const [aiAnalysis, sentimentData] = await Promise.all([
         analyzeMemeToken(activeToken),
-        getTokenSentiment(activeToken.symbol, activeToken.name)
+        getTokenSentiment(activeToken.symbol, activeToken.name, activeToken)
       ]);
 
       // Ignore stale analysis responses if user switched tokens quickly.

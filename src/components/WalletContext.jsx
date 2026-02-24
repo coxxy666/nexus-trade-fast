@@ -68,6 +68,35 @@ export function WalletProvider({ children }) {
     const injected = window.ethereum;
     if (!injected) return null;
 
+    // Handle single-provider mobile in-app browsers (no ethereum.providers array).
+    if (!Array.isArray(injected.providers) || injected.providers.length === 0) {
+      if (isBinanceRequest) {
+        if (hasRequest(window.BinanceChain)) return window.BinanceChain;
+        const label = `${injected?.providerName || ''} ${injected?.name || ''}`.toLowerCase();
+        if (injected?.isBinance || injected?.isBinanceWallet || injected?.isBnbWallet || label.includes('binance') || label.includes('bnb')) {
+          return hasRequest(injected) ? injected : null;
+        }
+        return null;
+      }
+
+      if (isTrustRequest) {
+        if (injected?.isTrust || injected?.isTrustWallet) return hasRequest(injected) ? injected : null;
+        return null;
+      }
+
+      if (isMetamaskRequest) {
+        if (injected?.isMetaMask) return hasRequest(injected) ? injected : null;
+        return null;
+      }
+
+      if (isCoinbaseRequest) {
+        if (injected?.isCoinbaseWallet) return hasRequest(injected) ? injected : null;
+        return null;
+      }
+
+      return hasRequest(injected) ? injected : null;
+    }
+
     if (Array.isArray(injected.providers) && injected.providers.length > 0) {
       if (isBinanceRequest) {
         const binanceProvider = injected.providers.find(

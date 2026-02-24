@@ -65,12 +65,23 @@ export const analyzeMemeToken = async (tokenData) => {
       change24h <= -5 ? 'negative' :
       'neutral';
 
+    const metrics = [price, marketCap, liquidity, volume24h, Math.abs(change24h)];
+    const validMetricCount = metrics.filter((v) => Number.isFinite(v) && v > 0).length;
+    const completeness = validMetricCount / metrics.length;
+
+    const turnoverHealth = marketCap > 0 ? clamp((volumeToMcap / 0.35) * 100, 0, 100) : 30;
+    const liquidityDepth =
+      marketCap > 0
+        ? clamp((liquidity / (marketCap * 0.25)) * 100, 0, 100)
+        : clamp((liquidity / 200000) * 100, 0, 100);
+    const stability = clamp(100 - Math.abs(change24h) * 1.8, 5, 100);
+
     const confidenceScore = clamp(
-      35 +
-      (price > 0 ? 12 : 0) +
-      (marketCap > 0 ? 18 : 0) +
-      (liquidity > 0 ? 18 : 0) +
-      (volume24h > 0 ? 12 : 0)
+      20 +
+      completeness * 35 +
+      turnoverHealth * 0.2 +
+      liquidityDepth * 0.2 +
+      stability * 0.25
     );
 
     const keyRisks = [];

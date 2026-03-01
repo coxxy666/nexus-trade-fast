@@ -29,6 +29,15 @@ export function WalletProvider({ children }) {
     const normalizeProvider = (providerLike) => {
       if (!providerLike) return null;
       if (typeof providerLike.connect === 'function') return providerLike;
+      if (
+        typeof providerLike.request === 'function' &&
+        (providerLike?.isSolflare || providerLike?.isPhantom || providerLike?.isBackpack)
+      ) {
+        return {
+          ...providerLike,
+          connect: (opts) => providerLike.request({ method: 'connect', params: opts ? [opts] : [] }),
+        };
+      }
       if (providerLike?.solana && typeof providerLike.solana.connect === 'function') return providerLike.solana;
       return null;
     };
@@ -93,6 +102,16 @@ export function WalletProvider({ children }) {
     return valid[0]?.provider || null;
   }, []);
 
+  const findSolanaProviderWithRetry = useCallback(async (walletName) => {
+    const attempts = 10;
+    for (let i = 0; i < attempts; i += 1) {
+      const provider = getSolanaProvider(walletName);
+      if (provider) return provider;
+      await new Promise((resolve) => setTimeout(resolve, 120));
+    }
+    return null;
+  }, [getSolanaProvider]);
+
   const getEvmProvider = useCallback((preferredWallet = '') => {
     const hasRequest = (p) => p && typeof p.request === 'function';
     const isLikelyTrust = (p) => !!(p?.isTrust || p?.isTrustWallet);
@@ -129,18 +148,22 @@ export function WalletProvider({ children }) {
         if (isLikelyBinance(injected)) {
           return hasRequest(injected) ? injected : null;
         }
+        return null;
       }
 
       if (isTrustRequest) {
         if (isLikelyTrust(injected)) return hasRequest(injected) ? injected : null;
+        return null;
       }
 
       if (isMetamaskRequest) {
         if (isLikelyMetaMask(injected)) return hasRequest(injected) ? injected : null;
+        return null;
       }
 
       if (isCoinbaseRequest) {
         if (isLikelyCoinbase(injected)) return hasRequest(injected) ? injected : null;
+        return null;
       }
 
       return hasRequest(injected) ? injected : null;
@@ -366,7 +389,7 @@ export function WalletProvider({ children }) {
     setIsConnecting(true);
     try {
       if (type === 'solana') {
-        const solanaProvider = getSolanaProvider(walletName);
+        const solanaProvider = await findSolanaProviderWithRetry(walletName);
         const shouldRetrySolanaConnectWithoutOptions = (error) => {
           const message = String(error?.message || '').toLowerCase();
           const code = Number(error?.code);

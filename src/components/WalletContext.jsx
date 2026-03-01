@@ -196,9 +196,9 @@ export function WalletProvider({ children }) {
     if (want.includes('binance')) return providers.find(isBinanceProvider) || null;
     if (want.includes('metamask')) return providers.find(isMetaMaskProvider) || null;
     if (want.includes('trust')) {
-      // Force Trust Wallet to EVM-only provider. Do not fallback to generic Trust providers
-      // because those can expose Beacon (bnb1...) accounts.
-      return getExplicitTrustEvmProvider();
+      // Prefer explicit Trust EVM provider, then fallback to trusted injected providers.
+      // Beacon accounts are still blocked later by strict 0x address validation.
+      return getExplicitTrustEvmProvider() || providers.find(isTrustProvider) || null;
     }
     if (want.includes('coinbase')) return providers.find(isCoinbaseProvider) || null;
     if (want.includes('ethereum')) return providers.find(isMetaMaskProvider) || providers[0] || null;
@@ -417,7 +417,7 @@ export function WalletProvider({ children }) {
         try {
           const walletLower = normalizeString(walletName);
           const isTrustRequested = walletLower.includes('trust');
-          if (isTrustRequested && provider !== getExplicitTrustEvmProvider()) {
+          if (isTrustRequested && !isTrustProvider(provider) && provider !== getExplicitTrustEvmProvider()) {
             throw new Error('Trust Wallet EVM provider was not detected. Open this site inside Trust Wallet DApp browser and use the EVM wallet.');
           }
 

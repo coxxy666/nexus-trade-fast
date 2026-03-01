@@ -61,7 +61,15 @@ export function WalletProvider({ children }) {
     const isLikelyCoinbase = (p) => !!p?.isCoinbaseWallet;
     const isLikelyBinance = (p) => {
       const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-      return !!(p?.isBinance || p?.isBinanceWallet || p?.isBnbWallet || label.includes('binance') || label.includes('bnb'));
+      return !!(
+        p?.isBinance ||
+        p?.isBinanceWallet ||
+        p?.isBnbWallet ||
+        p?.isBinanceChain ||
+        label.includes('binance') ||
+        label.includes('bnb chain') ||
+        label.includes('bnb')
+      );
     };
     const isLikelyMetaMask = (p) => !!(p?.isMetaMask && !isLikelyTrust(p) && !isLikelyCoinbase(p) && !isLikelyBinance(p));
     const preferred = String(preferredWallet || '').toLowerCase();
@@ -144,7 +152,15 @@ export function WalletProvider({ children }) {
       if (hasRequest(window.BinanceChain)) return true;
       return providers.some((p) => {
         const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-        return p?.isBinance || p?.isBinanceWallet || p?.isBnbWallet || label.includes('binance') || label.includes('bnb');
+        return (
+          p?.isBinance ||
+          p?.isBinanceWallet ||
+          p?.isBnbWallet ||
+          p?.isBinanceChain ||
+          label.includes('binance') ||
+          label.includes('bnb chain') ||
+          label.includes('bnb')
+        );
       });
     }
 

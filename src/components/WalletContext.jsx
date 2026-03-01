@@ -29,8 +29,25 @@ export function WalletProvider({ children }) {
   const normalizeString = (value) => String(value || '').toLowerCase();
   const isEvmHexAddress = (value) => /^0x[a-fA-F0-9]{40}$/.test(String(value || ''));
   const getExplicitTrustEvmProvider = () => {
+    const hasRequest = (p) => p && typeof p.request === 'function';
     const direct = window?.trustwallet?.ethereum || window?.trustWallet?.ethereum || null;
-    return direct && typeof direct.request === 'function' ? direct : null;
+    if (hasRequest(direct)) return direct;
+
+    const injected = window?.ethereum;
+    const providers = Array.isArray(injected?.providers) ? injected.providers : [];
+    const trustFromProviders = providers.find((p) => {
+      const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
+      const rdns = String(p?.info?.rdns || '').toLowerCase();
+      return !!(
+        p?.isTrust ||
+        p?.isTrustWallet ||
+        p?.isTrustWeb3 ||
+        p?.provider === 'TrustWallet' ||
+        label.includes('trust wallet') ||
+        rdns.includes('trustwallet')
+      );
+    });
+    return hasRequest(trustFromProviders) ? trustFromProviders : null;
   };
   const getChainNameFromId = (chainId) => {
     const normalized = normalizeString(chainId);
@@ -196,8 +213,8 @@ export function WalletProvider({ children }) {
     if (want.includes('binance')) return providers.find(isBinanceProvider) || null;
     if (want.includes('metamask')) return providers.find(isMetaMaskProvider) || null;
     if (want.includes('trust')) {
-      // Force Trust Wallet to EVM-only provider to avoid Beacon (bnb1...) account prompts.
-      return getExplicitTrustEvmProvider();
+      // Prefer explicit Trust EVM provider; fallback for extensions that only inject via ethereum.providers.
+      return getExplicitTrustEvmProvider() || providers.find(isTrustProvider) || null;
     }
     if (want.includes('coinbase')) return providers.find(isCoinbaseProvider) || null;
     if (want.includes('ethereum')) return providers.find(isMetaMaskProvider) || providers[0] || null;

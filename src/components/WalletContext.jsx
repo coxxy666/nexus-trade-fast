@@ -28,6 +28,10 @@ export function WalletProvider({ children }) {
 
   const normalizeString = (value) => String(value || '').toLowerCase();
   const isEvmHexAddress = (value) => /^0x[a-fA-F0-9]{40}$/.test(String(value || ''));
+  const getExplicitTrustEvmProvider = () => {
+    const direct = window?.trustwallet?.ethereum || window?.trustWallet?.ethereum || null;
+    return direct && typeof direct.request === 'function' ? direct : null;
+  };
   const getChainNameFromId = (chainId) => {
     const normalized = normalizeString(chainId);
     if (normalized === '0x1') return 'Ethereum Mainnet';
@@ -192,14 +196,9 @@ export function WalletProvider({ children }) {
     if (want.includes('binance')) return providers.find(isBinanceProvider) || null;
     if (want.includes('metamask')) return providers.find(isMetaMaskProvider) || null;
     if (want.includes('trust')) {
-      const explicitTrustEvm =
-        window?.trustwallet?.ethereum ||
-        window?.trustWallet?.ethereum ||
-        null;
-      if (explicitTrustEvm && typeof explicitTrustEvm.request === 'function') {
-        return explicitTrustEvm;
-      }
-      return providers.find(isTrustProvider) || null;
+      // Force Trust Wallet to EVM-only provider. Do not fallback to generic Trust providers
+      // because those can expose Beacon (bnb1...) accounts.
+      return getExplicitTrustEvmProvider();
     }
     if (want.includes('coinbase')) return providers.find(isCoinbaseProvider) || null;
     if (want.includes('ethereum')) return providers.find(isMetaMaskProvider) || providers[0] || null;
@@ -297,15 +296,6 @@ export function WalletProvider({ children }) {
         const msg = normalizeString(error?.message);
         const isPending = error?.code === -32002 || msg.includes('already pending') || msg.includes('already processing');
         if (isPending) throw error;
-      }
-    }
-
-    if (typeof provider.enable === 'function') {
-      try {
-        const enabled = await provider.enable();
-        if (Array.isArray(enabled) && enabled.length > 0) return enabled;
-      } catch {
-        // ignore and fallback to eth_accounts
       }
     }
 
@@ -425,13 +415,17 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          const accounts = await requestEvmAccounts(provider);
+          const walletLower = normalizeString(walletName);
+          const isTrustRequested = walletLower.includes('trust');
+          if (isTrustRequested && provider !== getExplicitTrustEvmProvider()) {
+            throw new Error('Trust Wallet EVM provider was not detected. Open this site inside Trust Wallet DApp browser and use the EVM wallet.');
+          }
 
-          const address = accounts[0];
-          if (!isEvmHexAddress(address)) {
+          const accounts = await requestEvmAccounts(provider);
+          const address = Array.isArray(accounts) ? accounts.find((a) => isEvmHexAddress(a)) : null;
+          if (!address) {
             throw new Error('Connected account is not an EVM address. Please choose an EVM account (0x...) in Trust Wallet and retry.');
           }
-          const walletLower = normalizeString(walletName);
           const forceEthereum = walletLower.includes('ethereum');
           const targetChainId = forceEthereum ? '0x1' : '0x38';
 
@@ -561,6 +555,7 @@ export function WalletProvider({ children }) {
     getEvmProvider,
     getMobileBrowserDeepLink,
     getWalletDeepLinkUrl,
+    getExplicitTrustEvmProvider,
     isEvmHexAddress,
     isMobile,
     selectedNetwork,

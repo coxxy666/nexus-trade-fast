@@ -192,15 +192,111 @@ async function fetchViaBackendEndpoint(endpoint) {
     throw new Error(`Request failed (${response.status})`);
   }
   const payload = await response.json();
+  if (Array.isArray(payload)) return payload;
   if (Array.isArray(payload.tokens)) return payload.tokens;
   if (Array.isArray(payload.data)) return payload.data;
+  if (Array.isArray(payload.results)) return payload.results;
+  if (Array.isArray(payload.coins)) return payload.coins;
   return [];
+}
+
+async function fetchDirectFromCoinGecko() {
+  const response = await fetch(
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h'
+  );
+  if (!response.ok) throw new Error(`CoinGecko failed (${response.status})`);
+  const data = await response.json();
+  if (!Array.isArray(data)) return [];
+
+  return data.map((coin) => ({
+    symbol: (coin?.symbol || '').toUpperCase(),
+    name: coin?.name || '',
+    address: coin?.id || '',
+    price_usd: Number(coin?.current_price ?? 0),
+    price_change_24h: Number(coin?.price_change_percentage_24h ?? 0),
+    volume_24h: Number(coin?.total_volume ?? 0),
+    liquidity: Number(coin?.market_cap ?? 0),
+    market_cap: Number(coin?.market_cap ?? 0),
+    logo_url: coin?.image || '',
+    network: 'multi-chain',
+    fdv: Number(coin?.fully_diluted_valuation ?? 0),
+    market_cap_rank: Number(coin?.market_cap_rank ?? 9999),
+  }));
+}
+
+async function fetchDirectFromCoinMarketCap() {
+  const response = await fetch(
+    'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=5000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,volume_7d,volume_30d'
+  );
+  if (!response.ok) throw new Error(`CoinMarketCap failed (${response.status})`);
+  const payload = await response.json();
+  const list = payload?.data?.cryptoCurrencyList;
+  if (!Array.isArray(list)) return [];
+
+  const isMeme = (coin) => {
+    const name = String(coin?.name || '').toLowerCase();
+    const symbol = String(coin?.symbol || '').toLowerCase();
+    const tags = Array.isArray(coin?.tags) ? coin.tags.map((t) => String(t).toLowerCase()) : [];
+    return (
+      tags.includes('meme') ||
+      tags.includes('memes') ||
+      name.includes('meme') ||
+      name.includes('doge') ||
+      name.includes('shib') ||
+      name.includes('pepe') ||
+      name.includes('floki') ||
+      symbol.includes('doge') ||
+      symbol.includes('shib') ||
+      symbol.includes('pepe')
+    );
+  };
+
+  return list
+    .filter(isMeme)
+    .map((coin) => {
+      const quote = coin?.quotes?.[0] || {};
+      const platform = coin?.platform || {};
+      const addr = String(platform?.contract_address || '').trim();
+      const platformBlob = JSON.stringify(platform).toLowerCase();
+      const network =
+        platformBlob.includes('solana') ? 'solana' :
+        platformBlob.includes('binance') || platformBlob.includes('bsc') || platformBlob.includes('bnb') ? 'bsc' :
+        platformBlob.includes('ethereum') || platformBlob.includes('erc20') || platformBlob.includes('eth') ? 'ethereum' :
+        'multi-chain';
+
+      return {
+        symbol: String(coin?.symbol || '').toUpperCase(),
+        name: coin?.name || '',
+        address: addr,
+        price_usd: Number(quote?.price ?? 0),
+        price_change_24h: Number(quote?.percentChange24h ?? 0),
+        volume_24h: Number(quote?.volume24h ?? 0),
+        liquidity: Number(quote?.marketCap ?? 0),
+        market_cap: Number(quote?.marketCap ?? 0),
+        logo_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin?.id}.png`,
+        network,
+        fdv: Number(quote?.fullyDilutedMarketCap ?? 0),
+        market_cap_rank: Number(coin?.cmcRank ?? 9999),
+      };
+    });
 }
 
 export const fetchMemeTokensFromCoinGecko = async () => {
   try {
     const tokens = await fetchViaBackendEndpoint('/api/meme-tokens');
-    return dedupeAndMerge(tokens);
+    if (Array.isArray(tokens) && tokens.length > 0) {
+      return dedupeAndMerge(tokens);
+    }
+  } catch {}
+
+  try {
+    const [gecko, cmc] = await Promise.allSettled([
+      fetchDirectFromCoinGecko(),
+      fetchDirectFromCoinMarketCap(),
+    ]);
+    const geckoTokens = gecko.status === 'fulfilled' ? gecko.value : [];
+    const cmcTokens = cmc.status === 'fulfilled' ? cmc.value : [];
+    return dedupeAndMerge([...geckoTokens, ...cmcTokens]);
   } catch {
     return dedupeAndMerge([]);
   }
@@ -209,11 +305,13 @@ export const fetchMemeTokensFromCoinGecko = async () => {
 export const fetchAllMemeTokens = async () => {
   try {
     const tokens = await fetchViaBackendEndpoint('/api/meme-tokens-proxy');
-    return dedupeAndMerge(tokens);
+    if (Array.isArray(tokens) && tokens.length > 0) {
+      return dedupeAndMerge(tokens);
+    }
   } catch {
-    // Fallback to the simpler function if proxy fails.
-    return fetchMemeTokensFromCoinGecko();
+    // continue to fallback below
   }
+  return fetchMemeTokensFromCoinGecko();
 };
 
 export const fetchMemeTokensFromGeckoTerminal = async () => {

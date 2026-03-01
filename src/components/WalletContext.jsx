@@ -57,6 +57,13 @@ export function WalletProvider({ children }) {
 
   const getEvmProvider = useCallback((preferredWallet = '') => {
     const hasRequest = (p) => p && typeof p.request === 'function';
+    const isLikelyTrust = (p) => !!(p?.isTrust || p?.isTrustWallet);
+    const isLikelyCoinbase = (p) => !!p?.isCoinbaseWallet;
+    const isLikelyBinance = (p) => {
+      const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
+      return !!(p?.isBinance || p?.isBinanceWallet || p?.isBnbWallet || label.includes('binance') || label.includes('bnb'));
+    };
+    const isLikelyMetaMask = (p) => !!(p?.isMetaMask && !isLikelyTrust(p) && !isLikelyCoinbase(p) && !isLikelyBinance(p));
     const preferred = String(preferredWallet || '').toLowerCase();
     const isBinanceRequest = preferred.includes('binance');
     const isCoinbaseRequest = preferred.includes('coinbase');
@@ -72,22 +79,21 @@ export function WalletProvider({ children }) {
     if (!Array.isArray(injected.providers) || injected.providers.length === 0) {
       if (isBinanceRequest) {
         if (hasRequest(window.BinanceChain)) return window.BinanceChain;
-        const label = `${injected?.providerName || ''} ${injected?.name || ''}`.toLowerCase();
-        if (injected?.isBinance || injected?.isBinanceWallet || injected?.isBnbWallet || label.includes('binance') || label.includes('bnb')) {
+        if (isLikelyBinance(injected)) {
           return hasRequest(injected) ? injected : null;
         }
       }
 
       if (isTrustRequest) {
-        if (injected?.isTrust || injected?.isTrustWallet) return hasRequest(injected) ? injected : null;
+        if (isLikelyTrust(injected)) return hasRequest(injected) ? injected : null;
       }
 
       if (isMetamaskRequest) {
-        if (injected?.isMetaMask) return hasRequest(injected) ? injected : null;
+        if (isLikelyMetaMask(injected)) return hasRequest(injected) ? injected : null;
       }
 
       if (isCoinbaseRequest) {
-        if (injected?.isCoinbaseWallet) return hasRequest(injected) ? injected : null;
+        if (isLikelyCoinbase(injected)) return hasRequest(injected) ? injected : null;
       }
 
       return hasRequest(injected) ? injected : null;
@@ -95,30 +101,19 @@ export function WalletProvider({ children }) {
 
     if (Array.isArray(injected.providers) && injected.providers.length > 0) {
       if (isBinanceRequest) {
-        const binanceProvider = injected.providers.find(
-          (p) => {
-            const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-            return (
-              p?.isBinance ||
-              p?.isBinanceWallet ||
-              p?.isBnbWallet ||
-              label.includes('binance') ||
-              label.includes('bnb')
-            );
-          }
-        );
+        const binanceProvider = injected.providers.find((p) => isLikelyBinance(p));
         if (hasRequest(binanceProvider)) return binanceProvider;
       }
       if (isCoinbaseRequest) {
-        const coinbaseProvider = injected.providers.find((p) => p?.isCoinbaseWallet);
+        const coinbaseProvider = injected.providers.find((p) => isLikelyCoinbase(p));
         if (hasRequest(coinbaseProvider)) return coinbaseProvider;
       }
       if (isTrustRequest) {
-        const trustProvider = injected.providers.find((p) => p?.isTrust || p?.isTrustWallet);
+        const trustProvider = injected.providers.find((p) => isLikelyTrust(p));
         if (hasRequest(trustProvider)) return trustProvider;
       }
       if (isMetamaskRequest) {
-        const metamaskProvider = injected.providers.find((p) => p?.isMetaMask);
+        const metamaskProvider = injected.providers.find((p) => isLikelyMetaMask(p));
         if (hasRequest(metamaskProvider)) return metamaskProvider;
       }
 
@@ -320,10 +315,18 @@ export function WalletProvider({ children }) {
       } else if (type === 'bnb') {
         // If user explicitly chose a wallet brand that isn't injected, use WalletConnect
         // so we don't silently fall back to another injected wallet (usually MetaMask).
-        if (!isRequestedInjectedWalletAvailable(walletName)) {
-          await connectWallet('walletconnect', walletName);
-          return;
+      if (!isRequestedInjectedWalletAvailable(walletName)) {
+        if (isMobile) {
+          const deepLink = getMobileBrowserDeepLink(walletName);
+          if (deepLink) {
+            window.location.href = deepLink;
+            setIsConnecting(false);
+            return;
+          }
         }
+        await connectWallet('walletconnect', walletName);
+        return;
+      }
 
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
@@ -416,7 +419,8 @@ export function WalletProvider({ children }) {
           const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
           const WalletConnectProvider = (await import('@walletconnect/web3-provider')).default;
-          const wcChainId = selectedNetwork === 'ethereum' ? 1 : 56;
+          const wantsEthereum = String(walletName || '').toLowerCase().includes('ethereum');
+          const wcChainId = wantsEthereum || selectedNetwork === 'ethereum' ? 1 : 56;
           const provider = new WalletConnectProvider({
             infuraId: '9aa3d95b3bc440fa88ea12eaa4456161',
             chainId: wcChainId,

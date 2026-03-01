@@ -13,12 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 export default function WalletButton({ compact = false }) {
   const { account, walletType, isConnecting, connectWallet, disconnectWallet, formatAddress } = useWallet();
   const [showWalletModal, setShowWalletModal] = useState(false);
-  const hasInjectedEvm =
-    typeof window !== 'undefined' && (
-      (window.ethereum && typeof window.ethereum.request === 'function') ||
-      (window.BinanceChain && typeof window.BinanceChain.request === 'function')
-    );
-  const evmConnectType = hasInjectedEvm ? 'bnb' : 'walletconnect';
+  const evmConnectType = 'bnb';
 
   const handleConnect = (type, walletName = null) => {
     connectWallet(type, walletName);

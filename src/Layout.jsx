@@ -12,6 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 import WalletButton from '@/components/WalletButton';
 import { WalletProvider } from '@/components/WalletContext';
+import WalletConnectQR from '@/components/WalletConnectQR';
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -184,6 +185,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
         </div>
       </footer>
+      <WalletConnectQR />
       </div>
     </WalletProvider>
   );

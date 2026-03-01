@@ -308,6 +308,17 @@ export function WalletProvider({ children }) {
     try {
       if (type === 'solana') {
         const solanaProvider = getSolanaProvider(walletName);
+        const shouldRetrySolanaConnectWithoutOptions = (error) => {
+          const message = String(error?.message || '').toLowerCase();
+          const code = Number(error?.code);
+          return (
+            code === -32602 ||
+            message.includes('invalid params') ||
+            message.includes('invalid arguments') ||
+            message.includes('onlyiftrusted') ||
+            message.includes('unexpected number of arguments')
+          );
+        };
 
         if (!solanaProvider) {
           if (isMobile) {
@@ -324,16 +335,21 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          let response;
+          let response = null;
           try {
             response = await solanaProvider.connect({ onlyIfTrusted: false });
           } catch (firstError) {
-            // Some providers reject options object and only support connect().
+            if (!shouldRetrySolanaConnectWithoutOptions(firstError)) {
+              throw firstError;
+            }
             response = await solanaProvider.connect();
           }
 
           const publicKey = response?.publicKey || solanaProvider?.publicKey;
-          const address = typeof publicKey?.toString === 'function' ? publicKey.toString() : '';
+          const address =
+            (typeof publicKey?.toBase58 === 'function' && publicKey.toBase58()) ||
+            (typeof publicKey?.toString === 'function' && publicKey.toString()) ||
+            '';
           if (!address) {
             throw new Error('Wallet connected but no public key was returned');
           }

@@ -414,7 +414,7 @@ export function WalletProvider({ children }) {
           const address = accounts[0];
           const walletLower = normalizeString(walletName);
           const forceEthereum = walletLower.includes('ethereum');
-          const targetChainId = forceEthereum ? '0x1' : null;
+          const targetChainId = forceEthereum ? '0x1' : '0x38';
 
           const currentChainIdRaw = await requestEvmChainId(provider);
           const currentChainId = normalizeString(currentChainIdRaw);
@@ -429,11 +429,13 @@ export function WalletProvider({ children }) {
                 await provider.request({
                   method: 'wallet_addEthereumChain',
                   params: [{
-                    chainId: '0x1',
-                    chainName: 'Ethereum Mainnet',
-                    nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-                    rpcUrls: [NETWORKS.ethereum.rpc],
-                    blockExplorerUrls: ['https://etherscan.io/'],
+                    chainId: targetChainId,
+                    chainName: forceEthereum ? 'Ethereum Mainnet' : 'BNB Smart Chain',
+                    nativeCurrency: forceEthereum
+                      ? { name: 'Ethereum', symbol: 'ETH', decimals: 18 }
+                      : { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                    rpcUrls: [forceEthereum ? NETWORKS.ethereum.rpc : NETWORKS.bsc.rpc],
+                    blockExplorerUrls: [forceEthereum ? 'https://etherscan.io/' : 'https://bscscan.com/'],
                   }],
                 });
               } else {

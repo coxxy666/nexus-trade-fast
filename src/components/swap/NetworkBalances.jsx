@@ -18,11 +18,23 @@ export default function NetworkBalances() {
     return null;
   }
 
-  const balance = Number(accountBalances?.[nativeCoin.symbol] || 0);
-  const holdingsCount = Object.entries(accountBalances || {}).filter(([key, value]) => {
+  const getNativeBalance = () => {
+    const direct = accountBalances?.[nativeCoin.symbol];
+    if (direct !== undefined && direct !== null) return Number(direct);
+    const matchedKey = Object.keys(accountBalances || {}).find(
+      (key) => String(key || '').toUpperCase() === String(nativeCoin.symbol || '').toUpperCase()
+    );
+    if (!matchedKey) return 0;
+    return Number(accountBalances?.[matchedKey] || 0);
+  };
+
+  const balance = getNativeBalance();
+  const topLevelCount = Object.entries(accountBalances || {}).filter(([key, value]) => {
     if (key === 'tokenByAddress') return false;
     return Number(value) > 0;
   }).length;
+  const byAddressCount = Object.values(accountBalances?.tokenByAddress || {}).filter((value) => Number(value) > 0).length;
+  const holdingsCount = byAddressCount > 0 ? byAddressCount + (balance > 0 ? 1 : 0) : topLevelCount;
 
   return (
     <motion.div

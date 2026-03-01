@@ -339,7 +339,7 @@ export function WalletProvider({ children }) {
               return;
             }
           }
-          await connectWallet('walletconnect', walletName, true);
+          alert(`${walletName || 'Selected wallet'} is not detected in this browser. Install/open that wallet extension (desktop) or open this site inside that wallet app (mobile).`);
           return;
         }
 
@@ -408,6 +408,10 @@ export function WalletProvider({ children }) {
 
       if (type === 'walletconnect') {
         try {
+          if (!isMobile) {
+            alert('WalletConnect is disabled in this build. Use an injected wallet extension (MetaMask/Binance/Trust) in this browser.');
+            return;
+          }
           if (typeof globalThis !== 'undefined' && typeof globalThis.global === 'undefined') {
             globalThis.global = globalThis;
           }

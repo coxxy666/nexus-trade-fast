@@ -284,8 +284,11 @@ export function WalletProvider({ children }) {
     return null;
   }, []);
 
-  const requestEvmAccounts = useCallback(async (provider) => {
-    const tryMethods = ['eth_requestAccounts', 'wallet_requestAccounts'];
+  const requestEvmAccounts = useCallback(async (provider, walletName = '') => {
+    const wallet = normalizeString(walletName);
+    const tryMethods = wallet.includes('trust')
+      ? ['eth_requestAccounts']
+      : ['eth_requestAccounts', 'wallet_requestAccounts'];
     for (const method of tryMethods) {
       try {
         const accounts = await provider.request({ method });
@@ -421,7 +424,7 @@ export function WalletProvider({ children }) {
             throw new Error('Trust Wallet EVM provider was not detected. Open this site inside Trust Wallet DApp browser and use the EVM wallet.');
           }
 
-          const accounts = await requestEvmAccounts(provider);
+          const accounts = await requestEvmAccounts(provider, walletName || '');
           const address = Array.isArray(accounts) ? accounts.find((a) => isEvmHexAddress(a)) : null;
           if (!address) {
             throw new Error('Connected account is not an EVM address. Please choose an EVM account (0x...) in Trust Wallet and retry.');

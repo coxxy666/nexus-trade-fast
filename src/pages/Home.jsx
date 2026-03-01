@@ -575,6 +575,7 @@ export default function Home() {
               { name: 'GeckoTerminal', logo: '\uD83E\uDD8E' },
               { name: 'CoinMarketCap', logo: '\uD83D\uDCB9' },
               { name: 'CoinGecko', logo: '\uD83E\uDD8E' },
+              { name: 'MEXC Exchange', logo: '\uD83D\uDFE0' },
             ].map((partner, i) => (
               <motion.div
                 key={partner.name}

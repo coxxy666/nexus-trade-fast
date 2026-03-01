@@ -138,6 +138,19 @@ function sortTokens(tokens) {
 }
 
 function dedupeAndMerge(tokens = []) {
+  const normalizeName = (value = '') =>
+    String(value)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  const makeKey = (token) => {
+    const address = String(token?.address || '').trim().toLowerCase();
+    if (address) return `addr:${address}`;
+    const symbol = String(token?.symbol || '').toUpperCase();
+    const name = normalizeName(token?.name || '');
+    return `sym:${symbol}::name:${name}`;
+  };
+
   const isCoreSymbol = (symbol) => CORE_PRIORITY.includes(String(symbol || '').toUpperCase());
   const isCoreCandidate = (token) => {
     const symbol = String(token?.symbol || '').toUpperCase();
@@ -163,7 +176,7 @@ function dedupeAndMerge(tokens = []) {
   for (const token of tokens) {
     const normalized = normalizeToken(token);
     if (!normalized.symbol) continue;
-    const key = normalized.symbol;
+    const key = makeKey(normalized);
     if (!map.has(key)) {
       map.set(key, normalized);
     } else {
@@ -173,7 +186,7 @@ function dedupeAndMerge(tokens = []) {
 
   for (const fallback of FALLBACK_TOKENS) {
     const normalized = normalizeToken(fallback);
-    const key = normalized.symbol;
+    const key = makeKey(normalized);
     if (!map.has(key)) {
       map.set(key, normalized);
       continue;

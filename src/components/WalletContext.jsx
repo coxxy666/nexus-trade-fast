@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { apiUrl } from '@/lib/apiUrl';
 
 const WalletContext = createContext();
@@ -20,7 +20,8 @@ export function WalletProvider({ children }) {
   const [web3, setWeb3] = useState(null);
   const [selectedNetwork, setSelectedNetwork] = useState('bsc');
   const [accountBalances, setAccountBalances] = useState({});
-  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+  const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+  const connectLockRef = useRef(false);
 
   const getSolanaProvider = useCallback((preferred = '') => {
     const want = String(preferred || '').toLowerCase();
@@ -303,7 +304,11 @@ export function WalletProvider({ children }) {
     return null;
   }, []);
 
-  const connectWallet = async (type = 'solana', walletName = null) => {
+  const connectWallet = async (type = 'solana', walletName = null, internal = false) => {
+    if (connectLockRef.current && !internal) return;
+    if (!internal) {
+      connectLockRef.current = true;
+    }
     setIsConnecting(true);
     try {
       if (type === 'solana') {
@@ -325,12 +330,10 @@ export function WalletProvider({ children }) {
             const deepLink = getMobileBrowserDeepLink(walletName);
             if (deepLink) {
               window.location.href = deepLink;
-              setIsConnecting(false);
               return;
             }
           }
           alert('No Solana wallet detected. Install Phantom, Solflare, or Backpack and refresh.');
-          setIsConnecting(false);
           return;
         }
 
@@ -369,17 +372,15 @@ export function WalletProvider({ children }) {
             alert(`Failed to connect ${walletName || 'Solana'} wallet: ${e?.message || 'Unknown error'}`);
           }
         }
-        setIsConnecting(false);
       } else if (type === 'bnb') {
         // On mobile, if chosen wallet isn't injected in this browser, open app or WalletConnect.
         if (isMobile && !isRequestedInjectedWalletAvailable(walletName)) {
           const deepLink = getMobileBrowserDeepLink(walletName);
           if (deepLink) {
             window.location.href = deepLink;
-            setIsConnecting(false);
             return;
           }
-          await connectWallet('walletconnect', walletName);
+          await connectWallet('walletconnect', walletName, true);
           return;
         }
 
@@ -390,12 +391,11 @@ export function WalletProvider({ children }) {
             const deepLink = getMobileBrowserDeepLink(walletName);
             if (deepLink) {
               window.location.href = deepLink;
-              setIsConnecting(false);
               return;
             }
           }
           // Fallback to WalletConnect when no injected EVM provider is available.
-          await connectWallet('walletconnect', walletName);
+          await connectWallet('walletconnect', walletName, true);
           return;
         }
 
@@ -473,15 +473,6 @@ export function WalletProvider({ children }) {
           setWcSelectedWallet(walletName || null);
           const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
-          if (isMobile) {
-            const deepLink = getMobileBrowserDeepLink(walletName);
-            if (deepLink) {
-              window.location.href = deepLink;
-              setIsConnecting(false);
-              return;
-            }
-          }
-
           const WalletConnectProvider = (await import('@walletconnect/web3-provider')).default;
           const wantsEthereum = String(walletName || '').toLowerCase().includes('ethereum');
           const wcChainId = wantsEthereum || selectedNetwork === 'ethereum' ? 1 : 56;
@@ -544,8 +535,12 @@ export function WalletProvider({ children }) {
       if (error.code !== 4001) {
         alert('Failed to connect wallet. Please try again.');
       }
+    } finally {
+      if (!internal) {
+        connectLockRef.current = false;
+      }
+      setIsConnecting(false);
     }
-    setIsConnecting(false);
   };
 
   const disconnectWallet = async () => {

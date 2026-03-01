@@ -30,13 +30,12 @@ export default function SwapCard({ onSwapDataChange }) {
    const PLATFORM_FEE_PERCENT = 0.5;
    const PLATFORM_FEE_RATE = PLATFORM_FEE_PERCENT / 100;
    const { selectedNetwork, accountBalances, account, walletType, connectWallet, isConnecting, wcProvider } = useWallet();
-   const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
    const hasInjectedEvm =
      typeof window !== 'undefined' && (
        (window.ethereum && typeof window.ethereum.request === 'function') ||
        (window.BinanceChain && typeof window.BinanceChain.request === 'function')
      );
-   const evmConnectType = isMobile && !hasInjectedEvm ? 'walletconnect' : 'bnb';
+   const evmConnectType = hasInjectedEvm ? 'bnb' : 'walletconnect';
    const [fromToken, setFromToken] = useState(null);
    const [toToken, setToToken] = useState(null);
    const [fromAmount, setFromAmount] = useState('');

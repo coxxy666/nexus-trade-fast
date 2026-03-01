@@ -327,6 +327,15 @@ export function WalletProvider({ children }) {
 
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
+          // On mobile browsers, first open the selected wallet app browser.
+          if (isMobile) {
+            const deepLink = getMobileBrowserDeepLink(walletName);
+            if (deepLink) {
+              window.location.href = deepLink;
+              setIsConnecting(false);
+              return;
+            }
+          }
           // Fallback to WalletConnect when no injected EVM provider is available.
           await connectWallet('walletconnect', walletName);
           return;

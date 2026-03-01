@@ -142,6 +142,10 @@ export function WalletProvider({ children }) {
     const list = [];
 
     if (hasRequest(window.BinanceChain)) list.push(window.BinanceChain);
+    if (hasRequest(window?.trustwallet)) list.push(window.trustwallet);
+    if (hasRequest(window?.trustwallet?.ethereum)) list.push(window.trustwallet.ethereum);
+    if (hasRequest(window?.trustWallet)) list.push(window.trustWallet);
+    if (hasRequest(window?.trustWallet?.ethereum)) list.push(window.trustWallet.ethereum);
 
     const injected = window.ethereum;
     if (Array.isArray(injected?.providers) && injected.providers.length > 0) {
@@ -155,7 +159,13 @@ export function WalletProvider({ children }) {
   }, []);
 
   const providerLabel = (p) => `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-  const isTrustProvider = (p) => !!(p?.isTrust || p?.isTrustWallet || providerLabel(p).includes('trust'));
+  const isTrustProvider = (p) => !!(
+    p?.isTrust ||
+    p?.isTrustWallet ||
+    p?.isTrustWeb3 ||
+    p?.provider === 'TrustWallet' ||
+    providerLabel(p).includes('trust wallet')
+  );
   const isCoinbaseProvider = (p) => !!(p?.isCoinbaseWallet || providerLabel(p).includes('coinbase'));
   const isBinanceProvider = (p) => !!(
     p?.isBinance ||
@@ -253,7 +263,7 @@ export function WalletProvider({ children }) {
     const wallet = normalizeString(walletName);
     if (wallet.includes('phantom')) return `https://phantom.app/ul/browse/${currentUrl}?ref=${ref}`;
     if (wallet.includes('solflare')) return `https://solflare.com/ul/v1/browse/${currentUrl}?ref=${ref}`;
-    if (wallet.includes('trust')) return `trust://open_url?url=${currentUrl}`;
+    if (wallet.includes('trust')) return `https://link.trustwallet.com/open_url?coin_id=60&url=${currentUrl}`;
     if (wallet.includes('metamask')) return `metamask://dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
     if (wallet.includes('binance')) return `https://bnbchain.wallet/binance-wallet/dapp?url=${currentUrl}`;
     return null;

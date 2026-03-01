@@ -4,10 +4,12 @@ import { apiUrl } from '@/lib/apiUrl';
 const WalletContext = createContext();
 
 const NETWORKS = {
-  'bsc': { id: '0x38', chainId: 56, name: 'BNB Smart Chain', icon: '??', rpc: 'https://bsc-dataseed.binance.org/' },
-  'ethereum': { id: '0x1', chainId: 1, name: 'Ethereum', icon: 'ETH', rpc: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161' },
-  'solana': { id: 'solana', chainId: null, name: 'Solana', icon: '?', rpc: null },
+  bsc: { id: '0x38', chainId: 56, name: 'BNB Smart Chain', icon: 'BNB', rpc: 'https://bsc-dataseed.binance.org/' },
+  ethereum: { id: '0x1', chainId: 1, name: 'Ethereum', icon: 'ETH', rpc: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161' },
+  solana: { id: 'solana', chainId: null, name: 'Solana', icon: 'SOL', rpc: null },
 };
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function WalletProvider({ children }) {
   const [account, setAccount] = useState(null);
@@ -20,237 +22,11 @@ export function WalletProvider({ children }) {
   const [web3, setWeb3] = useState(null);
   const [selectedNetwork, setSelectedNetwork] = useState('bsc');
   const [accountBalances, setAccountBalances] = useState({});
-  const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+
   const connectLockRef = useRef(false);
-  const solanaRequestRef = useRef(null);
+  const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
-  const getSolanaProvider = useCallback((preferred = '') => {
-    const want = String(preferred || '').toLowerCase();
-    const normalizeProvider = (providerLike) => {
-      if (!providerLike) return null;
-      if (typeof providerLike.connect === 'function') return providerLike;
-      if (
-        typeof providerLike.request === 'function' &&
-        (providerLike?.isSolflare || providerLike?.isPhantom || providerLike?.isBackpack)
-      ) {
-        return {
-          ...providerLike,
-          connect: (opts) => providerLike.request({ method: 'connect', params: opts ? [opts] : [] }),
-        };
-      }
-      if (providerLike?.solana && typeof providerLike.solana.connect === 'function') return providerLike.solana;
-      return null;
-    };
-    const getExtraSolanaProviders = () => {
-      const extras = [];
-      const globalCandidates = [
-        window?.solflare?.provider,
-        window?.Solflare,
-        window?.Solflare?.solana,
-      ];
-      for (const candidate of globalCandidates) {
-        const normalized = normalizeProvider(candidate);
-        if (normalized) extras.push(normalized);
-      }
-      // Last-resort scan for providers injected under non-standard keys.
-      try {
-        for (const value of Object.values(window || {})) {
-          if (!value || typeof value !== 'object') continue;
-          if (!value?.isSolflare && !value?.isPhantom && !value?.isBackpack) continue;
-          const normalized = normalizeProvider(value);
-          if (normalized) extras.push(normalized);
-        }
-      } catch {
-        // ignore enumeration issues
-      }
-      return extras;
-    };
-
-    const candidates = [
-      { key: 'phantom', provider: window?.phantom?.solana },
-      { key: 'solflare', provider: window?.solflare?.solana || window?.solflare },
-      { key: 'backpack', provider: window?.backpack },
-      { key: 'coin98', provider: window?.coin98?.solana },
-      { key: 'default', provider: window?.solana },
-    ];
-
-    if (Array.isArray(window?.solana?.providers)) {
-      for (const p of window.solana.providers) {
-        if (!p) continue;
-        if (p.isPhantom) candidates.push({ key: 'phantom', provider: p });
-        else if (p.isSolflare) candidates.push({ key: 'solflare', provider: p });
-        else if (p.isBackpack) candidates.push({ key: 'backpack', provider: p });
-        else candidates.push({ key: 'unknown', provider: p });
-      }
-    }
-    for (const p of getExtraSolanaProviders()) {
-      if (p?.isPhantom) candidates.push({ key: 'phantom', provider: p });
-      else if (p?.isSolflare) candidates.push({ key: 'solflare', provider: p });
-      else if (p?.isBackpack) candidates.push({ key: 'backpack', provider: p });
-      else candidates.push({ key: 'unknown', provider: p });
-    }
-
-    const valid = candidates
-      .map((c) => ({ ...c, provider: normalizeProvider(c.provider) }))
-      .filter((c) => c.provider && typeof c.provider.connect === 'function');
-
-    if (want) {
-      const exact = valid.find((c) => c.key === want);
-      if (exact) return exact.provider;
-    }
-
-    return valid[0]?.provider || null;
-  }, []);
-
-  const findSolanaProviderWithRetry = useCallback(async (walletName) => {
-    const attempts = 10;
-    for (let i = 0; i < attempts; i += 1) {
-      const provider = getSolanaProvider(walletName);
-      if (provider) return provider;
-      await new Promise((resolve) => setTimeout(resolve, 120));
-    }
-    return null;
-  }, [getSolanaProvider]);
-
-  const getEvmProvider = useCallback((preferredWallet = '') => {
-    const hasRequest = (p) => p && typeof p.request === 'function';
-    const isLikelyTrust = (p) => !!(p?.isTrust || p?.isTrustWallet);
-    const isLikelyCoinbase = (p) => !!p?.isCoinbaseWallet;
-    const isLikelyBinance = (p) => {
-      const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-      return !!(
-        p?.isBinance ||
-        p?.isBinanceWallet ||
-        p?.isBnbWallet ||
-        p?.isBinanceChain ||
-        label.includes('binance') ||
-        label.includes('bnb chain') ||
-        label.includes('bnb')
-      );
-    };
-    const isLikelyMetaMask = (p) => !!(p?.isMetaMask && !isLikelyTrust(p) && !isLikelyCoinbase(p) && !isLikelyBinance(p));
-    const preferred = String(preferredWallet || '').toLowerCase();
-    const isBinanceRequest = preferred.includes('binance');
-    const isCoinbaseRequest = preferred.includes('coinbase');
-    const isTrustRequest = preferred.includes('trust');
-    const isMetamaskRequest = preferred.includes('metamask');
-    const isStrictSpecificRequest = isBinanceRequest || isCoinbaseRequest || isTrustRequest || isMetamaskRequest;
-
-    if (isBinanceRequest && hasRequest(window.BinanceChain)) return window.BinanceChain;
-
-    const injected = window.ethereum;
-    if (!injected) return null;
-
-    // Handle single-provider mobile in-app browsers (no ethereum.providers array).
-    if (!Array.isArray(injected.providers) || injected.providers.length === 0) {
-      if (isBinanceRequest) {
-        if (hasRequest(window.BinanceChain)) return window.BinanceChain;
-        if (isLikelyBinance(injected)) {
-          return hasRequest(injected) ? injected : null;
-        }
-        return null;
-      }
-
-      if (isTrustRequest) {
-        if (isLikelyTrust(injected)) return hasRequest(injected) ? injected : null;
-        return null;
-      }
-
-      if (isMetamaskRequest) {
-        if (isLikelyMetaMask(injected)) return hasRequest(injected) ? injected : null;
-        return null;
-      }
-
-      if (isCoinbaseRequest) {
-        if (isLikelyCoinbase(injected)) return hasRequest(injected) ? injected : null;
-        return null;
-      }
-
-      return hasRequest(injected) ? injected : null;
-    }
-
-    if (Array.isArray(injected.providers) && injected.providers.length > 0) {
-      if (isBinanceRequest) {
-        const binanceProvider = injected.providers.find((p) => isLikelyBinance(p));
-        if (hasRequest(binanceProvider)) return binanceProvider;
-        // Some Binance extensions do not expose clear flags; prefer non-MetaMask provider.
-        const nonMetaProvider = injected.providers.find(
-          (p) => hasRequest(p) && !isLikelyMetaMask(p) && !isLikelyCoinbase(p)
-        );
-        if (hasRequest(nonMetaProvider)) return nonMetaProvider;
-        // Do not silently fall back to MetaMask for explicit Binance selection.
-        return null;
-      }
-      if (isCoinbaseRequest) {
-        const coinbaseProvider = injected.providers.find((p) => isLikelyCoinbase(p));
-        if (hasRequest(coinbaseProvider)) return coinbaseProvider;
-      }
-      if (isTrustRequest) {
-        const trustProvider = injected.providers.find((p) => isLikelyTrust(p));
-        if (hasRequest(trustProvider)) return trustProvider;
-      }
-      if (isMetamaskRequest) {
-        const metamaskProvider = injected.providers.find((p) => isLikelyMetaMask(p));
-        if (hasRequest(metamaskProvider)) return metamaskProvider;
-      }
-
-      if (isStrictSpecificRequest) {
-        return null;
-      }
-
-      const preferred = injected.providers.find(
-        (p) => p?.isMetaMask || p?.isTrust || p?.isBinance || p?.isCoinbaseWallet
-      );
-      if (hasRequest(preferred)) return preferred;
-
-      const fallback = injected.providers.find((p) => hasRequest(p));
-      if (fallback) return fallback;
-    }
-
-    return hasRequest(injected) ? injected : null;
-  }, []);
-
-  const isRequestedInjectedWalletAvailable = useCallback((walletName = '') => {
-    const name = String(walletName || '').toLowerCase();
-    if (!name) return true;
-    if (name.includes('ethereum')) return true;
-
-    const hasRequest = (p) => p && typeof p.request === 'function';
-    const injected = window.ethereum;
-    const providers = Array.isArray(injected?.providers) && injected.providers.length > 0
-      ? injected.providers
-      : (injected ? [injected] : []);
-
-    if (name.includes('binance')) {
-      if (hasRequest(window.BinanceChain)) return true;
-      return providers.some((p) => {
-        const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
-        return (
-          p?.isBinance ||
-          p?.isBinanceWallet ||
-          p?.isBnbWallet ||
-          p?.isBinanceChain ||
-          label.includes('binance') ||
-          label.includes('bnb chain') ||
-          label.includes('bnb')
-        );
-      });
-    }
-
-    if (name.includes('trust')) {
-      return providers.some((p) => p?.isTrust || p?.isTrustWallet);
-    }
-
-    if (name.includes('coinbase')) {
-      return providers.some((p) => p?.isCoinbaseWallet);
-    }
-
-    if (name.includes('metamask')) {
-      return providers.some((p) => p?.isMetaMask);
-    }
-
-    return providers.some((p) => hasRequest(p));
-  }, []);
+  const normalizeString = (value) => String(value || '').toLowerCase();
 
   const fetchAccountBalances = useCallback(async (address, chain) => {
     if (!address || !chain) {
@@ -276,30 +52,129 @@ export function WalletProvider({ children }) {
     }
   }, []);
 
-  const commitConnectedEvmAccount = useCallback(async (provider, address, walletName = '') => {
-    const chainId = await provider.request({ method: 'eth_chainId' });
-    const isEthereumRequested = String(walletName || '').toLowerCase().includes('ethereum');
-    const targetNetwork = isEthereumRequested
-      ? 'ethereum'
-      : String(chainId || '').toLowerCase() === '0x1'
-        ? 'ethereum'
-        : 'bsc';
-
+  const setConnectedSession = useCallback(async ({ address, type, chain, provider = null }) => {
     setAccount(address);
-    setWalletType('bnb');
-    setSelectedNetwork(targetNetwork);
+    setWalletType(type);
+    setSelectedNetwork(chain);
     localStorage.setItem('connectedWallet', address);
-    localStorage.setItem('walletType', 'bnb');
-    localStorage.setItem('selectedNetwork', targetNetwork);
-    fetchAccountBalances(address, targetNetwork);
-    return targetNetwork;
+    localStorage.setItem('walletType', type);
+    localStorage.setItem('selectedNetwork', chain);
+    if (provider) setWcProvider(provider);
+    await fetchAccountBalances(address, chain);
   }, [fetchAccountBalances]);
+
+  const collectSolanaProviders = useCallback(() => {
+    if (typeof window === 'undefined') return [];
+    const raw = [
+      window?.phantom?.solana,
+      window?.solflare?.solana,
+      window?.solflare,
+      window?.backpack?.solana,
+      window?.backpack,
+      window?.coin98?.solana,
+      window?.solana,
+      window?.Solflare?.solana,
+      window?.Solflare,
+    ];
+
+    if (Array.isArray(window?.solana?.providers)) {
+      raw.push(...window.solana.providers);
+    }
+
+    const providers = [];
+    for (const candidate of raw) {
+      if (!candidate) continue;
+      const normalized = candidate?.solana && typeof candidate.solana.connect === 'function'
+        ? candidate.solana
+        : candidate;
+      if (typeof normalized?.connect !== 'function') continue;
+      if (!providers.includes(normalized)) providers.push(normalized);
+    }
+    return providers;
+  }, []);
+
+  const getSolanaProvider = useCallback((walletName = '') => {
+    const want = normalizeString(walletName);
+    const providers = collectSolanaProviders();
+    if (!providers.length) return null;
+
+    if (want.includes('phantom')) {
+      return providers.find((p) => p?.isPhantom) || null;
+    }
+    if (want.includes('solflare')) {
+      return providers.find((p) => p?.isSolflare) || null;
+    }
+    if (want.includes('backpack')) {
+      return providers.find((p) => p?.isBackpack) || null;
+    }
+    return providers[0] || null;
+  }, [collectSolanaProviders]);
+
+  const waitForSolanaProvider = useCallback(async (walletName = '') => {
+    for (let i = 0; i < 12; i += 1) {
+      const provider = getSolanaProvider(walletName);
+      if (provider) return provider;
+      await sleep(120);
+    }
+    return null;
+  }, [getSolanaProvider]);
+
+  const collectEvmProviders = useCallback(() => {
+    if (typeof window === 'undefined') return [];
+    const hasRequest = (p) => p && typeof p.request === 'function';
+    const list = [];
+
+    if (hasRequest(window.BinanceChain)) list.push(window.BinanceChain);
+
+    const injected = window.ethereum;
+    if (Array.isArray(injected?.providers) && injected.providers.length > 0) {
+      for (const p of injected.providers) {
+        if (hasRequest(p) && !list.includes(p)) list.push(p);
+      }
+    } else if (hasRequest(injected) && !list.includes(injected)) {
+      list.push(injected);
+    }
+    return list;
+  }, []);
+
+  const providerLabel = (p) => `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
+  const isTrustProvider = (p) => !!(p?.isTrust || p?.isTrustWallet || providerLabel(p).includes('trust'));
+  const isCoinbaseProvider = (p) => !!(p?.isCoinbaseWallet || providerLabel(p).includes('coinbase'));
+  const isBinanceProvider = (p) => !!(
+    p?.isBinance ||
+    p?.isBinanceWallet ||
+    p?.isBnbWallet ||
+    p?.isBinanceChain ||
+    providerLabel(p).includes('binance') ||
+    providerLabel(p).includes('bnb chain')
+  );
+  const isMetaMaskProvider = (p) => !!(p?.isMetaMask && !isTrustProvider(p) && !isCoinbaseProvider(p) && !isBinanceProvider(p));
+
+  const getEvmProvider = useCallback((walletName = '') => {
+    const want = normalizeString(walletName);
+    const providers = collectEvmProviders();
+    if (!providers.length) return null;
+
+    if (want.includes('binance')) return providers.find(isBinanceProvider) || null;
+    if (want.includes('metamask')) return providers.find(isMetaMaskProvider) || null;
+    if (want.includes('trust')) return providers.find(isTrustProvider) || null;
+    if (want.includes('coinbase')) return providers.find(isCoinbaseProvider) || null;
+    if (want.includes('ethereum')) return providers.find(isMetaMaskProvider) || providers[0] || null;
+
+    return providers[0] || null;
+  }, [collectEvmProviders]);
+
+  const isRequestedInjectedWalletAvailable = useCallback((walletName = '') => {
+    const name = normalizeString(walletName);
+    if (!name) return true;
+    if (name.includes('ethereum')) return true;
+    return !!getEvmProvider(walletName);
+  }, [getEvmProvider]);
 
   useEffect(() => {
     const savedAccount = localStorage.getItem('connectedWallet');
     const savedType = localStorage.getItem('walletType');
     const savedNetwork = localStorage.getItem('selectedNetwork') || 'bsc';
-
     if (savedAccount && savedType) {
       setAccount(savedAccount);
       setWalletType(savedType);
@@ -316,15 +191,15 @@ export function WalletProvider({ children }) {
 
   const getWalletDeeplink = (walletName) => {
     const deeplinks = {
-      'Rainbow': 'rainbow://wc',
+      Rainbow: 'rainbow://wc',
       'Trust Wallet': 'trust://wc',
       'Coinbase Wallet': 'cbwallet://wc',
       'Binance Web3': 'bnb://wc',
-      'Solflare': 'solflare://wc',
+      Solflare: 'solflare://wc',
       'Magic Eden': 'magiceden://wc',
-      'Argent': 'argent://wc',
+      Argent: 'argent://wc',
       'Ledger Live': 'ledger://wc',
-      'SafePal': 'safepal://wc',
+      SafePal: 'safepal://wc',
       'OKX Wallet': 'okx://wc',
       'Gate.io Web3': 'gateio://wc',
       'Kucoin Wallet': 'kucoin://wc',
@@ -332,28 +207,25 @@ export function WalletProvider({ children }) {
     return deeplinks[walletName] || null;
   };
 
-  const getWalletDeepLinkUrl = useCallback((walletName, wcUri) => {
-    if (!walletName || !wcUri) return null;
-    const encoded = encodeURIComponent(wcUri);
-
+  const getWalletDeepLinkUrl = useCallback((walletName, wcUriValue) => {
+    if (!walletName || !wcUriValue) return null;
+    const encoded = encodeURIComponent(wcUriValue);
     const builders = {
-      'Rainbow': () => `rainbow://wc?uri=${encoded}`,
+      Rainbow: () => `rainbow://wc?uri=${encoded}`,
       'Trust Wallet': () => `trust://wc?uri=${encoded}`,
       'Coinbase Wallet': () => `https://go.cb-w.com/wc?uri=${encoded}`,
       'Binance Web3': () => `bnb://wc?uri=${encoded}`,
-      'Solflare': () => `solflare://wc?uri=${encoded}`,
+      Solflare: () => `solflare://wc?uri=${encoded}`,
       'Magic Eden': () => `magiceden://wc?uri=${encoded}`,
-      'Argent': () => `argent://app/wc?uri=${encoded}`,
+      Argent: () => `argent://app/wc?uri=${encoded}`,
       'Ledger Live': () => `ledgerlive://wc?uri=${encoded}`,
-      'SafePal': () => `safepal://wc?uri=${encoded}`,
+      SafePal: () => `safepal://wc?uri=${encoded}`,
       'OKX Wallet': () => `okx://wallet/connect?uri=${encoded}`,
       'Gate.io Web3': () => `gateio://wc?uri=${encoded}`,
       'Kucoin Wallet': () => `kucoin://wc?uri=${encoded}`,
     };
-
     const build = builders[walletName];
     if (build) return build();
-
     const fallback = getWalletDeeplink(walletName);
     return fallback ? `${fallback}?uri=${encoded}` : null;
   }, []);
@@ -361,48 +233,24 @@ export function WalletProvider({ children }) {
   const getMobileBrowserDeepLink = useCallback((walletName) => {
     const currentUrl = encodeURIComponent(window.location.href);
     const ref = encodeURIComponent(window.location.origin);
-    const wallet = String(walletName || '').toLowerCase();
-
-    if (wallet.includes('phantom')) {
-      return `https://phantom.app/ul/browse/${currentUrl}?ref=${ref}`;
-    }
-    if (wallet.includes('solflare')) {
-      return `https://solflare.com/ul/v1/browse/${currentUrl}?ref=${ref}`;
-    }
-    if (wallet.includes('trust')) {
-      return `https://link.trustwallet.com/open_url?url=${currentUrl}`;
-    }
-    if (wallet.includes('metamask')) {
-      return `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
-    }
-    if (wallet.includes('binance')) {
-      return `https://bnbchain.wallet/binance-wallet/dapp?url=${currentUrl}`;
-    }
+    const wallet = normalizeString(walletName);
+    if (wallet.includes('phantom')) return `https://phantom.app/ul/browse/${currentUrl}?ref=${ref}`;
+    if (wallet.includes('solflare')) return `https://solflare.com/ul/v1/browse/${currentUrl}?ref=${ref}`;
+    if (wallet.includes('trust')) return `https://link.trustwallet.com/open_url?url=${currentUrl}`;
+    if (wallet.includes('metamask')) return `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
+    if (wallet.includes('binance')) return `https://bnbchain.wallet/binance-wallet/dapp?url=${currentUrl}`;
     return null;
   }, []);
 
-  const connectWallet = async (type = 'solana', walletName = null, internal = false) => {
+  const connectWallet = useCallback(async (type = 'solana', walletName = null, internal = false) => {
     if (connectLockRef.current && !internal) return;
-    if (!internal) {
-      connectLockRef.current = true;
-    }
+    if (!internal) connectLockRef.current = true;
     setIsConnecting(true);
+
     try {
       if (type === 'solana') {
-        const solanaProvider = await findSolanaProviderWithRetry(walletName);
-        const shouldRetrySolanaConnectWithoutOptions = (error) => {
-          const message = String(error?.message || '').toLowerCase();
-          const code = Number(error?.code);
-          return (
-            code === -32602 ||
-            message.includes('invalid params') ||
-            message.includes('invalid arguments') ||
-            message.includes('onlyiftrusted') ||
-            message.includes('unexpected number of arguments')
-          );
-        };
-
-        if (!solanaProvider) {
+        const provider = await waitForSolanaProvider(walletName);
+        if (!provider) {
           if (isMobile) {
             const deepLink = getMobileBrowserDeepLink(walletName);
             if (deepLink) {
@@ -415,109 +263,58 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          const existingSolanaKey = solanaProvider?.publicKey;
-          const existingSolanaAddress =
-            (typeof existingSolanaKey?.toBase58 === 'function' && existingSolanaKey.toBase58()) ||
-            (typeof existingSolanaKey?.toString === 'function' && existingSolanaKey.toString()) ||
+          const existingKey = provider?.publicKey;
+          const existingAddress =
+            (typeof existingKey?.toBase58 === 'function' && existingKey.toBase58()) ||
+            (typeof existingKey?.toString === 'function' && existingKey.toString()) ||
             '';
-          if (existingSolanaAddress) {
-            setAccount(existingSolanaAddress);
-            setWalletType('solana');
-            setSelectedNetwork('solana');
-            localStorage.setItem('connectedWallet', existingSolanaAddress);
-            localStorage.setItem('walletType', 'solana');
-            localStorage.setItem('selectedNetwork', 'solana');
-            fetchAccountBalances(existingSolanaAddress, 'solana');
+          if (existingAddress) {
+            await setConnectedSession({ address: existingAddress, type: 'solana', chain: 'solana' });
             return;
           }
 
-          if (solanaRequestRef.current) {
-            await solanaRequestRef.current;
-            return;
-          }
-
-          let response = null;
+          let response;
           try {
-            solanaRequestRef.current = solanaProvider.connect({ onlyIfTrusted: false });
-            response = await solanaRequestRef.current;
+            response = await provider.connect({ onlyIfTrusted: false });
           } catch (firstError) {
-            if (!shouldRetrySolanaConnectWithoutOptions(firstError)) {
-              throw firstError;
-            }
-            solanaRequestRef.current = solanaProvider.connect();
-            response = await solanaRequestRef.current;
+            const message = normalizeString(firstError?.message);
+            const code = Number(firstError?.code);
+            const canRetryWithoutOptions =
+              code === -32602 ||
+              message.includes('invalid params') ||
+              message.includes('invalid arguments') ||
+              message.includes('onlyiftrusted') ||
+              message.includes('unexpected number of arguments');
+            if (!canRetryWithoutOptions) throw firstError;
+            response = await provider.connect();
           }
 
-          const publicKey = response?.publicKey || solanaProvider?.publicKey;
+          const key = response?.publicKey || provider?.publicKey;
           const address =
-            (typeof publicKey?.toBase58 === 'function' && publicKey.toBase58()) ||
-            (typeof publicKey?.toString === 'function' && publicKey.toString()) ||
+            (typeof key?.toBase58 === 'function' && key.toBase58()) ||
+            (typeof key?.toString === 'function' && key.toString()) ||
             '';
-          if (!address) {
-            throw new Error('Wallet connected but no public key was returned');
-          }
-          setAccount(address);
-          setWalletType('solana');
-          setSelectedNetwork('solana');
-          localStorage.setItem('connectedWallet', address);
-          localStorage.setItem('walletType', 'solana');
-          localStorage.setItem('selectedNetwork', 'solana');
-          fetchAccountBalances(address, 'solana');
-        } catch (e) {
-          console.error('Solana wallet connection error:', e);
-          const msg = String(e?.message || '').toLowerCase();
+          if (!address) throw new Error('Wallet connected but no public key was returned');
+
+          await setConnectedSession({ address, type: 'solana', chain: 'solana' });
+          return;
+        } catch (error) {
+          const msg = normalizeString(error?.message);
           if (msg.includes('already pending') || msg.includes('already processing')) {
-            try {
-              if (typeof solanaProvider?.disconnect === 'function') {
-                await solanaProvider.disconnect();
-              }
-              const retryResponse = await solanaProvider.connect({ onlyIfTrusted: false });
-              const retryPublicKey = retryResponse?.publicKey || solanaProvider?.publicKey;
-              const retryAddress =
-                (typeof retryPublicKey?.toBase58 === 'function' && retryPublicKey.toBase58()) ||
-                (typeof retryPublicKey?.toString === 'function' && retryPublicKey.toString()) ||
-                '';
-              if (retryAddress) {
-                setAccount(retryAddress);
-                setWalletType('solana');
-                setSelectedNetwork('solana');
-                localStorage.setItem('connectedWallet', retryAddress);
-                localStorage.setItem('walletType', 'solana');
-                localStorage.setItem('selectedNetwork', 'solana');
-                fetchAccountBalances(retryAddress, 'solana');
-                return;
-              }
-            } catch {
-              // keep default alert below
-            }
-            alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
+            alert('A Solana wallet request is already pending. Open the wallet popup and approve or reject it.');
             return;
           }
-          if (e?.code === 4001 || e?.code === 4100 || msg.includes('rejected') || msg.includes('declined')) {
-            console.log('User rejected connection');
-          } else {
-            alert(`Failed to connect ${walletName || 'Solana'} wallet: ${e?.message || 'Unknown error'}`);
+          if (error?.code === 4001 || error?.code === 4100 || msg.includes('rejected') || msg.includes('declined')) {
+            return;
           }
-        } finally {
-          solanaRequestRef.current = null;
-        }
-      } else if (type === 'bnb') {
-        // If chosen wallet isn't injected in this browser, open app (mobile) or use WalletConnect.
-        if (!isRequestedInjectedWalletAvailable(walletName)) {
-          if (isMobile) {
-            const deepLink = getMobileBrowserDeepLink(walletName);
-            if (deepLink) {
-              window.location.href = deepLink;
-              return;
-            }
-          }
-          await connectWallet('walletconnect', walletName, true);
+          alert(`Failed to connect ${walletName || 'Solana'} wallet: ${error?.message || 'Unknown error'}`);
           return;
         }
+      }
 
-        const evmProvider = getEvmProvider(walletName);
-        if (!evmProvider) {
-          // On mobile browsers, first open the selected wallet app browser.
+      if (type === 'bnb') {
+        const provider = getEvmProvider(walletName);
+        if (!provider) {
           if (isMobile) {
             const deepLink = getMobileBrowserDeepLink(walletName);
             if (deepLink) {
@@ -525,7 +322,6 @@ export function WalletProvider({ children }) {
               return;
             }
           }
-          // Fallback to WalletConnect when no injected EVM provider is available.
           await connectWallet('walletconnect', walletName, true);
           return;
         }
@@ -533,62 +329,43 @@ export function WalletProvider({ children }) {
         try {
           let accounts = [];
           try {
-            const existingAccounts = await evmProvider.request({ method: 'eth_accounts' });
-            if (Array.isArray(existingAccounts) && existingAccounts.length > 0) {
-              accounts = existingAccounts;
-            }
+            const existing = await provider.request({ method: 'eth_accounts' });
+            if (Array.isArray(existing) && existing.length > 0) accounts = existing;
           } catch {
-            // Ignore and request accounts below.
+            // ignore
           }
 
-          if (!accounts || accounts.length === 0) {
-            accounts = await evmProvider.request({
-              method: 'eth_requestAccounts'
-            });
+          if (!accounts.length) {
+            accounts = await provider.request({ method: 'eth_requestAccounts' });
           }
-
-          if (!accounts || accounts.length === 0) {
+          if (!Array.isArray(accounts) || !accounts.length) {
             throw new Error('No accounts found');
           }
 
-          const currentChainIdAtConnect = await evmProvider.request({ method: 'eth_chainId' });
+          const address = accounts[0];
+          const walletLower = normalizeString(walletName);
+          const forceEthereum = walletLower.includes('ethereum');
+          const targetChainId = forceEthereum ? '0x1' : null;
 
-          const isEthereumRequested = String(walletName || '').toLowerCase().includes('ethereum');
-          const targetNetwork = isEthereumRequested
-            ? 'ethereum'
-            : currentChainIdAtConnect === '0x1'
-              ? 'ethereum'
-              : 'bsc';
-          const targetChainId = isEthereumRequested ? '0x1' : '0x38';
-          const targetChainName = isEthereumRequested ? 'Ethereum Mainnet' : 'BNB Smart Chain';
-          const targetCurrency = isEthereumRequested
-            ? { name: 'Ethereum', symbol: 'ETH', decimals: 18 }
-            : { name: 'BNB', symbol: 'BNB', decimals: 18 };
-          const targetRpcUrls = isEthereumRequested
-            ? ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161']
-            : ['https://bsc-dataseed.binance.org/'];
-          const targetExplorerUrls = isEthereumRequested
-            ? ['https://etherscan.io/']
-            : ['https://bscscan.com/'];
-
-          const currentChainId = await evmProvider.request({ method: 'eth_chainId' });
-          if (currentChainId !== targetChainId) {
+          const currentChainIdRaw = await provider.request({ method: 'eth_chainId' });
+          const currentChainId = normalizeString(currentChainIdRaw);
+          if (targetChainId && currentChainId !== targetChainId) {
             try {
-              await evmProvider.request({
+              await provider.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: targetChainId }],
               });
             } catch (switchError) {
-              if (switchError.code === 4902) {
-                await evmProvider.request({
+              if (switchError?.code === 4902) {
+                await provider.request({
                   method: 'wallet_addEthereumChain',
                   params: [{
-                    chainId: targetChainId,
-                    chainName: targetChainName,
-                    nativeCurrency: targetCurrency,
-                    rpcUrls: targetRpcUrls,
-                    blockExplorerUrls: targetExplorerUrls
-                  }]
+                    chainId: '0x1',
+                    chainName: 'Ethereum Mainnet',
+                    nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+                    rpcUrls: [NETWORKS.ethereum.rpc],
+                    blockExplorerUrls: ['https://etherscan.io/'],
+                  }],
                 });
               } else {
                 throw switchError;
@@ -596,56 +373,35 @@ export function WalletProvider({ children }) {
             }
           }
 
-          await commitConnectedEvmAccount(evmProvider, accounts[0], walletName);
-        } catch (bnbError) {
-          const msg = String(bnbError?.message || '').toLowerCase();
-          if (bnbError?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
-            try {
-              const existingAccounts = await evmProvider.request({ method: 'eth_accounts' });
-              if (Array.isArray(existingAccounts) && existingAccounts.length > 0) {
-                await commitConnectedEvmAccount(evmProvider, existingAccounts[0], walletName);
-                return;
-              }
-            } catch {
-              // Fall through to alert below.
-            }
-            try {
-              await evmProvider.request({
-                method: 'wallet_requestPermissions',
-                params: [{ eth_accounts: {} }],
-              });
-              const retriedAccounts = await evmProvider.request({ method: 'eth_accounts' });
-              if (Array.isArray(retriedAccounts) && retriedAccounts.length > 0) {
-                await commitConnectedEvmAccount(evmProvider, retriedAccounts[0], walletName);
-                return;
-              }
-            } catch {
-              // continue to alert below
-            }
-            alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
-            throw bnbError;
+          const finalChainRaw = await provider.request({ method: 'eth_chainId' });
+          const chain = normalizeString(finalChainRaw) === '0x1' ? 'ethereum' : 'bsc';
+          await setConnectedSession({ address, type: 'bnb', chain });
+          return;
+        } catch (error) {
+          const msg = normalizeString(error?.message);
+          if (error?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
+            alert('An EVM wallet request is already pending. Open the wallet popup and approve or reject it.');
+            return;
           }
-          if (bnbError.code === 4001) {
-            console.log('User rejected wallet connection');
-          } else {
-            console.error('BNB wallet connection error:', bnbError);
-          }
-          throw bnbError;
+          if (error?.code === 4001 || msg.includes('user rejected')) return;
+          alert(`Failed to connect wallet: ${error?.message || 'Unknown error'}`);
+          return;
         }
-      } else if (type === 'walletconnect') {
+      }
+
+      if (type === 'walletconnect') {
         try {
           setWcSelectedWallet(walletName || null);
-          const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
-
           const WalletConnectProvider = (await import('@walletconnect/web3-provider')).default;
-          const wantsEthereum = String(walletName || '').toLowerCase().includes('ethereum');
+          const wantsEthereum = normalizeString(walletName).includes('ethereum');
           const wcChainId = wantsEthereum || selectedNetwork === 'ethereum' ? 1 : 56;
+
           const provider = new WalletConnectProvider({
             infuraId: '9aa3d95b3bc440fa88ea12eaa4456161',
             chainId: wcChainId,
             rpc: {
-              1: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-              56: 'https://bsc-dataseed.binance.org/',
+              1: NETWORKS.ethereum.rpc,
+              56: NETWORKS.bsc.rpc,
             },
             qrcodeModal: {
               open: (uri) => {
@@ -653,69 +409,68 @@ export function WalletProvider({ children }) {
                 setShowWcQr(true);
                 if (walletName && isMobile) {
                   const targetUrl = getWalletDeepLinkUrl(walletName, uri);
-                  setTimeout(() => {
-                    if (targetUrl) {
+                  if (targetUrl) {
+                    setTimeout(() => {
                       window.location.href = targetUrl;
-                    }
-                  }, 150);
+                    }, 120);
+                  }
                 }
               },
               close: () => {
                 setShowWcQr(false);
                 setWcUri(null);
-              }
-            }
+              },
+            },
           });
 
           await provider.enable();
-          const accounts = provider.accounts;
+          const accounts = Array.isArray(provider.accounts) ? provider.accounts : [];
+          if (!accounts.length) throw new Error('No accounts returned by WalletConnect');
 
-          if (accounts && accounts.length > 0) {
-            setAccount(accounts[0]);
-            setWalletType('walletconnect');
-            setWcProvider(provider);
-            const connectedChain = provider.chainId === 1 ? 'ethereum' : 'bsc';
-            setSelectedNetwork(connectedChain);
-            localStorage.setItem('connectedWallet', accounts[0]);
-            localStorage.setItem('walletType', 'walletconnect');
-            localStorage.setItem('selectedNetwork', connectedChain);
-            setShowWcQr(false);
-            setWcUri(null);
-            setWcSelectedWallet(null);
-            fetchAccountBalances(accounts[0], connectedChain);
-          }
-        } catch (wcError) {
-          console.error('WalletConnect error:', wcError);
+          const address = accounts[0];
+          const chain = Number(provider.chainId) === 1 ? 'ethereum' : 'bsc';
+          setWcProvider(provider);
           setShowWcQr(false);
           setWcUri(null);
           setWcSelectedWallet(null);
-          if (wcError.code !== 4001 && wcError.message !== 'Modal closed by user') {
-            alert('Failed to connect via WalletConnect.\n\nTry these alternatives:\n- MetaMask / Trust Wallet for BNB\n- Phantom Wallet for Solana\n\nOr check your internet connection and try again.');
-          }
+          await setConnectedSession({ address, type: 'walletconnect', chain, provider });
+          return;
+        } catch (error) {
+          console.error('WalletConnect error:', error);
+          setShowWcQr(false);
+          setWcUri(null);
+          setWcSelectedWallet(null);
+          if (error?.code === 4001 || error?.message === 'Modal closed by user') return;
+          alert(`Failed to connect via WalletConnect: ${error?.message || 'Unknown error'}`);
+          return;
         }
       }
-    } catch (error) {
-      console.error('Failed to connect wallet:', error);
-      const msg = String(error?.message || '').toLowerCase();
-      if (error?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
-        return;
-      }
-      if (error.code !== 4001) {
-        alert(`Failed to connect wallet: ${error?.message || 'Unknown error'}`);
-      }
     } finally {
-      if (!internal) {
-        connectLockRef.current = false;
-      }
+      if (!internal) connectLockRef.current = false;
       setIsConnecting(false);
     }
-  };
+  }, [
+    getEvmProvider,
+    getMobileBrowserDeepLink,
+    getWalletDeepLinkUrl,
+    isMobile,
+    selectedNetwork,
+    setConnectedSession,
+    waitForSolanaProvider,
+  ]);
 
   const disconnectWallet = async () => {
-    if (wcProvider) {
-      await wcProvider.disconnect();
-      setWcProvider(null);
+    try {
+      if (wcProvider?.disconnect) {
+        await wcProvider.disconnect();
+      }
+    } catch {
+      // ignore disconnect errors
     }
+    setWcProvider(null);
+    setWcUri(null);
+    setWcSelectedWallet(null);
+    setShowWcQr(false);
     setAccount(null);
     setWalletType(null);
     setAccountBalances({});
@@ -731,46 +486,36 @@ export function WalletProvider({ children }) {
   const switchNetwork = async (networkKey) => {
     const network = NETWORKS[networkKey];
     if (!network) return;
-
-      setSelectedNetwork(networkKey);
+    setSelectedNetwork(networkKey);
     localStorage.setItem('selectedNetwork', networkKey);
 
-    if (account && (walletType === 'ethereum' || walletType === 'bnb' || walletType === 'walletconnect') && network.id !== 'solana') {
-      const evmProvider = getEvmProvider() || window.ethereum;
-      if (!evmProvider?.request) return;
-      try {
-        await evmProvider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: network.id }],
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          try {
-            const chainConfigs = {
-              'ethereum': {
-                chainId: '0x1',
-                chainName: 'Ethereum Mainnet',
-                nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-                rpcUrls: ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-                blockExplorerUrls: ['https://etherscan.io/']
-              },
-              'polygon': {
-                chainId: '0x89',
-                chainName: 'Polygon',
-                nativeCurrency: { name: 'Polygon', symbol: 'MATIC', decimals: 18 },
-                rpcUrls: ['https://polygon-rpc.com/'],
-                blockExplorerUrls: ['https://polygonscan.com/']
-              }
-            };
-            if (chainConfigs[networkKey]) {
-              await evmProvider.request({
-                method: 'wallet_addEthereumChain',
-                params: [chainConfigs[networkKey]]
-              });
-            }
-          } catch (addError) {
-            console.error('Failed to add network:', addError);
-          }
+    if (!account) return;
+    if (network.id === 'solana') return;
+    if (!['bnb', 'walletconnect'].includes(walletType)) return;
+
+    const provider = wcProvider?.request ? wcProvider : (getEvmProvider('') || window.ethereum);
+    if (!provider?.request) return;
+
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: network.id }],
+      });
+    } catch (switchError) {
+      if (switchError?.code === 4902 && networkKey === 'ethereum') {
+        try {
+          await provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: NETWORKS.ethereum.id,
+              chainName: NETWORKS.ethereum.name,
+              nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+              rpcUrls: [NETWORKS.ethereum.rpc],
+              blockExplorerUrls: ['https://etherscan.io/'],
+            }],
+          });
+        } catch (addError) {
+          console.error('Failed to add Ethereum network:', addError);
         }
       }
     }
@@ -800,6 +545,7 @@ export function WalletProvider({ children }) {
       networks: NETWORKS,
       accountBalances,
       fetchAccountBalances,
+      isRequestedInjectedWalletAvailable,
     }}>
       {children}
     </WalletContext.Provider>

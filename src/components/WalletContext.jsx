@@ -22,6 +22,7 @@ export function WalletProvider({ children }) {
   const [accountBalances, setAccountBalances] = useState({});
   const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
   const connectLockRef = useRef(false);
+  const solanaRequestRef = useRef(null);
 
   const getSolanaProvider = useCallback((preferred = '') => {
     const want = String(preferred || '').toLowerCase();
@@ -84,6 +85,7 @@ export function WalletProvider({ children }) {
     const isCoinbaseRequest = preferred.includes('coinbase');
     const isTrustRequest = preferred.includes('trust');
     const isMetamaskRequest = preferred.includes('metamask');
+    const isStrictSpecificRequest = isBinanceRequest || isCoinbaseRequest || isTrustRequest || isMetamaskRequest;
 
     if (isBinanceRequest && hasRequest(window.BinanceChain)) return window.BinanceChain;
 
@@ -138,6 +140,10 @@ export function WalletProvider({ children }) {
       if (isMetamaskRequest) {
         const metamaskProvider = injected.providers.find((p) => isLikelyMetaMask(p));
         if (hasRequest(metamaskProvider)) return metamaskProvider;
+      }
+
+      if (isStrictSpecificRequest) {
+        return null;
       }
 
       const preferred = injected.providers.find(
@@ -338,14 +344,21 @@ export function WalletProvider({ children }) {
         }
 
         try {
+          if (solanaRequestRef.current) {
+            await solanaRequestRef.current;
+            return;
+          }
+
           let response = null;
           try {
-            response = await solanaProvider.connect({ onlyIfTrusted: false });
+            solanaRequestRef.current = solanaProvider.connect({ onlyIfTrusted: false });
+            response = await solanaRequestRef.current;
           } catch (firstError) {
             if (!shouldRetrySolanaConnectWithoutOptions(firstError)) {
               throw firstError;
             }
-            response = await solanaProvider.connect();
+            solanaRequestRef.current = solanaProvider.connect();
+            response = await solanaRequestRef.current;
           }
 
           const publicKey = response?.publicKey || solanaProvider?.publicKey;
@@ -366,11 +379,17 @@ export function WalletProvider({ children }) {
         } catch (e) {
           console.error('Solana wallet connection error:', e);
           const msg = String(e?.message || '').toLowerCase();
+          if (msg.includes('already pending') || msg.includes('already processing')) {
+            alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
+            return;
+          }
           if (e?.code === 4001 || e?.code === 4100 || msg.includes('rejected') || msg.includes('declined')) {
             console.log('User rejected connection');
           } else {
             alert(`Failed to connect ${walletName || 'Solana'} wallet: ${e?.message || 'Unknown error'}`);
           }
+        } finally {
+          solanaRequestRef.current = null;
         }
       } else if (type === 'bnb') {
         // On mobile, if chosen wallet isn't injected in this browser, open app or WalletConnect.
@@ -461,6 +480,11 @@ export function WalletProvider({ children }) {
           localStorage.setItem('selectedNetwork', targetNetwork);
           fetchAccountBalances(accounts[0], targetNetwork);
         } catch (bnbError) {
+          const msg = String(bnbError?.message || '').toLowerCase();
+          if (bnbError?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
+            alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
+            throw bnbError;
+          }
           if (bnbError.code === 4001) {
             console.log('User rejected wallet connection');
           } else {
@@ -532,8 +556,12 @@ export function WalletProvider({ children }) {
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
+      const msg = String(error?.message || '').toLowerCase();
+      if (error?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
+        return;
+      }
       if (error.code !== 4001) {
-        alert('Failed to connect wallet. Please try again.');
+        alert(`Failed to connect wallet: ${error?.message || 'Unknown error'}`);
       }
     } finally {
       if (!internal) {

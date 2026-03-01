@@ -65,6 +65,25 @@ export function WalletProvider({ children }) {
 
   const collectSolanaProviders = useCallback(() => {
     if (typeof window === 'undefined') return [];
+    const toSolanaProvider = (candidate) => {
+      if (!candidate) return null;
+      const base = candidate?.solana && typeof candidate.solana === 'object' ? candidate.solana : candidate;
+      if (typeof base?.connect === 'function') return base;
+      if (
+        typeof base?.request === 'function' &&
+        (base?.isPhantom || base?.isSolflare || base?.isBackpack || candidate?.isPhantom || candidate?.isSolflare || candidate?.isBackpack)
+      ) {
+        return {
+          ...base,
+          connect: async (opts = {}) => {
+            await base.request({ method: 'connect', params: [opts] });
+            return { publicKey: base.publicKey };
+          },
+        };
+      }
+      return null;
+    };
+
     const raw = [
       window?.phantom?.solana,
       window?.solflare?.solana,
@@ -84,10 +103,8 @@ export function WalletProvider({ children }) {
     const providers = [];
     for (const candidate of raw) {
       if (!candidate) continue;
-      const normalized = candidate?.solana && typeof candidate.solana.connect === 'function'
-        ? candidate.solana
-        : candidate;
-      if (typeof normalized?.connect !== 'function') continue;
+      const normalized = toSolanaProvider(candidate);
+      if (!normalized) continue;
       if (!providers.includes(normalized)) providers.push(normalized);
     }
     return providers;
@@ -111,10 +128,10 @@ export function WalletProvider({ children }) {
   }, [collectSolanaProviders]);
 
   const waitForSolanaProvider = useCallback(async (walletName = '') => {
-    for (let i = 0; i < 12; i += 1) {
+    for (let i = 0; i < 25; i += 1) {
       const provider = getSolanaProvider(walletName);
       if (provider) return provider;
-      await sleep(120);
+      await sleep(200);
     }
     return null;
   }, [getSolanaProvider]);
@@ -391,6 +408,13 @@ export function WalletProvider({ children }) {
 
       if (type === 'walletconnect') {
         try {
+          if (typeof globalThis !== 'undefined' && typeof globalThis.global === 'undefined') {
+            globalThis.global = globalThis;
+          }
+          if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
+            window.global = window;
+          }
+
           setWcSelectedWallet(walletName || null);
           const WalletConnectProvider = (await import('@walletconnect/web3-provider')).default;
           const wantsEthereum = normalizeString(walletName).includes('ethereum');
@@ -559,4 +583,3 @@ export function useWallet() {
   }
   return context;
 }
-

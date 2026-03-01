@@ -27,6 +27,7 @@ export function WalletProvider({ children }) {
   const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
   const normalizeString = (value) => String(value || '').toLowerCase();
+  const isEvmHexAddress = (value) => /^0x[a-fA-F0-9]{40}$/.test(String(value || ''));
   const getChainNameFromId = (chainId) => {
     const normalized = normalizeString(chainId);
     if (normalized === '0x1') return 'Ethereum Mainnet';
@@ -190,7 +191,16 @@ export function WalletProvider({ children }) {
 
     if (want.includes('binance')) return providers.find(isBinanceProvider) || null;
     if (want.includes('metamask')) return providers.find(isMetaMaskProvider) || null;
-    if (want.includes('trust')) return providers.find(isTrustProvider) || null;
+    if (want.includes('trust')) {
+      const explicitTrustEvm =
+        window?.trustwallet?.ethereum ||
+        window?.trustWallet?.ethereum ||
+        null;
+      if (explicitTrustEvm && typeof explicitTrustEvm.request === 'function') {
+        return explicitTrustEvm;
+      }
+      return providers.find(isTrustProvider) || null;
+    }
     if (want.includes('coinbase')) return providers.find(isCoinbaseProvider) || null;
     if (want.includes('ethereum')) return providers.find(isMetaMaskProvider) || providers[0] || null;
 
@@ -418,6 +428,9 @@ export function WalletProvider({ children }) {
           const accounts = await requestEvmAccounts(provider);
 
           const address = accounts[0];
+          if (!isEvmHexAddress(address)) {
+            throw new Error('Connected account is not an EVM address. Please choose an EVM account (0x...) in Trust Wallet and retry.');
+          }
           const walletLower = normalizeString(walletName);
           const forceEthereum = walletLower.includes('ethereum');
           const targetChainId = forceEthereum ? '0x1' : '0x38';
@@ -548,6 +561,7 @@ export function WalletProvider({ children }) {
     getEvmProvider,
     getMobileBrowserDeepLink,
     getWalletDeepLinkUrl,
+    isEvmHexAddress,
     isMobile,
     selectedNetwork,
     setConnectedSession,

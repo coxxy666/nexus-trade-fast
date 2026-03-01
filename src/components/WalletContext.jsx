@@ -24,10 +24,16 @@ export function WalletProvider({ children }) {
 
   const getSolanaProvider = useCallback((preferred = '') => {
     const want = String(preferred || '').toLowerCase();
+    const normalizeProvider = (providerLike) => {
+      if (!providerLike) return null;
+      if (typeof providerLike.connect === 'function') return providerLike;
+      if (providerLike?.solana && typeof providerLike.solana.connect === 'function') return providerLike.solana;
+      return null;
+    };
 
     const candidates = [
       { key: 'phantom', provider: window?.phantom?.solana },
-      { key: 'solflare', provider: window?.solflare },
+      { key: 'solflare', provider: window?.solflare?.solana || window?.solflare },
       { key: 'backpack', provider: window?.backpack },
       { key: 'coin98', provider: window?.coin98?.solana },
       { key: 'default', provider: window?.solana },
@@ -44,7 +50,7 @@ export function WalletProvider({ children }) {
     }
 
     const valid = candidates
-      .map((c) => ({ ...c, provider: c.provider?.solana || c.provider }))
+      .map((c) => ({ ...c, provider: normalizeProvider(c.provider) }))
       .filter((c) => c.provider && typeof c.provider.connect === 'function');
 
     if (want) {
@@ -318,8 +324,19 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          const response = await solanaProvider.connect({ onlyIfTrusted: false });
-          const address = response.publicKey.toString();
+          let response;
+          try {
+            response = await solanaProvider.connect({ onlyIfTrusted: false });
+          } catch (firstError) {
+            // Some providers reject options object and only support connect().
+            response = await solanaProvider.connect();
+          }
+
+          const publicKey = response?.publicKey || solanaProvider?.publicKey;
+          const address = typeof publicKey?.toString === 'function' ? publicKey.toString() : '';
+          if (!address) {
+            throw new Error('Wallet connected but no public key was returned');
+          }
           setAccount(address);
           setWalletType('solana');
           setSelectedNetwork('solana');
@@ -329,10 +346,11 @@ export function WalletProvider({ children }) {
           fetchAccountBalances(address, 'solana');
         } catch (e) {
           console.error('Solana wallet connection error:', e);
-          if (e.code === 4001) {
+          const msg = String(e?.message || '').toLowerCase();
+          if (e?.code === 4001 || e?.code === 4100 || msg.includes('rejected') || msg.includes('declined')) {
             console.log('User rejected connection');
           } else {
-            alert(`Failed to connect ${walletName || 'Solana'} wallet. Please try again.`);
+            alert(`Failed to connect ${walletName || 'Solana'} wallet: ${e?.message || 'Unknown error'}`);
           }
         }
         setIsConnecting(false);

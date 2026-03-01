@@ -341,8 +341,16 @@ export default function SwapCard({ onSwapDataChange }) {
 
     // For token contracts/mints, prefer address-based balances when available.
     const addr = String(tokenAddress || '').trim();
-    if (addr && accountBalances && accountBalances.tokenByAddress && accountBalances.tokenByAddress[addr] !== undefined) {
-      return Number(accountBalances.tokenByAddress[addr] || 0).toFixed(6);
+    if (addr && accountBalances && accountBalances.tokenByAddress && typeof accountBalances.tokenByAddress === 'object') {
+      const exact = accountBalances.tokenByAddress[addr];
+      if (exact !== undefined) {
+        return Number(exact || 0).toFixed(6);
+      }
+      const addrLower = addr.toLowerCase();
+      const matchedKey = Object.keys(accountBalances.tokenByAddress).find((k) => String(k || '').toLowerCase() === addrLower);
+      if (matchedKey) {
+        return Number(accountBalances.tokenByAddress[matchedKey] || 0).toFixed(6);
+      }
     }
 
     // First check wallet balances (native chain tokens)

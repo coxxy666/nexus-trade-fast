@@ -76,22 +76,18 @@ export function WalletProvider({ children }) {
         if (injected?.isBinance || injected?.isBinanceWallet || injected?.isBnbWallet || label.includes('binance') || label.includes('bnb')) {
           return hasRequest(injected) ? injected : null;
         }
-        return null;
       }
 
       if (isTrustRequest) {
         if (injected?.isTrust || injected?.isTrustWallet) return hasRequest(injected) ? injected : null;
-        return null;
       }
 
       if (isMetamaskRequest) {
         if (injected?.isMetaMask) return hasRequest(injected) ? injected : null;
-        return null;
       }
 
       if (isCoinbaseRequest) {
         if (injected?.isCoinbaseWallet) return hasRequest(injected) ? injected : null;
-        return null;
       }
 
       return hasRequest(injected) ? injected : null;
@@ -112,8 +108,6 @@ export function WalletProvider({ children }) {
           }
         );
         if (hasRequest(binanceProvider)) return binanceProvider;
-        // If Binance was explicitly requested, avoid silently falling back to MetaMask.
-        return null;
       }
       if (isCoinbaseRequest) {
         const coinbaseProvider = injected.providers.find((p) => p?.isCoinbaseWallet);
@@ -122,12 +116,10 @@ export function WalletProvider({ children }) {
       if (isTrustRequest) {
         const trustProvider = injected.providers.find((p) => p?.isTrust || p?.isTrustWallet);
         if (hasRequest(trustProvider)) return trustProvider;
-        return null;
       }
       if (isMetamaskRequest) {
         const metamaskProvider = injected.providers.find((p) => p?.isMetaMask);
         if (hasRequest(metamaskProvider)) return metamaskProvider;
-        return null;
       }
 
       const preferred = injected.providers.find(
@@ -139,7 +131,6 @@ export function WalletProvider({ children }) {
       if (fallback) return fallback;
     }
 
-    if (isBinanceRequest || isTrustRequest || isMetamaskRequest) return null;
     return hasRequest(injected) ? injected : null;
   }, []);
 
@@ -295,16 +286,8 @@ export function WalletProvider({ children }) {
       } else if (type === 'bnb') {
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
-          if (isMobile) {
-            await connectWallet('walletconnect', walletName);
-            return;
-          }
-          if (String(walletName || '').toLowerCase().includes('binance')) {
-            alert('Binance Web3 wallet was not detected. Install/enable Binance Wallet extension or app and try again.');
-          } else {
-            alert('Please install MetaMask or Trust Wallet for EVM chains.');
-          }
-          setIsConnecting(false);
+          // Fallback to WalletConnect when no injected EVM provider is available.
+          await connectWallet('walletconnect', walletName);
           return;
         }
 

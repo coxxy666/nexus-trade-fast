@@ -134,6 +134,40 @@ export function WalletProvider({ children }) {
     return hasRequest(injected) ? injected : null;
   }, []);
 
+  const isRequestedInjectedWalletAvailable = useCallback((walletName = '') => {
+    const name = String(walletName || '').toLowerCase();
+    if (!name) return true;
+    if (name.includes('ethereum')) return true;
+
+    const hasRequest = (p) => p && typeof p.request === 'function';
+    const injected = window.ethereum;
+    const providers = Array.isArray(injected?.providers) && injected.providers.length > 0
+      ? injected.providers
+      : (injected ? [injected] : []);
+
+    if (name.includes('binance')) {
+      if (hasRequest(window.BinanceChain)) return true;
+      return providers.some((p) => {
+        const label = `${p?.providerName || ''} ${p?.name || ''}`.toLowerCase();
+        return p?.isBinance || p?.isBinanceWallet || p?.isBnbWallet || label.includes('binance') || label.includes('bnb');
+      });
+    }
+
+    if (name.includes('trust')) {
+      return providers.some((p) => p?.isTrust || p?.isTrustWallet);
+    }
+
+    if (name.includes('coinbase')) {
+      return providers.some((p) => p?.isCoinbaseWallet);
+    }
+
+    if (name.includes('metamask')) {
+      return providers.some((p) => p?.isMetaMask);
+    }
+
+    return providers.some((p) => hasRequest(p));
+  }, []);
+
   const fetchAccountBalances = useCallback(async (address, chain) => {
     if (!address || !chain) {
       setAccountBalances({});
@@ -284,6 +318,13 @@ export function WalletProvider({ children }) {
         }
         setIsConnecting(false);
       } else if (type === 'bnb') {
+        // If user explicitly chose a wallet brand that isn't injected, use WalletConnect
+        // so we don't silently fall back to another injected wallet (usually MetaMask).
+        if (!isRequestedInjectedWalletAvailable(walletName)) {
+          await connectWallet('walletconnect', walletName);
+          return;
+        }
+
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
           // Fallback to WalletConnect when no injected EVM provider is available.

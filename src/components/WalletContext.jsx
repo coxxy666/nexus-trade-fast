@@ -344,6 +344,22 @@ export function WalletProvider({ children }) {
         }
 
         try {
+          const existingSolanaKey = solanaProvider?.publicKey;
+          const existingSolanaAddress =
+            (typeof existingSolanaKey?.toBase58 === 'function' && existingSolanaKey.toBase58()) ||
+            (typeof existingSolanaKey?.toString === 'function' && existingSolanaKey.toString()) ||
+            '';
+          if (existingSolanaAddress) {
+            setAccount(existingSolanaAddress);
+            setWalletType('solana');
+            setSelectedNetwork('solana');
+            localStorage.setItem('connectedWallet', existingSolanaAddress);
+            localStorage.setItem('walletType', 'solana');
+            localStorage.setItem('selectedNetwork', 'solana');
+            fetchAccountBalances(existingSolanaAddress, 'solana');
+            return;
+          }
+
           if (solanaRequestRef.current) {
             await solanaRequestRef.current;
             return;
@@ -419,9 +435,21 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          const accounts = await evmProvider.request({
-            method: 'eth_requestAccounts'
-          });
+          let accounts = [];
+          try {
+            const existingAccounts = await evmProvider.request({ method: 'eth_accounts' });
+            if (Array.isArray(existingAccounts) && existingAccounts.length > 0) {
+              accounts = existingAccounts;
+            }
+          } catch {
+            // Ignore and request accounts below.
+          }
+
+          if (!accounts || accounts.length === 0) {
+            accounts = await evmProvider.request({
+              method: 'eth_requestAccounts'
+            });
+          }
 
           if (!accounts || accounts.length === 0) {
             throw new Error('No accounts found');
@@ -482,6 +510,24 @@ export function WalletProvider({ children }) {
         } catch (bnbError) {
           const msg = String(bnbError?.message || '').toLowerCase();
           if (bnbError?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
+            try {
+              const existingAccounts = await evmProvider.request({ method: 'eth_accounts' });
+              if (Array.isArray(existingAccounts) && existingAccounts.length > 0) {
+                const recovered = existingAccounts[0];
+                const chainId = await evmProvider.request({ method: 'eth_chainId' });
+                const recoveredNetwork = String(chainId || '').toLowerCase() === '0x1' ? 'ethereum' : 'bsc';
+                setAccount(recovered);
+                setWalletType('bnb');
+                setSelectedNetwork(recoveredNetwork);
+                localStorage.setItem('connectedWallet', recovered);
+                localStorage.setItem('walletType', 'bnb');
+                localStorage.setItem('selectedNetwork', recoveredNetwork);
+                fetchAccountBalances(recovered, recoveredNetwork);
+                return;
+              }
+            } catch {
+              // Fall through to alert below.
+            }
             alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
             throw bnbError;
           }

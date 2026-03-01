@@ -18,10 +18,11 @@ export default function NetworkBalances() {
     return null;
   }
 
-  const balance = accountBalances[nativeCoin.symbol] || 0;
-  const holdingsCount = Object.values(accountBalances || {}).filter(
-    (value) => Number(value) > 0
-  ).length;
+  const balance = Number(accountBalances?.[nativeCoin.symbol] || 0);
+  const holdingsCount = Object.entries(accountBalances || {}).filter(([key, value]) => {
+    if (key === 'tokenByAddress') return false;
+    return Number(value) > 0;
+  }).length;
 
   return (
     <motion.div
@@ -36,7 +37,7 @@ export default function NetworkBalances() {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-lg font-semibold text-white">
-            {typeof balance === 'number' ? balance.toFixed(6) : '0.00'} {nativeCoin.symbol}
+            {Number.isFinite(balance) ? balance.toFixed(6) : '0.000000'} {nativeCoin.symbol}
           </span>
           {balance === 0 && (
             <span className="text-xs text-yellow-400 ml-1">Low balance</span>

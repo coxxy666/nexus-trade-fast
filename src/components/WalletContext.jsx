@@ -111,6 +111,14 @@ export function WalletProvider({ children }) {
       if (isBinanceRequest) {
         const binanceProvider = injected.providers.find((p) => isLikelyBinance(p));
         if (hasRequest(binanceProvider)) return binanceProvider;
+        // Some Binance extensions do not expose clear flags; prefer non-MetaMask provider.
+        const nonMetaProvider = injected.providers.find(
+          (p) => hasRequest(p) && !isLikelyMetaMask(p) && !isLikelyCoinbase(p)
+        );
+        if (hasRequest(nonMetaProvider)) return nonMetaProvider;
+        if (injected.providers.length === 1 && hasRequest(injected.providers[0])) {
+          return injected.providers[0];
+        }
       }
       if (isCoinbaseRequest) {
         const coinbaseProvider = injected.providers.find((p) => isLikelyCoinbase(p));
@@ -329,20 +337,17 @@ export function WalletProvider({ children }) {
         }
         setIsConnecting(false);
       } else if (type === 'bnb') {
-        // If user explicitly chose a wallet brand that isn't injected, use WalletConnect
-        // so we don't silently fall back to another injected wallet (usually MetaMask).
-      if (!isRequestedInjectedWalletAvailable(walletName)) {
-        if (isMobile) {
+        // On mobile, if chosen wallet isn't injected in this browser, open app or WalletConnect.
+        if (isMobile && !isRequestedInjectedWalletAvailable(walletName)) {
           const deepLink = getMobileBrowserDeepLink(walletName);
           if (deepLink) {
             window.location.href = deepLink;
             setIsConnecting(false);
             return;
           }
+          await connectWallet('walletconnect', walletName);
+          return;
         }
-        await connectWallet('walletconnect', walletName);
-        return;
-      }
 
         const evmProvider = getEvmProvider(walletName);
         if (!evmProvider) {
@@ -433,6 +438,15 @@ export function WalletProvider({ children }) {
         try {
           setWcSelectedWallet(walletName || null);
           const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
+
+          if (isMobile) {
+            const deepLink = getMobileBrowserDeepLink(walletName);
+            if (deepLink) {
+              window.location.href = deepLink;
+              setIsConnecting(false);
+              return;
+            }
+          }
 
           const WalletConnectProvider = (await import('@walletconnect/web3-provider')).default;
           const wantsEthereum = String(walletName || '').toLowerCase().includes('ethereum');

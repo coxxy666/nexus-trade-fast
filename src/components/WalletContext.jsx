@@ -224,6 +224,25 @@ export function WalletProvider({ children }) {
     }
   }, []);
 
+  const commitConnectedEvmAccount = useCallback(async (provider, address, walletName = '') => {
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    const isEthereumRequested = String(walletName || '').toLowerCase().includes('ethereum');
+    const targetNetwork = isEthereumRequested
+      ? 'ethereum'
+      : String(chainId || '').toLowerCase() === '0x1'
+        ? 'ethereum'
+        : 'bsc';
+
+    setAccount(address);
+    setWalletType('bnb');
+    setSelectedNetwork(targetNetwork);
+    localStorage.setItem('connectedWallet', address);
+    localStorage.setItem('walletType', 'bnb');
+    localStorage.setItem('selectedNetwork', targetNetwork);
+    fetchAccountBalances(address, targetNetwork);
+    return targetNetwork;
+  }, [fetchAccountBalances]);
+
   useEffect(() => {
     const savedAccount = localStorage.getItem('connectedWallet');
     const savedType = localStorage.getItem('walletType');
@@ -396,6 +415,29 @@ export function WalletProvider({ children }) {
           console.error('Solana wallet connection error:', e);
           const msg = String(e?.message || '').toLowerCase();
           if (msg.includes('already pending') || msg.includes('already processing')) {
+            try {
+              if (typeof solanaProvider?.disconnect === 'function') {
+                await solanaProvider.disconnect();
+              }
+              const retryResponse = await solanaProvider.connect({ onlyIfTrusted: false });
+              const retryPublicKey = retryResponse?.publicKey || solanaProvider?.publicKey;
+              const retryAddress =
+                (typeof retryPublicKey?.toBase58 === 'function' && retryPublicKey.toBase58()) ||
+                (typeof retryPublicKey?.toString === 'function' && retryPublicKey.toString()) ||
+                '';
+              if (retryAddress) {
+                setAccount(retryAddress);
+                setWalletType('solana');
+                setSelectedNetwork('solana');
+                localStorage.setItem('connectedWallet', retryAddress);
+                localStorage.setItem('walletType', 'solana');
+                localStorage.setItem('selectedNetwork', 'solana');
+                fetchAccountBalances(retryAddress, 'solana');
+                return;
+              }
+            } catch {
+              // keep default alert below
+            }
             alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
             return;
           }
@@ -457,7 +499,6 @@ export function WalletProvider({ children }) {
 
           const currentChainIdAtConnect = await evmProvider.request({ method: 'eth_chainId' });
 
-          setAccount(accounts[0]);
           const isEthereumRequested = String(walletName || '').toLowerCase().includes('ethereum');
           const targetNetwork = isEthereumRequested
             ? 'ethereum'
@@ -501,32 +542,31 @@ export function WalletProvider({ children }) {
             }
           }
 
-          setWalletType('bnb');
-          setSelectedNetwork(targetNetwork);
-          localStorage.setItem('connectedWallet', accounts[0]);
-          localStorage.setItem('walletType', 'bnb');
-          localStorage.setItem('selectedNetwork', targetNetwork);
-          fetchAccountBalances(accounts[0], targetNetwork);
+          await commitConnectedEvmAccount(evmProvider, accounts[0], walletName);
         } catch (bnbError) {
           const msg = String(bnbError?.message || '').toLowerCase();
           if (bnbError?.code === -32002 || msg.includes('already pending') || msg.includes('already processing')) {
             try {
               const existingAccounts = await evmProvider.request({ method: 'eth_accounts' });
               if (Array.isArray(existingAccounts) && existingAccounts.length > 0) {
-                const recovered = existingAccounts[0];
-                const chainId = await evmProvider.request({ method: 'eth_chainId' });
-                const recoveredNetwork = String(chainId || '').toLowerCase() === '0x1' ? 'ethereum' : 'bsc';
-                setAccount(recovered);
-                setWalletType('bnb');
-                setSelectedNetwork(recoveredNetwork);
-                localStorage.setItem('connectedWallet', recovered);
-                localStorage.setItem('walletType', 'bnb');
-                localStorage.setItem('selectedNetwork', recoveredNetwork);
-                fetchAccountBalances(recovered, recoveredNetwork);
+                await commitConnectedEvmAccount(evmProvider, existingAccounts[0], walletName);
                 return;
               }
             } catch {
               // Fall through to alert below.
+            }
+            try {
+              await evmProvider.request({
+                method: 'wallet_requestPermissions',
+                params: [{ eth_accounts: {} }],
+              });
+              const retriedAccounts = await evmProvider.request({ method: 'eth_accounts' });
+              if (Array.isArray(retriedAccounts) && retriedAccounts.length > 0) {
+                await commitConnectedEvmAccount(evmProvider, retriedAccounts[0], walletName);
+                return;
+              }
+            } catch {
+              // continue to alert below
             }
             alert('A wallet request is already pending. Open your wallet extension/app and approve or reject it first.');
             throw bnbError;

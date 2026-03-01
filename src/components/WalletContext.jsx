@@ -32,6 +32,30 @@ export function WalletProvider({ children }) {
       if (providerLike?.solana && typeof providerLike.solana.connect === 'function') return providerLike.solana;
       return null;
     };
+    const getExtraSolanaProviders = () => {
+      const extras = [];
+      const globalCandidates = [
+        window?.solflare?.provider,
+        window?.Solflare,
+        window?.Solflare?.solana,
+      ];
+      for (const candidate of globalCandidates) {
+        const normalized = normalizeProvider(candidate);
+        if (normalized) extras.push(normalized);
+      }
+      // Last-resort scan for providers injected under non-standard keys.
+      try {
+        for (const value of Object.values(window || {})) {
+          if (!value || typeof value !== 'object') continue;
+          if (!value?.isSolflare && !value?.isPhantom && !value?.isBackpack) continue;
+          const normalized = normalizeProvider(value);
+          if (normalized) extras.push(normalized);
+        }
+      } catch {
+        // ignore enumeration issues
+      }
+      return extras;
+    };
 
     const candidates = [
       { key: 'phantom', provider: window?.phantom?.solana },
@@ -49,6 +73,12 @@ export function WalletProvider({ children }) {
         else if (p.isBackpack) candidates.push({ key: 'backpack', provider: p });
         else candidates.push({ key: 'unknown', provider: p });
       }
+    }
+    for (const p of getExtraSolanaProviders()) {
+      if (p?.isPhantom) candidates.push({ key: 'phantom', provider: p });
+      else if (p?.isSolflare) candidates.push({ key: 'solflare', provider: p });
+      else if (p?.isBackpack) candidates.push({ key: 'backpack', provider: p });
+      else candidates.push({ key: 'unknown', provider: p });
     }
 
     const valid = candidates
@@ -125,9 +155,8 @@ export function WalletProvider({ children }) {
           (p) => hasRequest(p) && !isLikelyMetaMask(p) && !isLikelyCoinbase(p)
         );
         if (hasRequest(nonMetaProvider)) return nonMetaProvider;
-        if (injected.providers.length === 1 && hasRequest(injected.providers[0])) {
-          return injected.providers[0];
-        }
+        // Do not silently fall back to MetaMask for explicit Binance selection.
+        return null;
       }
       if (isCoinbaseRequest) {
         const coinbaseProvider = injected.providers.find((p) => isLikelyCoinbase(p));
@@ -450,12 +479,14 @@ export function WalletProvider({ children }) {
           solanaRequestRef.current = null;
         }
       } else if (type === 'bnb') {
-        // On mobile, if chosen wallet isn't injected in this browser, open app or WalletConnect.
-        if (isMobile && !isRequestedInjectedWalletAvailable(walletName)) {
-          const deepLink = getMobileBrowserDeepLink(walletName);
-          if (deepLink) {
-            window.location.href = deepLink;
-            return;
+        // If chosen wallet isn't injected in this browser, open app (mobile) or use WalletConnect.
+        if (!isRequestedInjectedWalletAvailable(walletName)) {
+          if (isMobile) {
+            const deepLink = getMobileBrowserDeepLink(walletName);
+            if (deepLink) {
+              window.location.href = deepLink;
+              return;
+            }
           }
           await connectWallet('walletconnect', walletName, true);
           return;

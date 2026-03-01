@@ -27,6 +27,12 @@ export function WalletProvider({ children }) {
   const isMobile = typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
   const normalizeString = (value) => String(value || '').toLowerCase();
+  const getChainNameFromId = (chainId) => {
+    const normalized = normalizeString(chainId);
+    if (normalized === '0x1') return 'Ethereum Mainnet';
+    if (normalized === '0x38') return 'BNB Smart Chain';
+    return `chain ${chainId}`;
+  };
 
   const fetchAccountBalances = useCallback(async (address, chain) => {
     if (!address || !chain) {
@@ -312,7 +318,7 @@ export function WalletProvider({ children }) {
     } catch {
       // ignore
     }
-    return '0x38';
+    return null;
   }, []);
 
   const waitForEvmProvider = useCallback(async (walletName = '') => {
@@ -417,8 +423,8 @@ export function WalletProvider({ children }) {
           const targetChainId = forceEthereum ? '0x1' : '0x38';
 
           const currentChainIdRaw = await requestEvmChainId(provider);
-          const currentChainId = normalizeString(currentChainIdRaw);
-          if (targetChainId && currentChainId !== targetChainId) {
+          const currentChainId = normalizeString(currentChainIdRaw || '');
+          if (!currentChainId || currentChainId !== targetChainId) {
             try {
               await provider.request({
                 method: 'wallet_switchEthereumChain',
@@ -445,7 +451,14 @@ export function WalletProvider({ children }) {
           }
 
           const finalChainRaw = await requestEvmChainId(provider);
-          const chain = normalizeString(finalChainRaw) === '0x1' ? 'ethereum' : 'bsc';
+          const finalChainId = normalizeString(finalChainRaw || '');
+          if (!finalChainId) {
+            throw new Error('Connected, but wallet chain could not be verified. Please switch to BNB Smart Chain and retry.');
+          }
+          if (finalChainId !== normalizeString(targetChainId)) {
+            throw new Error(`Wallet is still on ${getChainNameFromId(finalChainId)}. Please switch to ${getChainNameFromId(targetChainId)} and retry.`);
+          }
+          const chain = finalChainId === '0x1' ? 'ethereum' : 'bsc';
           await setConnectedSession({ address, type: 'bnb', chain });
           return;
         } catch (error) {

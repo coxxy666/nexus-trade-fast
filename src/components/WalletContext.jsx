@@ -253,11 +253,66 @@ export function WalletProvider({ children }) {
     const wallet = normalizeString(walletName);
     if (wallet.includes('phantom')) return `https://phantom.app/ul/browse/${currentUrl}?ref=${ref}`;
     if (wallet.includes('solflare')) return `https://solflare.com/ul/v1/browse/${currentUrl}?ref=${ref}`;
-    if (wallet.includes('trust')) return `https://link.trustwallet.com/open_url?url=${currentUrl}`;
-    if (wallet.includes('metamask')) return `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
+    if (wallet.includes('trust')) return `trust://open_url?url=${currentUrl}`;
+    if (wallet.includes('metamask')) return `metamask://dapp/${window.location.host}${window.location.pathname}${window.location.search}`;
     if (wallet.includes('binance')) return `https://bnbchain.wallet/binance-wallet/dapp?url=${currentUrl}`;
     return null;
   }, []);
+
+  const requestEvmAccounts = useCallback(async (provider) => {
+    const tryMethods = ['eth_requestAccounts', 'wallet_requestAccounts'];
+    for (const method of tryMethods) {
+      try {
+        const accounts = await provider.request({ method });
+        if (Array.isArray(accounts) && accounts.length > 0) {
+          return accounts;
+        }
+      } catch (error) {
+        const msg = normalizeString(error?.message);
+        const isPending = error?.code === -32002 || msg.includes('already pending') || msg.includes('already processing');
+        if (isPending) throw error;
+      }
+    }
+
+    if (typeof provider.enable === 'function') {
+      try {
+        const enabled = await provider.enable();
+        if (Array.isArray(enabled) && enabled.length > 0) return enabled;
+      } catch {
+        // ignore and fallback to eth_accounts
+      }
+    }
+
+    const existing = await provider.request({ method: 'eth_accounts' });
+    if (Array.isArray(existing) && existing.length > 0) return existing;
+    throw new Error('No accounts found');
+  }, []);
+
+  const requestEvmChainId = useCallback(async (provider) => {
+    try {
+      const chainId = await provider.request({ method: 'eth_chainId' });
+      if (chainId !== undefined && chainId !== null) return String(chainId);
+    } catch {
+      // ignore and fallback
+    }
+    try {
+      const netVersion = await provider.request({ method: 'net_version' });
+      const asNum = Number(netVersion);
+      if (Number.isFinite(asNum) && asNum > 0) return `0x${asNum.toString(16)}`;
+    } catch {
+      // ignore
+    }
+    return '0x38';
+  }, []);
+
+  const waitForEvmProvider = useCallback(async (walletName = '') => {
+    for (let i = 0; i < 12; i += 1) {
+      const provider = getEvmProvider(walletName);
+      if (provider) return provider;
+      await sleep(150);
+    }
+    return null;
+  }, [getEvmProvider]);
 
   const connectWallet = useCallback(async (type = 'solana', walletName = null, internal = false) => {
     if (connectLockRef.current && !internal) return;
@@ -330,7 +385,7 @@ export function WalletProvider({ children }) {
       }
 
       if (type === 'bnb') {
-        const provider = getEvmProvider(walletName);
+        const provider = await waitForEvmProvider(walletName);
         if (!provider) {
           if (isMobile) {
             const deepLink = getMobileBrowserDeepLink(walletName);
@@ -344,27 +399,14 @@ export function WalletProvider({ children }) {
         }
 
         try {
-          let accounts = [];
-          try {
-            const existing = await provider.request({ method: 'eth_accounts' });
-            if (Array.isArray(existing) && existing.length > 0) accounts = existing;
-          } catch {
-            // ignore
-          }
-
-          if (!accounts.length) {
-            accounts = await provider.request({ method: 'eth_requestAccounts' });
-          }
-          if (!Array.isArray(accounts) || !accounts.length) {
-            throw new Error('No accounts found');
-          }
+          const accounts = await requestEvmAccounts(provider);
 
           const address = accounts[0];
           const walletLower = normalizeString(walletName);
           const forceEthereum = walletLower.includes('ethereum');
           const targetChainId = forceEthereum ? '0x1' : null;
 
-          const currentChainIdRaw = await provider.request({ method: 'eth_chainId' });
+          const currentChainIdRaw = await requestEvmChainId(provider);
           const currentChainId = normalizeString(currentChainIdRaw);
           if (targetChainId && currentChainId !== targetChainId) {
             try {
@@ -390,7 +432,7 @@ export function WalletProvider({ children }) {
             }
           }
 
-          const finalChainRaw = await provider.request({ method: 'eth_chainId' });
+          const finalChainRaw = await requestEvmChainId(provider);
           const chain = normalizeString(finalChainRaw) === '0x1' ? 'ethereum' : 'bsc';
           await setConnectedSession({ address, type: 'bnb', chain });
           return;
@@ -485,6 +527,9 @@ export function WalletProvider({ children }) {
     selectedNetwork,
     setConnectedSession,
     waitForSolanaProvider,
+    waitForEvmProvider,
+    requestEvmAccounts,
+    requestEvmChainId,
   ]);
 
   const disconnectWallet = async () => {

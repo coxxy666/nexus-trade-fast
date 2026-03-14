@@ -113,11 +113,15 @@ async function handler(req: Request): Promise<Response> {
 
   console.error(`[${new Date().toISOString()}] ${req.method} ${path}`);
 
+  const requestedHeaders = req.headers.get("Access-Control-Request-Headers") || "Content-Type";
+
   // CORS headers
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": requestedHeaders,
+    "Access-Control-Max-Age": "86400",
+    "Vary": "Origin, Access-Control-Request-Headers",
   };
 
   // Handle preflight

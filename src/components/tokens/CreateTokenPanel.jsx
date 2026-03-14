@@ -1016,9 +1016,7 @@ export default function CreateTokenPanel() {
 
           {directBep20Result && (
             <div className="text-xs text-gray-200 space-y-1">
-              <p>Factory: {directBep20Result.factoryAddress}</p>
-              <p>Metadata URI: {directBep20Result.metadataUri}</p>
-              <p>Method: {directBep20Result.methodUsed}</p>
+              <p>BEP20 token created successfully.</p>
               <p>Tx: {directBep20Result.txHash}</p>
               <a
                 href={`https://bscscan.com/tx/${directBep20Result.txHash}`}

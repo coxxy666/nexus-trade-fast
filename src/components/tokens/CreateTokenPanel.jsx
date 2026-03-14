@@ -1054,14 +1054,17 @@ export default function CreateTokenPanel() {
 
           {directResult && (
             <div className="text-xs text-gray-200 space-y-1">
-              <p className="text-emerald-200 font-medium">Solana token created successfully.</p>
-              <p>Mint: {directResult.mintAddress}</p>
-              <p>Metadata: {directResult.metadataAddress}</p>
-              <p>Metadata URI: {directResult.metadataUri}</p>
-              <p>Token Account: {directResult.tokenAccount}</p>
+              <p>Solana token created successfully.</p>
+              <p>Mint Address: {directResult.mintAddress}</p>
               <p>Tx: {directResult.txHash}</p>
-              <p>Mint Authority: {String(directResult.authorities?.mintAuthority)}</p>
-              <p>Freeze Authority: {String(directResult.authorities?.freezeAuthority)}</p>
+              <a
+                href={`https://solscan.io/tx/${directResult.txHash}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-emerald-300 hover:text-emerald-200 underline"
+              >
+                View on Solscan
+              </a>
             </div>
           )}
         </div>

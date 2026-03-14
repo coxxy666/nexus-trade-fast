@@ -88,11 +88,11 @@ function concatBytes(...parts) {
   return out;
 }
 
-function buildCreateMetadataV3Data({ name, symbol, uri }) {
+function buildCreateMetadataV3Data({ name, symbol, uri, isMutable = false }) {
   const ix = new Uint8Array([33]); // CreateMetadataAccountV3
   const sellerFeeBasisPoints = new Uint8Array([0, 0]); // 0%
   const none = new Uint8Array([0]); // Option::None
-  const isMutable = new Uint8Array([1]); // true
+  const mutableFlag = new Uint8Array([isMutable ? 1 : 0]);
   return concatBytes(
     ix,
     encodeBorshString(String(name || '').slice(0, 32)),
@@ -102,7 +102,7 @@ function buildCreateMetadataV3Data({ name, symbol, uri }) {
     none, // creators
     none, // collection
     none, // uses
-    isMutable,
+    mutableFlag,
     none // collectionDetails
   );
 }
@@ -236,12 +236,25 @@ export default function CreateTokenPanel() {
     description: '',
     revokeMintAuthority: true,
     revokeFreezeAuthority: true,
+    immutableMetadata: true,
   });
 
   React.useEffect(() => {
     if (!account) return;
     setForm((prev) => ({ ...prev, ownerAddress: prev.ownerAddress || account }));
   }, [account]);
+
+  React.useEffect(() => {
+    setForm((prev) => {
+      if (prev.chain === 'solana' && String(prev.decimals) !== '9') {
+        return { ...prev, decimals: '9' };
+      }
+      if (prev.chain === 'bep20' && String(prev.decimals) === '9') {
+        return { ...prev, decimals: '18' };
+      }
+      return prev;
+    });
+  }, [form.chain]);
 
   const onChange = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
@@ -421,7 +434,7 @@ export default function CreateTokenPanel() {
       );
 
       const decimals = Number(form.decimals);
-      const initialSupply = BigInt(Math.floor(Number(form.initialSupply)));
+      const initialSupply = BigInt(String(form.initialSupply || '0'));
       const multiplier = 10n ** BigInt(decimals);
       const mintAmount = initialSupply * multiplier;
       const rentForMint = await connection.getMinimumBalanceForRentExemption(MINT_ACCOUNT_SIZE);
@@ -464,6 +477,7 @@ export default function CreateTokenPanel() {
             name: tokenName,
             symbol: tokenSymbol,
             uri: metadataUri,
+            isMutable: !form.immutableMetadata,
           }),
         })
       );
@@ -581,7 +595,10 @@ export default function CreateTokenPanel() {
         // ignore local storage failures
       }
       setDirectResult(payload);
-      toast.success(`Token created and minted: ${payload.mintAddress}`);
+      toast.success(`Solana token created: ${payload.mintAddress}`, {
+        description: `${payload.symbol} supply ${form.initialSupply} minted to your wallet`,
+        duration: 12000,
+      });
     } catch (error) {
       console.error('Direct Solana mint failed:', error);
       const msg = String(error?.message || error || 'Direct mint failed');
@@ -902,7 +919,16 @@ export default function CreateTokenPanel() {
           </div>
           <div>
             <Label>Decimals</Label>
-            <Input type="number" min="0" max="18" value={form.decimals} onChange={(e) => onChange('decimals', e.target.value)} className="mt-2" required />
+            <Input
+              type="number"
+              min="0"
+              max={form.chain === 'solana' ? '9' : '18'}
+              value={form.decimals}
+              onChange={(e) => onChange('decimals', e.target.value)}
+              className="mt-2"
+              required
+            />
+            {form.chain === 'solana' && <p className="text-xs text-gray-400 mt-1">Solana defaults to 9 decimals for standard SPL token display.</p>}
           </div>
           <div>
             <Label>Initial Supply</Label>
@@ -942,6 +968,14 @@ export default function CreateTokenPanel() {
                 onChange={(e) => onChange('revokeFreezeAuthority', e.target.checked)}
               />
               Revoke freeze authority after creation (set to null)
+            </label>
+            <label className="flex items-center gap-2 text-sm md:col-span-2">
+              <input
+                type="checkbox"
+                checked={!!form.immutableMetadata}
+                onChange={(e) => onChange('immutableMetadata', e.target.checked)}
+              />
+              Lock metadata after creation (recommended). Uncheck to keep metadata editable.
             </label>
           </div>
         )}

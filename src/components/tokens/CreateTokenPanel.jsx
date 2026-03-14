@@ -208,6 +208,23 @@ async function waitForTransactionReceipt(provider, txHash, attempts = 20, delayM
   return null;
 }
 
+async function waitForSolanaSignatureConfirmation(connection, signature, attempts = 30, delayMs = 2000) {
+  for (let i = 0; i < attempts; i += 1) {
+    const statuses = await connection.getSignatureStatuses([signature], {
+      searchTransactionHistory: true,
+    });
+    const status = statuses?.value?.[0];
+    if (status?.err) {
+      throw new Error(`Solana transaction failed: ${JSON.stringify(status.err)}`);
+    }
+    if (status?.confirmationStatus === 'confirmed' || status?.confirmationStatus === 'finalized') {
+      return status;
+    }
+    await sleep(delayMs);
+  }
+  throw new Error('Solana transaction confirmation timed out. Check the signature in a Solana explorer.');
+}
+
 function extractCreatedTokenAddress(receipt) {
   const logs = Array.isArray(receipt?.logs) ? receipt.logs : [];
   const eventLog = logs.find((log) => String(log?.topics?.[0] || '').toLowerCase() === BEP20_TOKEN_CREATED_TOPIC);
@@ -553,11 +570,7 @@ export default function CreateTokenPanel() {
         throw new Error('Failed to submit transaction');
       }
 
-      await connection.confirmTransaction({
-        signature,
-        blockhash: latest.blockhash,
-        lastValidBlockHeight: latest.lastValidBlockHeight,
-      }, 'confirmed');
+      await waitForSolanaSignatureConfirmation(connection, signature);
 
       const payload = {
         mintAddress: mintKeypair.publicKey.toBase58(),

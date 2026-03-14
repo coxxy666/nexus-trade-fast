@@ -595,10 +595,11 @@ export default function CreateTokenPanel() {
         // ignore local storage failures
       }
       setDirectResult(payload);
-      toast.success(`Solana token created: ${payload.mintAddress}`, {
-        description: `${payload.symbol} supply ${form.initialSupply} minted to your wallet`,
-        duration: 12000,
-      });
+      const successMessage = `Solana token created: ${payload.mintAddress}`;
+      toast.success(successMessage, { duration: 12000 });
+      if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+        window.alert(`${successMessage}\n${payload.symbol} supply ${form.initialSupply} minted to your wallet.`);
+      }
     } catch (error) {
       console.error('Direct Solana mint failed:', error);
       const msg = String(error?.message || error || 'Direct mint failed');

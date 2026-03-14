@@ -1041,6 +1041,7 @@ export default function CreateTokenPanel() {
 
           {directResult && (
             <div className="text-xs text-gray-200 space-y-1">
+              <p className="text-emerald-200 font-medium">Solana token created successfully.</p>
               <p>Mint: {directResult.mintAddress}</p>
               <p>Metadata: {directResult.metadataAddress}</p>
               <p>Metadata URI: {directResult.metadataUri}</p>

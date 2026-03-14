@@ -28,6 +28,7 @@ const SOLANA_RPC_FALLBACKS = [
 ].filter(Boolean);
 const BEP20_CREATE_SELECTOR_LEGACY = '0x5165749e';
 const BEP20_CREATE_SELECTOR_WITH_METADATA = '0x6fc6ce0e';
+const BEP20_TOKEN_CREATED_TOPIC = '0xd2db7bb578a69b9619e7208ed6e813b563c0729ec8e025d92c316909befb64ca';
 
 function bigintToLeU64(value) {
   const out = new Uint8Array(8);
@@ -191,6 +192,27 @@ function extractEvmErrorMessage(error) {
   ];
   const found = candidates.find((v) => typeof v === 'string' && v.trim());
   return found ? found.trim() : '';
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function waitForTransactionReceipt(provider, txHash, attempts = 20, delayMs = 1500) {
+  for (let i = 0; i < attempts; i += 1) {
+    const receipt = await provider.request({
+      method: 'eth_getTransactionReceipt',
+      params: [txHash],
+    });
+    if (receipt) return receipt;
+    await sleep(delayMs);
+  }
+  return null;
+}
+
+function extractCreatedTokenAddress(receipt) {
+  const logs = Array.isArray(receipt?.logs) ? receipt.logs : [];
+  const eventLog = logs.find((log) => String(log?.topics?.[0] || '').toLowerCase() === BEP20_TOKEN_CREATED_TOPIC);
+  const topicAddress = String(eventLog?.topics?.[1] || '').replace(/^0x/i, '').slice(-40);
+  return /^[a-fA-F0-9]{40}$/.test(topicAddress) ? `0x${topicAddress}` : null;
 }
 
 export default function CreateTokenPanel() {
@@ -559,7 +581,7 @@ export default function CreateTokenPanel() {
         // ignore local storage failures
       }
       setDirectResult(payload);
-      toast.success('Token created and minted to your wallet');
+      toast.success(`Token created and minted: ${payload.mintAddress}`);
     } catch (error) {
       console.error('Direct Solana mint failed:', error);
       const msg = String(error?.message || error || 'Direct mint failed');
@@ -751,8 +773,12 @@ export default function CreateTokenPanel() {
       console.log('[BEP20] Transaction sent', { txHash });
 
       if (!txHash) throw new Error('No transaction hash returned');
-      setDirectBep20Result({ txHash, factoryAddress, metadataUri, methodUsed });
-      toast.success('BEP20 create transaction submitted');
+      const receipt = await waitForTransactionReceipt(provider, txHash);
+      const tokenAddress = extractCreatedTokenAddress(receipt);
+      setDirectBep20Result({ txHash, factoryAddress, metadataUri, methodUsed, tokenAddress });
+      toast.success(tokenAddress
+        ? `BEP20 token created: ${tokenAddress}`
+        : 'BEP20 create transaction submitted');
     } catch (error) {
       const message = extractEvmErrorMessage(error) || String(error || '');
       const debugPayload = {
@@ -1017,6 +1043,7 @@ export default function CreateTokenPanel() {
           {directBep20Result && (
             <div className="text-xs text-gray-200 space-y-1">
               <p>BEP20 token created successfully.</p>
+              {directBep20Result.tokenAddress && <p>Contract: {directBep20Result.tokenAddress}</p>}
               <p>Tx: {directBep20Result.txHash}</p>
               <a
                 href={`https://bscscan.com/tx/${directBep20Result.txHash}`}

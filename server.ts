@@ -10,6 +10,8 @@ import { getRateComparison } from "./functions/getRateComparison.ts";
 import { crossChainSwap } from "./functions/crossChainSwap.ts";
 import { solanaDexSwap } from "./functions/solanaDexSwap.ts";
 import { getTokenSentiment } from "./functions/getTokenSentiment.ts";
+import { createToken } from "./functions/createToken.ts";
+import { createTokenMetadata, getTokenMetadataById } from "./functions/tokenMetadata.ts";
 
 const PORT = Number(Deno.env.get("PORT") || "8000");
 const HOSTNAME = Deno.env.get("HOST") || "0.0.0.0";
@@ -31,7 +33,79 @@ console.log(`   - POST http://${HOSTNAME}:${PORT}/api/rate-comparison`);
 console.log(`   - POST http://${HOSTNAME}:${PORT}/api/cross-chain-swap`);
 console.log(`   - POST http://${HOSTNAME}:${PORT}/api/solana-swap`);
 console.log(`   - POST http://${HOSTNAME}:${PORT}/api/token-sentiment`);
+console.log(`   - POST http://${HOSTNAME}:${PORT}/api/create-token`);
+console.log(`   - POST http://${HOSTNAME}:${PORT}/api/solana-rpc`);
+console.log(`   - POST http://${HOSTNAME}:${PORT}/api/token-metadata`);
+console.log(`   - GET  http://${HOSTNAME}:${PORT}/api/token-metadata/:id`);
 console.log("=".repeat(50) + "\n");
+
+const SOLANA_RPC_ENDPOINTS = [
+  Deno.env.get("SOLANA_RPC_URL"),
+  ...String(Deno.env.get("SOLANA_RPC_FALLBACKS") || "")
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean),
+  "https://api.mainnet-beta.solana.com",
+].filter(Boolean);
+
+async function forwardSolanaRpc(req: Request): Promise<Response> {
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const bodyText = await req.text();
+  let lastError = "No Solana RPC endpoint available";
+
+  for (const rpcUrl of SOLANA_RPC_ENDPOINTS) {
+    try {
+      const upstream = await fetch(rpcUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: bodyText,
+      });
+
+      const responseText = await upstream.text();
+      let parsed: any = null;
+      try {
+        parsed = JSON.parse(responseText);
+      } catch {
+        parsed = null;
+      }
+
+      const isForbiddenJsonRpc =
+        parsed &&
+        typeof parsed === "object" &&
+        parsed.error &&
+        (Number(parsed.error.code) === 403 ||
+          String(parsed.error.message || "").toLowerCase().includes("forbidden"));
+
+      if (upstream.status === 403 || isForbiddenJsonRpc) {
+        lastError = `Forbidden by ${rpcUrl}`;
+        continue;
+      }
+
+      if (!upstream.ok) {
+        lastError = `RPC ${rpcUrl} failed with status ${upstream.status}`;
+        continue;
+      }
+
+      return new Response(responseText, {
+        status: upstream.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      lastError = String(error?.message || error);
+    }
+  }
+
+  return new Response(JSON.stringify({ error: lastError }), {
+    status: 502,
+    headers: { "Content-Type": "application/json" },
+  });
+}
 
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
@@ -114,6 +188,27 @@ async function handler(req: Request): Promise<Response> {
       return withCors(await getTokenSentiment(req));
     }
 
+    if (path === "/api/create-token") {
+      console.error(" Building token creation package...");
+      return withCors(await createToken(req));
+    }
+
+    if (path === "/api/solana-rpc") {
+      console.error(" Proxying Solana RPC request...");
+      return withCors(await forwardSolanaRpc(req));
+    }
+
+    if (path === "/api/token-metadata") {
+      console.error(" Creating token metadata...");
+      return withCors(await createTokenMetadata(req));
+    }
+
+    if (path.startsWith("/api/token-metadata/")) {
+      const id = decodeURIComponent(path.replace("/api/token-metadata/", ""));
+      console.error(` Reading token metadata: ${id}`);
+      return withCors(await getTokenMetadataById(id));
+    }
+
     // Default response
     return new Response(JSON.stringify({ 
       status: "ok", 
@@ -127,7 +222,11 @@ async function handler(req: Request): Promise<Response> {
         "/api/rate-comparison",
         "/api/cross-chain-swap",
         "/api/solana-swap",
-        "/api/token-sentiment"
+        "/api/token-sentiment",
+        "/api/create-token",
+        "/api/solana-rpc",
+        "/api/token-metadata",
+        "/api/token-metadata/:id"
       ] 
     }), { headers });
 

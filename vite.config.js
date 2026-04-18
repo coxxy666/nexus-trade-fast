@@ -28,7 +28,12 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        buffer: 'buffer',
+        process: 'process/browser',
       },
+    },
+    optimizeDeps: {
+      include: ['buffer', 'process'],
     },
     plugins: [react({ fastRefresh: false })],
   };

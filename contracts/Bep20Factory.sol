@@ -2,8 +2,8 @@
 pragma solidity ^0.8.20;
 
 /**
- * @title Minimal BEP20 token deployed by factory
- * @dev Self-contained token to keep deployment simple (no external imports).
+ * Standard ERC20-compatible token deployed through SaveMeme.
+ * The token itself stays a normal BEP20; attribution is carried by the factory event and metadata URI.
  */
 contract FactoryBEP20Token {
     string public name;
@@ -73,16 +73,24 @@ contract FactoryBEP20Token {
     }
 }
 
-/**
- * @title BEP20 Factory
- * @dev Supports both signatures used by frontend:
- *  - createToken(name,symbol,decimals,initialSupply,owner)
- *  - createToken(name,symbol,decimals,initialSupply,owner,metadataUri)
- */
 contract Bep20Factory {
+    string public constant PLATFORM = "SaveMeme";
     address public owner;
 
-    event TokenCreated(
+    struct MintedTokenInfo {
+        address token;
+        address creator;
+        address tokenOwner;
+        string name;
+        string symbol;
+        string metadataURI;
+        uint256 createdAt;
+    }
+
+    MintedTokenInfo[] public mintedTokens;
+
+    event TokenCreated(address indexed token, address indexed creator, string platform);
+    event TokenCreatedDetailed(
         address indexed token,
         address indexed creator,
         address indexed tokenOwner,
@@ -90,7 +98,8 @@ contract Bep20Factory {
         string symbol,
         uint8 decimals,
         uint256 initialSupply,
-        string metadataURI
+        string metadataURI,
+        string platform
     );
 
     modifier onlyOwner() {
@@ -105,6 +114,15 @@ contract Bep20Factory {
     function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0), "invalid owner");
         owner = newOwner;
+    }
+
+    function totalMintedBySaveMeme() external view returns (uint256) {
+        return mintedTokens.length;
+    }
+
+    function getMintedToken(uint256 index) external view returns (MintedTokenInfo memory) {
+        require(index < mintedTokens.length, "index out of range");
+        return mintedTokens[index];
     }
 
     function createToken(
@@ -151,16 +169,17 @@ contract Bep20Factory {
         );
         tokenAddress = address(token);
 
-        emit TokenCreated(
-            tokenAddress,
-            msg.sender,
-            _tokenOwner,
-            _name,
-            _symbol,
-            _decimals,
-            _initialSupply,
-            _metadataURI
-        );
+        mintedTokens.push(MintedTokenInfo({
+            token: tokenAddress,
+            creator: msg.sender,
+            tokenOwner: _tokenOwner,
+            name: _name,
+            symbol: _symbol,
+            metadataURI: _metadataURI,
+            createdAt: block.timestamp
+        }));
+
+        emit TokenCreated(tokenAddress, msg.sender, PLATFORM);
+        emit TokenCreatedDetailed(tokenAddress, msg.sender, _tokenOwner, _name, _symbol, _decimals, _initialSupply, _metadataURI, PLATFORM);
     }
 }
-

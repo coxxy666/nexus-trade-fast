@@ -18,10 +18,10 @@ export default function ListToken() {
             </div>
           </div>
           <h1 className="text-5xl font-bold mb-4">
-            <span className="gradient-text">Create Token</span>
+            <span className="gradient-text">Create Meme Token</span>
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Create Solana or BEP20 tokens directly from this page.
+            Launch standard Solana SPL or BNB Chain BEP20 meme tokens with SaveMeme attribution.
           </p>
         </motion.div>
 

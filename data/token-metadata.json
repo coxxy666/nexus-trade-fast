@@ -1,0 +1,3638 @@
+{
+  "8eaeb693fd9d48e3a63e9263227a9936": {
+    "name": "mine",
+    "symbol": "MI",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "77d5da8ae6a348b5b071df62ac0d1285": {
+    "name": "mine",
+    "symbol": "MI",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "00beb3f4abd64d528e9600c851f25192": {
+    "name": "mine",
+    "symbol": "MI",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "232286d6d9a24e779db76df1b8588468": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "fdb530d12a23477696f0d6a594342b58": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "99ebca49447f44c49ca3d75cc1cc74fb": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "b8970205b1884340b2c19895a7e76540": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "32f21ce6522540f892af9b0e115f4585": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "0d102e0f5c694c58839c6dfc4cc8a7b8": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "2fae56ff952e46a483b8ea6430ac95de": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "b04dad332f664d9d8a45259dc63c7a5e": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "2928652a16f744828f1900d4df22ea17": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "1a357414595245cb9238ce4cd7a6b946": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "ae0eacfe74ef4252b6fab2cd36388259": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "729f0ba873a441c4b8475eb022c5a77a": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "62906823e429483399159c81721f85bf": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "806bda62dd304dcfb3695c5469091ba5": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "5acb8c25904042dda88a09f0d4c90e63": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "ed477477e2ab4851bb5e0f091fec6144": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "362e6c1bd339481c8c1da8688eab3557": {
+    "name": "mine",
+    "symbol": "MINE",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "1decd82335fd4f6297858c27deb36fd2": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "55bbed9697364dcdaecd5ae960d3b772": {
+    "name": "m",
+    "symbol": "M",
+    "description": "",
+    "image": "",
+    "properties": {
+      "category": "image",
+      "files": []
+    }
+  },
+  "92f5fd73a8934124bdda882c2e53093a": {
+    "name": "test50",
+    "symbol": "50",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T15:17:09.099Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T15:17:09.099Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T15:17:09.099Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "68d21bb8000c4eb4bb52cbadf8749949": {
+    "name": "50",
+    "symbol": "50",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T15:18:21.402Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T15:18:21.402Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T15:18:21.402Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "d38e61a8c88a4166b9e6f423608bbb20": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:02:23.865Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:02:23.865Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:02:23.865Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "533bb665efda45e2b92de0e411e03ba3": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:10:19.443Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:10:19.443Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:10:19.443Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "abe0864948654da8803c07728a3ffa72": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:40:42.759Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:40:42.759Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:40:42.759Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "7602ba8cbc074e7c8fd58f918bbc0664": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:41:04.231Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:04.231Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:04.231Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "38180831c20c4e0db54b3fa50f76a909": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:41:12.671Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:12.671Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:12.671Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "f27bf75fe647425eb05451718a31d163": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:41:46.930Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:46.930Z",
+      "chain": "solana",
+      "ai_checked": false
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:41:46.930Z",
+      "chain": "solana",
+      "ai_checked": false
+    }
+  },
+  "e70b63367639400a8df55619fdac7e3d": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:42:45.663Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:42:45.663Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:42:45.663Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    }
+  },
+  "ee94d6b7d0e44d01a7a82e07029cde82": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:45:57.743Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:45:57.743Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:45:57.743Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    }
+  },
+  "c784db81abf64bbfa14c2c5648641119": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T16:46:30.041Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:46:30.041Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T16:46:30.041Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    }
+  },
+  "666f06343fbc4ce18a2d99fd230b2892": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:07:10.520Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:07:10.520Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:07:10.520Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save"
+    }
+  },
+  "fb8b56740b514651ada2ab850b3e1577": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:51:45.088Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:51:45.088Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:51:45.088Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "f9022d9e087f4a23bcb858f6151e4d76": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:52:56.839Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:52:56.839Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:52:56.839Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "66e70f13ac9045a4a60887699a2202a9": {
+    "name": "doge",
+    "symbol": "DOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:55:37.228Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:55:37.228Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:55:37.228Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "e2259a442e864a02a2c2c55fd3c1544e": {
+    "name": "dog",
+    "symbol": "DOG",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:56:35.736Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:56:35.736Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:56:35.736Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "3f3f8005a2b14b1ca6ddbd9f8172b8f0": {
+    "name": "dog",
+    "symbol": "DOG",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:57:18.245Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:57:18.245Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:57:18.245Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "50d5d5654aa145a08608954338f7a871": {
+    "name": "dog",
+    "symbol": "DOG",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T17:59:30.805Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:59:30.805Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T17:59:30.805Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "b9c9b850fc3045b6a826db5c41035ad4": {
+    "name": "doggy",
+    "symbol": "DOG",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:08:19.070Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:08:19.070Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:08:19.070Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "9a3e93f24a644442a339fd09371e9ee3": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:13:41.320Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:13:41.320Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:13:41.320Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "b48c8c020fe94fdaa1ff8b428d25f182": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:14:18.447Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:14:18.447Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:14:18.447Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "2edf398e11da4b56a4aec30c9ce76dc8": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:14:56.184Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:14:56.184Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:14:56.184Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "eb8f036e4798476ebb4e1adbbc449b19": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:15:12.658Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:15:12.658Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:15:12.658Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "3ab460d6448d4efe9b88714c78c910b7": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:16:09.782Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:16:09.782Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:16:09.782Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "664e6a7a2dd5429db52e8705d5244e74": {
+    "name": "nazzy",
+    "symbol": "NAZ",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T18:46:53.901Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:46:53.901Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T18:46:53.901Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "d77f1374cb9948699c2c4fcf28169d5e": {
+    "name": "kill",
+    "symbol": "KI",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T19:50:55.462Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T19:50:55.462Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T19:50:55.462Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "8073fca6b9584ac18007610f28f750db": {
+    "name": "new",
+    "symbol": "NEW",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:28:16.679Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:28:16.679Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:28:16.679Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "bcd400153c8340bca456ce54d117cb86": {
+    "name": "new",
+    "symbol": "NEW",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:28:43.868Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:28:43.868Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:28:43.868Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "9d79cb475b0d4cafaa104eeea62e85d2": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:31:45.167Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:31:45.167Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:31:45.167Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "8b3386c9597c435b81e8ee48ce994c9f": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:32:09.129Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:09.129Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:09.129Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "5d038339f88d46aa925d2901509031ba": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:32:27.559Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:27.559Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:27.559Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "3a5afe1c1ff6459aabdfd9afe7c3b40d": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:32:42.485Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:42.485Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:42.485Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "fd697921745f45228c4fa5b5f22bbd38": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:32:55.633Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:55.633Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:32:55.633Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "1d0ce60072b34de49520b09aaf905d0c": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:33:04.147Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:33:04.147Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:33:04.147Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "3e289f228c5343a1a159592ee6cd2f28": {
+    "name": "gt",
+    "symbol": "GT",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:33:13.085Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:33:13.085Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:33:13.085Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "6d0432614fd14b8b868b574181b4c5de": {
+    "name": "new meme",
+    "symbol": "NEW",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:39:50.321Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:39:50.321Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:39:50.321Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "ca152df7ece044d983968c0f3e88d70b": {
+    "name": "newdoge",
+    "symbol": "NDOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:48:45.203Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:48:45.203Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:48:45.203Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "cca7c0ff5bc644d08ab490d5f03ac6f9": {
+    "name": "MemeDog",
+    "symbol": "MD",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:53:12.522Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:53:12.522Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:53:12.522Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "4fa53267f4514995a7b1eed2db5b6bfa": {
+    "name": "memetoken",
+    "symbol": "TOKEN",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T20:58:10.754Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:58:10.754Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T20:58:10.754Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "d44d607895224e1f90b2ee9ce0f3815c": {
+    "name": "newdoge",
+    "symbol": "NEWDOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T22:27:33.368Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:33.368Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:33.368Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "cc0862c9dc3b4b8894b0d42b6c3bd9dd": {
+    "name": "newdoge",
+    "symbol": "NEWDOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T22:27:46.483Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:46.483Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:46.483Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "14afc394c24740fca0c7602c7417d4c2": {
+    "name": "newdoge",
+    "symbol": "NEWDOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T22:27:59.615Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:59.615Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:27:59.615Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "5d2503edd4d8463e929bba5a69150d0f": {
+    "name": "Newdoge",
+    "symbol": "NEWDOGE",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T22:29:36.467Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:29:36.467Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:29:36.467Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  },
+  "0a49fd944d164ad5b89a306d79520be1": {
+    "name": "shiba",
+    "symbol": "SHIBA",
+    "description": "",
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "created_via",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "launch_source",
+        "value": "SaveMeme"
+      },
+      {
+        "trait_type": "category",
+        "value": "ai-meme"
+      },
+      {
+        "trait_type": "creator_wallet",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "chain",
+        "value": "solana"
+      },
+      {
+        "trait_type": "timestamp",
+        "value": "2026-04-18T22:46:40.936Z"
+      },
+      {
+        "trait_type": "ai_checked",
+        "value": "false"
+      },
+      {
+        "trait_type": "creator_authority",
+        "value": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw"
+      },
+      {
+        "trait_type": "attribution_program",
+        "value": "SaveMeme SPL launcher"
+      },
+      {
+        "trait_type": "verified_source",
+        "value": "SaveMeme metadata + registry"
+      },
+      {
+        "trait_type": "vanity_prefix",
+        "value": "save, meme"
+      }
+    ],
+    "properties": {
+      "category": "image",
+      "files": []
+    },
+    "extensions": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "ai-meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:46:40.936Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    },
+    "save_meme": {
+      "created_via": "SaveMeme",
+      "launch_source": "SaveMeme",
+      "category": "ai-meme",
+      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "timestamp": "2026-04-18T22:46:40.936Z",
+      "chain": "solana",
+      "ai_checked": false,
+      "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attribution_program": "SaveMeme SPL launcher",
+      "verified_source": "SaveMeme metadata + registry",
+      "vanity_prefix": "save, meme"
+    }
+  }
+}

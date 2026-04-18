@@ -6,6 +6,7 @@ import {
   Droplets, 
   BarChart3, 
   Shield,
+  Coins,
   Menu, 
   X
 } from 'lucide-react';
@@ -21,6 +22,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Home', icon: BarChart3, page: 'Home' },
     { name: 'Swap', icon: ArrowLeftRight, page: 'Swap' },
     { name: 'Pools', icon: Droplets, page: 'Pools' },
+    { name: 'Create Meme Token', icon: Coins, page: 'ListToken' },
     { name: 'MemeAI', icon: Shield, page: 'MemeAI' },
   ];
 

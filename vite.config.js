@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
   const proxyTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8000';
 
   return {
-    base: './',
+    base: '/',
     logLevel: 'error',
     server: {
       hmr: false,

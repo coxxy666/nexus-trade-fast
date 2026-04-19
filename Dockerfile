@@ -2,7 +2,7 @@ FROM node:20-bullseye AS deps
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .
 RUN npm ci
 
 FROM denoland/deno:2.2.12

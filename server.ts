@@ -1,7 +1,5 @@
-
-import "./loadEnv.ts"
+import "./loadEnv.ts";
 import { serve } from "https://deno.land/std/http/server.ts";
-
 
 // Import your functions
 import { fetchMemeTokensProxy } from "./functions/fetchMemeTokensProxy.ts";

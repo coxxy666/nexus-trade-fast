@@ -192,6 +192,8 @@ function extractEvmErrorMessage(error) {
   const found = candidates.find((v) => typeof v === 'string' && v.trim());
   const message = found ? found.trim() : '';
   const lower = message.toLowerCase();
+  const nestedStack = String(error?.stack || error?.error?.stack || error?.data?.stack || '');
+  const lowerStack = nestedStack.toLowerCase();
 
   if (lower.includes('insufficient funds') || lower.includes('insufficient balance') || lower.includes('exceeds balance')) {
     return 'Insufficient BNB to deploy the token contract. Add more BNB for gas and try again.';
@@ -199,6 +201,15 @@ function extractEvmErrorMessage(error) {
 
   if (lower.includes('intrinsic gas too low') || lower.includes('gas required exceeds allowance') || lower.includes('cannot estimate gas')) {
     return 'The wallet could not estimate enough gas for this token creation. Make sure you have enough BNB and try again.';
+  }
+
+  if (
+    lower.includes('failed to fetch') ||
+    lower.includes('networkerror') ||
+    (Number(error?.code) === -32603 && lower.includes('fetch')) ||
+    lowerStack.includes('failed to fetch')
+  ) {
+    return 'MetaMask could not reach the BNB Chain RPC while sending the transaction. In MetaMask, verify BNB Smart Chain is selected, switch to another BSC RPC URL, then try again.';
   }
 
   if (lower.includes('execution reverted')) {
@@ -329,6 +340,51 @@ function explorerTxUrl(chain, txHash) {
   if (!txHash) return '';
   if (chain === 'solana') return `https://solscan.io/tx/${txHash}`;
   return `https://bscscan.com/tx/${txHash}`;
+}
+
+const BEP20_FACTORY_TOTAL_MINTED_SELECTOR = '0xb142d69b';
+const BEP20_FACTORY_GET_MINTED_TOKEN_SELECTOR = '0xed47d4d1';
+
+async function getBep20FactoryMintCount(provider, factoryAddress) {
+  if (!provider?.request || !factoryAddress) return null;
+  const raw = await provider.request({
+    method: 'eth_call',
+    params: [{
+      to: factoryAddress,
+      data: BEP20_FACTORY_TOTAL_MINTED_SELECTOR,
+    }, 'latest'],
+  });
+  if (!raw || raw === '0x') return null;
+  return Number(BigInt(raw));
+}
+
+async function getBep20FactoryMintRecord(provider, factoryAddress, index) {
+  if (!provider?.request || !factoryAddress || index == null || index < 0) return null;
+  const callData = `${BEP20_FACTORY_GET_MINTED_TOKEN_SELECTOR}${toWordHex(index)}`;
+  const raw = await provider.request({
+    method: 'eth_call',
+    params: [{
+      to: factoryAddress,
+      data: callData,
+    }, 'latest'],
+  });
+  if (!raw || raw === '0x') return null;
+
+  const { Web3 } = await import('web3');
+  const decoded = Web3.eth.abi.decodeParameters(
+    ['address', 'address', 'address', 'string', 'string', 'string', 'uint256'],
+    raw,
+  );
+
+  return {
+    token: decoded?.[0] || '',
+    creator: decoded?.[1] || '',
+    tokenOwner: decoded?.[2] || '',
+    name: decoded?.[3] || '',
+    symbol: decoded?.[4] || '',
+    metadataURI: decoded?.[5] || '',
+    createdAt: decoded?.[6] || '',
+  };
 }
 
 function readFileAsDataUrl(file) {
@@ -1084,6 +1140,14 @@ export default function CreateTokenPanel() {
       }
       console.log('[BEP20] Method selected', { methodUsed, hasMetadataUri: !!metadataUri });
 
+      let mintedCountBefore = null;
+      try {
+        mintedCountBefore = await getBep20FactoryMintCount(provider, factoryAddress);
+        console.log('[BEP20] Factory mint count before send', { mintedCountBefore });
+      } catch (countError) {
+        console.warn('[BEP20] Failed to read factory mint count before send', countError);
+      }
+
       console.log('[BEP20] Step 8: estimating gas');
       let gas = null;
       try {
@@ -1114,7 +1178,22 @@ export default function CreateTokenPanel() {
 
       if (!txHash) throw new Error('No transaction hash returned');
       const receipt = await waitForTransactionReceipt(provider, txHash);
-      const tokenAddress = extractCreatedTokenAddress(receipt, factoryAddress);
+      let tokenAddress = extractCreatedTokenAddress(receipt, factoryAddress);
+      if (!tokenAddress && mintedCountBefore != null) {
+        try {
+          const mintedRecord = await getBep20FactoryMintRecord(provider, factoryAddress, mintedCountBefore);
+          const fallbackAddress = String(mintedRecord?.token || '').trim();
+          if (/^0x[a-fA-F0-9]{40}$/.test(fallbackAddress)) {
+            tokenAddress = fallbackAddress;
+            console.log('[BEP20] Token address recovered from factory record', {
+              mintedCountBefore,
+              tokenAddress,
+            });
+          }
+        } catch (factoryReadError) {
+          console.warn('[BEP20] Failed to recover token address from factory record', factoryReadError);
+        }
+      }
       const aiScan = tokenAddress ? await runOptionalAiScan({
         address: tokenAddress,
         chain: 'bsc',
@@ -1151,6 +1230,9 @@ export default function CreateTokenPanel() {
       toast.success(tokenAddress
         ? `SaveMeme BEP20 token created: ${tokenAddress}`
         : 'BEP20 create transaction submitted');
+      if (!tokenAddress) {
+        toast.warning('BEP20 token transaction succeeded, but the new token address could not be recovered. SaveMeme registry and X auto-post were skipped for this mint.', { duration: 12000 });
+      }
     } catch (error) {
       const message = extractEvmErrorMessage(error) || String(error || '');
       const debugPayload = {

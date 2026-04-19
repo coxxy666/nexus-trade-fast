@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN deno cache server.ts
+RUN rm -f deno.lock && deno cache server.ts
 
 EXPOSE 8000
 

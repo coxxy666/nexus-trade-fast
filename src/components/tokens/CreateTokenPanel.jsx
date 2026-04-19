@@ -431,6 +431,32 @@ function SaveMemeBadge({ children, tone = 'cyan' }) {
     </span>
   );
 }
+
+function normalizeRecentMintRecord(token) {
+  const chain = String(token?.chain || '').toLowerCase() === 'solana' ? 'solana' : 'bsc';
+  const tokenAddress = String(token?.token_address || token?.address || '').trim();
+  if (!tokenAddress) return null;
+
+  const rawName = String(token?.name || '').trim();
+  const rawSymbol = String(token?.symbol || '').trim();
+
+  return {
+    ...token,
+    chain,
+    token_address: tokenAddress,
+    name: rawName || 'Unnamed Token',
+    symbol: rawSymbol || 'UNKNOWN',
+    category: String(token?.category || '').trim() || 'meme',
+  };
+}
+
+function normalizeRecentMintRecords(tokens) {
+  if (!Array.isArray(tokens)) return [];
+  return tokens
+    .map(normalizeRecentMintRecord)
+    .filter(Boolean)
+    .slice(0, 6);
+}
 export default function CreateTokenPanel() {
   const { account, walletType, wcProvider } = useWallet();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -508,12 +534,23 @@ export default function CreateTokenPanel() {
   }, [form]);
 
 
+  const loadRecentMints = React.useCallback(async () => {
+    const res = await fetch(apiUrl('/api/tokens/minted-by-savememe'), { cache: 'no-store' });
+    const data = await res.json().catch(() => ({}));
+    const nextRecords = normalizeRecentMintRecords(data?.tokens);
+    console.log('[SaveMeme] Recent launches fetched', nextRecords);
+    setRecentMints(nextRecords);
+  }, []);
   React.useEffect(() => {
     let cancelled = false;
-    fetch(apiUrl('/api/tokens/minted-by-savememe'))
+    fetch(apiUrl('/api/tokens/minted-by-savememe'), { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
-        if (!cancelled) setRecentMints(Array.isArray(data?.tokens) ? data.tokens.slice(0, 6) : []);
+        if (!cancelled) {
+          const nextRecords = normalizeRecentMintRecords(data?.tokens);
+          console.log('[SaveMeme] Recent launches fetched', nextRecords);
+          setRecentMints(nextRecords);
+        }
       })
       .catch(() => {
         if (!cancelled) setRecentMints([]);
@@ -569,9 +606,18 @@ export default function CreateTokenPanel() {
     if (!res.ok || !data?.success) {
       throw new Error(data?.error || 'Failed to register SaveMeme token');
     }
-    setRecentMints((prev) => [data.token, ...prev.filter((item) => String(item?.token_address || '').toLowerCase() !== String(data.token?.token_address || '').toLowerCase())].slice(0, 6));
+    const normalizedToken = normalizeRecentMintRecord(data?.token);
+    if (normalizedToken) {
+      setRecentMints((prev) => [
+        normalizedToken,
+        ...prev.filter((item) => String(item?.token_address || '').toLowerCase() !== String(normalizedToken.token_address || '').toLowerCase()),
+      ].slice(0, 6));
+    }
+    loadRecentMints().catch(() => {
+      // keep optimistic state if the follow-up refresh fails
+    });
     return data.token;
-  }, []);
+  }, [loadRecentMints]);
 
   const runOptionalAiScan = React.useCallback(async ({ address, chain, name, symbol }) => {
     if (!form.aiSafetyScan || !address) return null;
@@ -1819,6 +1865,8 @@ export default function CreateTokenPanel() {
     </div>
   );
 }
+
+
 
 
 

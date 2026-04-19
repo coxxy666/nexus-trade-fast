@@ -1,4 +1,4 @@
-const ANNOUNCEMENT_STORE_PATH = "data/token-announcements.json"
+const ANNOUNCEMENT_STORE_PATH = "data/token-announcements.json";
 const ANNOUNCEMENT_KV_PREFIX = ["savememe", "token_announcements"] as const;
 const KV_ENABLED = ["1", "true", "yes", "on"].includes(String(Deno.env.get("USE_DENO_KV") || "").toLowerCase());
 const KV_PATH = String(Deno.env.get("DENO_KV_PATH") || "").trim() || undefined;

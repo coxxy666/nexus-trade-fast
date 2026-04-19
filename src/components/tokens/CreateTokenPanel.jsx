@@ -554,12 +554,18 @@ export default function CreateTokenPanel() {
   }), [account, form]);
 
   const registerSaveMemeMint = React.useCallback(async (payload) => {
+    console.log('[SaveMeme] Register mint payload', payload);
     const res = await fetch(apiUrl('/api/tokens/register-savememe-mint'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
     const data = await res.json();
+    console.log('[SaveMeme] Register mint response', {
+      ok: res.ok,
+      status: res.status,
+      data,
+    });
     if (!res.ok || !data?.success) {
       throw new Error(data?.error || 'Failed to register SaveMeme token');
     }
@@ -1204,6 +1210,15 @@ export default function CreateTokenPanel() {
       let registryError = '';
       if (tokenAddress) {
         try {
+          console.log('[BEP20] Registering minted token with SaveMeme registry', {
+            tokenAddress,
+            chain: 'bsc',
+            creatorWallet: form.ownerAddress || account,
+            txHash,
+            metadataUri,
+            tokenName,
+            tokenSymbol,
+          });
           registryRecord = await saveMintRecord({
             address: tokenAddress,
             chain: 'bsc',

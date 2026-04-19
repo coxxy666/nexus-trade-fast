@@ -3620,7 +3620,7 @@
       "attribution_program": "SaveMeme SPL launcher",
       "verified_source": "SaveMeme metadata + registry",
       "vanity_prefix": "save, meme"
-    },
+    }
     "save_meme": {
       "created_via": "SaveMeme",
       "launch_source": "SaveMeme",

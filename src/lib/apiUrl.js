@@ -1,6 +1,6 @@
 const rawBase = (import.meta.env.VITE_API_BASE_URL || '').trim();
 const API_BASE_URL = rawBase.replace(/\/+$/, '');
-const RAILWAY_FALLBACK_BASE = 'https://nexus-trade-fast-production.up.railway.app';
+const RAILWAY_FALLBACK_BASE = 'https://api.dolphinx2.ai';
 
 export function apiUrl(path = '/') {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;

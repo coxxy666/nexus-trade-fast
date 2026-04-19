@@ -1,7 +1,0 @@
-.git
-.env
-.env.local
-dist
-node_modules
-*.zip
-npm-debug.log

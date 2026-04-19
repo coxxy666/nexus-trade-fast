@@ -1,11 +1,18 @@
 import { enqueueTokenAnnouncement } from "./tokenAnnouncementQueue.ts";
+import { isPostgresStoreEnabled, readJsonStore, writeJsonStore } from "./postgresStore.ts";
 
 const SAVE_MEME_REGISTRY_PATH = "data/savememe-minted-tokens.json";
 const SAVE_MEME_KV_PREFIX = ["savememe", "minted_tokens"] as const;
+const SAVE_MEME_POSTGRES_TABLE = "savememe_minted_tokens";
 const KV_ENABLED = ["1", "true", "yes", "on"].includes(String(Deno.env.get("USE_DENO_KV") || "").toLowerCase());
 const KV_PATH = String(Deno.env.get("DENO_KV_PATH") || "").trim() || undefined;
 
 let kvPromise: Promise<Deno.Kv | null> | null = null;
+
+function getStorageMode(): "postgres" | "deno-kv" | "file" {
+  if (isPostgresStoreEnabled()) return "postgres";
+  return KV_ENABLED ? "deno-kv" : "file";
+}
 
 async function getKv(): Promise<Deno.Kv | null> {
   if (!KV_ENABLED) return null;
@@ -78,6 +85,11 @@ function explorerFor(chain: "solana" | "bsc", address: string): string {
 }
 
 async function readStore(): Promise<SaveMemeMintedTokenRecord[]> {
+  if (isPostgresStoreEnabled()) {
+    const records = await readJsonStore<SaveMemeMintedTokenRecord>(SAVE_MEME_POSTGRES_TABLE);
+    if (records) return records;
+  }
+
   const kv = await getKv();
   if (kv) {
     const records: SaveMemeMintedTokenRecord[] = [];
@@ -97,6 +109,11 @@ async function readStore(): Promise<SaveMemeMintedTokenRecord[]> {
 }
 
 async function writeStore(records: SaveMemeMintedTokenRecord[]): Promise<void> {
+  if (isPostgresStoreEnabled()) {
+    const stored = await writeJsonStore(SAVE_MEME_POSTGRES_TABLE, records);
+    if (stored) return;
+  }
+
   const kv = await getKv();
   if (kv) {
     const existingKeys: Deno.KvKey[] = [];
@@ -208,7 +225,7 @@ export async function registerMintedBySaveMeme(req: Request): Promise<Response> 
       };
     }
 
-    return json({ success: true, token: record, announcement, storage: (await getKv()) ? "deno-kv" : "file" });
+    return json({ success: true, token: record, announcement, storage: getStorageMode() });
   } catch (error) {
     return json({ error: String((error as Error)?.message || error || "Failed to register SaveMeme mint") }, 400);
   }
@@ -226,7 +243,7 @@ export async function listMintedBySaveMeme(req: Request): Promise<Response> {
       if (!q) return true;
       return [item.name, item.symbol, item.token_address, item.creator_wallet].some((value) => String(value || "").toLowerCase().includes(q));
     });
-    return json({ success: true, count: filtered.length, tokens: filtered, storage: (await getKv()) ? "deno-kv" : "file" });
+    return json({ success: true, count: filtered.length, tokens: filtered, storage: getStorageMode() });
   } catch (error) {
     return json({ error: String((error as Error)?.message || error || "Failed to list SaveMeme mints") }, 500);
   }
@@ -239,7 +256,7 @@ export async function getMintedTokenByAddress(address: string): Promise<Response
     const store = await readStore();
     const match = store.find((item) => normalizeAddress(item.token_address, item.chain) === cleanAddress.toLowerCase() || item.token_address === cleanAddress);
     if (!match) return json({ error: "Token not found" }, 404);
-    return json({ success: true, token: match, storage: (await getKv()) ? "deno-kv" : "file" });
+    return json({ success: true, token: match, storage: getStorageMode() });
   } catch (error) {
     return json({ error: String((error as Error)?.message || error || "Failed to load SaveMeme token") }, 500);
   }

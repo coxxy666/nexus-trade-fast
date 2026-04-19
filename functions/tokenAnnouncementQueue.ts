@@ -1,5 +1,8 @@
+import { isPostgresStoreEnabled, readJsonStore, writeJsonStore } from "./postgresStore.ts";
+
 const ANNOUNCEMENT_STORE_PATH = "data/token-announcements.json";
 const ANNOUNCEMENT_KV_PREFIX = ["savememe", "token_announcements"] as const;
+const ANNOUNCEMENT_POSTGRES_TABLE = "savememe_token_announcements";
 const KV_ENABLED = ["1", "true", "yes", "on"].includes(String(Deno.env.get("USE_DENO_KV") || "").toLowerCase());
 const KV_PATH = String(Deno.env.get("DENO_KV_PATH") || "").trim() || undefined;
 
@@ -27,6 +30,11 @@ const BANNED_WORDS = String(Deno.env.get("DOLPHINX_X_BANNED_WORDS") || "scam,rug
 let kvPromise: Promise<Deno.Kv | null> | null = null;
 let workerStarted = false;
 let workerTickInFlight = false;
+
+function getStorageMode(): "postgres" | "deno-kv" | "json-file" {
+  if (isPostgresStoreEnabled()) return "postgres";
+  return KV_ENABLED ? "deno-kv" : "json-file";
+}
 
 export type TokenAnnouncementRecord = {
   id: string;
@@ -113,7 +121,7 @@ export function getTokenAnnouncementRuntimeStatus() {
     ai_score_threshold: AI_SCORE_THRESHOLD > 0 ? AI_SCORE_THRESHOLD : null,
     require_ai_score: REQUIRE_AI_THRESHOLD,
     banned_words_configured: BANNED_WORDS.length,
-    storage_mode: KV_ENABLED ? "deno-kv" : "json-file",
+    storage_mode: getStorageMode(),
   };
 }
 
@@ -126,6 +134,11 @@ async function getKv(): Promise<Deno.Kv | null> {
 }
 
 async function readStore(): Promise<TokenAnnouncementRecord[]> {
+  if (isPostgresStoreEnabled()) {
+    const records = await readJsonStore<TokenAnnouncementRecord>(ANNOUNCEMENT_POSTGRES_TABLE);
+    if (records) return records;
+  }
+
   const kv = await getKv();
   if (kv) {
     const records: TokenAnnouncementRecord[] = [];
@@ -145,6 +158,11 @@ async function readStore(): Promise<TokenAnnouncementRecord[]> {
 }
 
 async function writeStore(records: TokenAnnouncementRecord[]): Promise<void> {
+  if (isPostgresStoreEnabled()) {
+    const stored = await writeJsonStore(ANNOUNCEMENT_POSTGRES_TABLE, records);
+    if (stored) return;
+  }
+
   const kv = await getKv();
   if (kv) {
     const existingKeys: Deno.KvKey[] = [];
@@ -532,7 +550,7 @@ export async function listTokenAnnouncements(req: Request): Promise<Response> {
         ai_score_threshold: AI_SCORE_THRESHOLD > 0 ? AI_SCORE_THRESHOLD : null,
         require_ai_score: REQUIRE_AI_THRESHOLD,
       },
-      storage: (await getKv()) ? "deno-kv" : "file",
+      storage: getStorageMode(),
     });
   } catch (error) {
     const message = String((error as Error)?.message || error || "Failed to list announcements");

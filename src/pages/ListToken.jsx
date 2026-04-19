@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Coins } from 'lucide-react';
 import CreateTokenPanel from '@/components/tokens/CreateTokenPanel';

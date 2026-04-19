@@ -129,6 +129,15 @@ const mergeTokenFields = (existing: any = {}, incoming: any = {}) => {
     liquidity: numberOr(incoming.liquidity, existing.liquidity),
     market_cap: numberOr(incoming.market_cap, existing.market_cap),
     fdv: numberOr(incoming.fdv, existing.fdv),
+    ath: numberOr(incoming.ath, existing.ath),
+    atl: numberOr(incoming.atl, existing.atl),
+    high_24h: numberOr(incoming.high_24h, existing.high_24h),
+    low_24h: numberOr(incoming.low_24h, existing.low_24h),
+    circulating_supply: numberOr(incoming.circulating_supply, existing.circulating_supply),
+    total_supply: numberOr(incoming.total_supply, existing.total_supply),
+    max_supply: numberOr(incoming.max_supply, existing.max_supply),
+    exchange_count: numberOr(incoming.exchange_count, existing.exchange_count),
+    tags: Array.isArray(incoming.tags) && incoming.tags.length ? incoming.tags : Array.isArray(existing.tags) ? existing.tags : [],
     market_cap_rank: Math.min(
       Number(incoming.market_cap_rank) || 9999,
       Number(existing.market_cap_rank) || 9999
@@ -351,6 +360,14 @@ const fetchFromCoinGecko = async () => {
       logo_url: coin.image || '',
       network: best.network,
       fdv: Number(coin.fully_diluted_valuation) || 0,
+      ath: Number(coin.ath) || 0,
+      atl: Number(coin.atl) || 0,
+      high_24h: Number(coin.high_24h) || 0,
+      low_24h: Number(coin.low_24h) || 0,
+      circulating_supply: Number(coin.circulating_supply) || 0,
+      total_supply: Number(coin.total_supply) || 0,
+      max_supply: Number(coin.max_supply) || 0,
+      tags: Array.isArray(coin.categories) ? coin.categories : [],
       market_cap_rank: Number(coin.market_cap_rank) || 999,
     };
   });
@@ -400,6 +417,15 @@ const fetchFromCoinMarketCap = async () => {
         logo_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`,
         network,
         fdv: Number(quote?.fullyDilutedMarketCap) || 0,
+        ath: Number(coin?.ath) || 0,
+        atl: Number(coin?.atl) || 0,
+        high_24h: Number(coin?.high24h) || 0,
+        low_24h: Number(coin?.low24h) || 0,
+        circulating_supply: Number(coin?.circulatingSupply) || 0,
+        total_supply: Number(coin?.totalSupply) || 0,
+        max_supply: Number(coin?.maxSupply) || 0,
+        exchange_count: Number(coin?.numMarketPairs) || 0,
+        tags: Array.isArray(coin?.tags) ? coin.tags : [],
         market_cap_rank: Number(coin.cmcRank) || 999,
       };
     });

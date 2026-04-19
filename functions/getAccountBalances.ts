@@ -1,5 +1,3 @@
-import { Connection, PublicKey, LAMPORTS_PER_SOL } from 'npm:@solana/web3.js';
-
 export async function getAccountBalances(req) {
   try {
     const { address, chain } = await req.json();
@@ -12,21 +10,43 @@ export async function getAccountBalances(req) {
 
     if (chain === 'solana') {
       try {
-        const connection = new Connection('https://api.mainnet-beta.solana.com');
-        const publicKey = new PublicKey(address);
-        const balanceInLamports = await connection.getBalance(publicKey);
-        const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL;
+        const rpcUrl = 'https://api.mainnet-beta.solana.com';
+        const balanceResponse = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getBalance',
+            params: [address],
+          }),
+        });
+        const balanceData = await balanceResponse.json();
+        const balanceInLamports = Number(balanceData?.result?.value || 0);
+        const balanceInSol = balanceInLamports / 1e9;
 
         // Fetch all SPL token balances keyed by mint address so frontend can resolve
         // balances for any selected token (e.g. MELANIA) without hardcoded symbols.
-        const tokenByAddress: Record<string, number> = {};
-        const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-          publicKey,
-          { programId: new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') }
-        );
+        const tokenByAddress = {};
+        const tokenResponse = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getTokenAccountsByOwner',
+            params: [
+              address,
+              { programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' },
+              { encoding: 'jsonParsed' },
+            ],
+          }),
+        });
+        const tokenData = await tokenResponse.json();
+        const tokenAccounts = Array.isArray(tokenData?.result?.value) ? tokenData.result.value : [];
 
-        for (const accountInfo of tokenAccounts.value) {
-          const parsed: any = accountInfo?.account?.data?.parsed;
+        for (const accountInfo of tokenAccounts) {
+          const parsed = accountInfo?.account?.data?.parsed;
           const info = parsed?.info;
           const mint = String(info?.mint || '');
           const amountUi = Number(info?.tokenAmount?.uiAmount || 0);

@@ -8,6 +8,11 @@ COPY functions ./functions
 COPY data ./data
 COPY deno.json ./
 COPY deno.lock ./
+COPY server.ts .
+COPY loadEnv.ts .
+COPY functions ./functions
+COPY data ./data
+COPY src ./src
 
 # Cache backend dependency graph only
 RUN deno cache server.ts

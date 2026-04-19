@@ -1200,20 +1200,38 @@ export default function CreateTokenPanel() {
         name: tokenName,
         symbol: tokenSymbol,
       }) : null;
-      const registryRecord = tokenAddress ? await saveMintRecord({
-        address: tokenAddress,
-        chain: 'bsc',
-        txHash,
-        metadataUri,
-        name: tokenName,
-        symbol: tokenSymbol,
-        aiScan,
-        extra: {
-          factoryAddress,
-          verifiedSource: 'SaveMeme factory / verified source',
-          methodUsed,
-        },
-      }) : null;
+      let registryRecord = null;
+      let registryError = '';
+      if (tokenAddress) {
+        try {
+          registryRecord = await saveMintRecord({
+            address: tokenAddress,
+            chain: 'bsc',
+            txHash,
+            metadataUri,
+            name: tokenName,
+            symbol: tokenSymbol,
+            aiScan,
+            extra: {
+              factoryAddress,
+              verifiedSource: 'SaveMeme factory / verified source',
+              methodUsed,
+            },
+          });
+        } catch (registrationError) {
+          registryError = String(
+            registrationError?.message ||
+            registrationError ||
+            'SaveMeme registry save failed after token creation.'
+          );
+          console.error('[BEP20] Registry save failed after successful create', {
+            tokenAddress,
+            txHash,
+            registryError,
+            raw: registrationError,
+          });
+        }
+      }
       setDirectBep20Result({
         txHash,
         factoryAddress,
@@ -1225,6 +1243,7 @@ export default function CreateTokenPanel() {
         aiChecked: Boolean(aiScan),
         aiScan,
         registryRecord,
+        registryError,
         verifiedSource: 'SaveMeme factory / verified source',
       });
       toast.success(tokenAddress
@@ -1232,6 +1251,8 @@ export default function CreateTokenPanel() {
         : 'BEP20 create transaction submitted');
       if (!tokenAddress) {
         toast.warning('BEP20 token transaction succeeded, but the new token address could not be recovered. SaveMeme registry and X auto-post were skipped for this mint.', { duration: 12000 });
+      } else if (registryError) {
+        toast.warning(`Token created on BNB Chain, but SaveMeme registry/X sync failed: ${registryError}`, { duration: 12000 });
       }
     } catch (error) {
       const message = extractEvmErrorMessage(error) || String(error || '');
@@ -1696,6 +1717,12 @@ export default function CreateTokenPanel() {
                 <p><span className="text-gray-400">Factory address:</span> <span className="break-all">{directBep20Result.factoryAddress}</span></p>
                 <p><span className="text-gray-400">Verified source:</span> {directBep20Result.verifiedSource}</p>
                 <p><span className="text-gray-400">Transaction:</span> <span className="break-all">{directBep20Result.txHash}</span></p>
+                {directBep20Result.registryError && (
+                  <p className="text-amber-300">
+                    <span className="text-gray-400">Registry/X sync:</span>{' '}
+                    {directBep20Result.registryError}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-3 text-xs">

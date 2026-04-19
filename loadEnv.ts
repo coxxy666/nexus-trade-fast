@@ -1,4 +1,4 @@
-import { parse } from "https://deno.land/std/dotenv/mod.ts";
+import { parse } from "https://deno.land/std/dotenv/mod.ts"
 
 const originalEnvKeys = new Set(Object.keys(Deno.env.toObject()));
 

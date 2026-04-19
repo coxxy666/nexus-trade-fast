@@ -1,4 +1,4 @@
-import { enqueueTokenAnnouncement } from "./tokenAnnouncementQueue.ts";
+import { enqueueTokenAnnouncement } from "./tokenAnnouncementQueue.ts"
 
 const SAVE_MEME_REGISTRY_PATH = "data/savememe-minted-tokens.json";
 const SAVE_MEME_KV_PREFIX = ["savememe", "minted_tokens"] as const;

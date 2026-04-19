@@ -1,452 +1,219 @@
 [
   {
-    "id": "58694436-f3e3-4a7b-b3c1-3f3b6d1bce2f",
-    "status": "posted",
-    "created_at": "2026-04-18T22:46:51.446Z",
-    "updated_at": "2026-04-18T22:47:02.867Z",
-    "attempts": 1,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "shiba",
-      "symbol": "SHIBA",
+    "id": "01e06e63-57fc-40a7-b6c7-f04b9e580d7b",
+    "token_address": "5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb",
+    "chain": "solana",
+    "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "name": "doggy",
+    "symbol": "DOG",
+    "created_at": "2026-04-18T18:08:55.189Z",
+    "created_via": "SaveMeme",
+    "launch_source": "SaveMeme",
+    "category": "meme",
+    "timestamp": "2026-04-18T18:08:55.189Z",
+    "tx_hash": "2osDUAehZu6FNg2QWW9sAB6NP6haJm6rXegtd54t1hoZKivZyR7RtM2CMMzrf6T4gQfJBi4nJU337Hp1nFaMQf6H",
+    "metadata_uri": "http://127.0.0.1:8000/api/token-metadata/b9c9b850fc3045b6a826db5c41035ad4",
+    "explorer_url": "https://solscan.io/token/5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb",
+    "ai_checked": true,
+    "ai_scan": {
+      "success": true,
       "chain": "solana",
-      "token_address": "JCY9bMeMeXV7Yy3b3kE9A2gwWrjMipYLYdEyDnT6BMjd",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T22:46:51.407Z",
-      "explorer_link": "https://solscan.io/token/JCY9bMeMeXV7Yy3b3kE9A2gwWrjMipYLYdEyDnT6BMjd"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token mint dolphin dex platform(SAVEMEME) at https://dolphinx2.ai/\n\nshiba ($SHIBA)\nChain: Solana\nExplorer: https://solscan.io/token/JCY9bMeMeXV7Yy3b3kE9A2gwWrjMipYLYdEyDnT6BMjd\n\n@Dolphin_xx2",
-    "logs": [
-      {
-        "at": "2026-04-18T22:46:51.446Z",
-        "level": "info",
-        "message": "Announcement queued for automatic posting."
+      "address": "5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb",
+      "tokenIdentity": {
+        "symbol": "DOG",
+        "name": "doggy",
+        "address": "5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb",
+        "explorerUrl": "https://solscan.io/token/5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb"
       },
-      {
-        "at": "2026-04-18T22:47:02.226Z",
-        "level": "info",
-        "message": "Posting attempt 1 started."
+      "contractVerification": {
+        "available": false,
+        "verified": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
       },
-      {
-        "at": "2026-04-18T22:47:02.867Z",
-        "level": "info",
-        "message": "Announcement posted to the official DolphinX X account."
-      }
-    ],
-    "posted_at": "2026-04-18T22:47:02.867Z",
-    "x_post_id": "2045635250886148587",
-    "x_response": {
-      "data": {
-        "edit_history_tweet_ids": [
-          "2045635250886148587"
-        ],
-        "text": "New token mint dolphin dex platform(SAVEMEME) at https://t.co/WIsObriGXr\n\nshiba ($SHIBA)\nChain: Solana\nExplorer: https://t.co/HYzer9RGxM\n\n@Dolphin_xx2",
-        "id": "2045635250886148587"
-      }
-    }
+      "holderConcentration": {
+        "available": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
+      },
+      "liquidityLock": {
+        "available": false,
+        "source": "DexScreener",
+        "locked": null,
+        "reason": "Invalid param: could not find account"
+      },
+      "honeypot": {
+        "available": false,
+        "source": "none",
+        "reason": "Automated honeypot simulation is not implemented for Solana in this build."
+      },
+      "smartMoney": {
+        "available": false,
+        "source": "none",
+        "reason": "Unavailable",
+        "signals": []
+      },
+      "groundedSummary": [
+        "No onchain analysis signals were available for this token yet."
+      ]
+    },
+    "attributes": {
+      "category": "meme",
+      "chain": "solana",
+      "creatorAuthority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attributionProgram": "SaveMeme SPL launcher",
+      "vanityPrefix": "save, meme",
+      "vanityMatchedPrefix": "save",
+      "vanityMatched": true,
+      "vanityAttempts": 13211
+    },
+    "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "attribution_program": "SaveMeme SPL launcher",
+    "verified_source": "SaveMeme metadata + registry",
+    "vanity_prefix": "save, meme"
   },
   {
-    "id": "4c914e53-be56-44c0-9085-e1f0254cfff1",
-    "status": "posted",
-    "created_at": "2026-04-18T22:29:49.440Z",
-    "updated_at": "2026-04-18T22:30:04.679Z",
-    "attempts": 1,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "Newdoge",
-      "symbol": "NEWDOGE",
+    "id": "ed4a3a42-11a2-48f5-8793-8373348a6e2e",
+    "token_address": "FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT",
+    "chain": "solana",
+    "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "name": "dog",
+    "symbol": "DOG",
+    "created_at": "2026-04-18T17:57:31.118Z",
+    "created_via": "SaveMeme",
+    "launch_source": "SaveMeme",
+    "category": "meme",
+    "timestamp": "2026-04-18T17:57:31.118Z",
+    "tx_hash": "3oWHaHqA4n7UEp21giPHmzDefKTmrSTgp6F9tvP1iuqGBuwfxSRRZZ5mfQefoKbW1BRGQUQQJYNVGb8ADHpYv5gF",
+    "metadata_uri": "http://127.0.0.1:8000/api/token-metadata/3f3f8005a2b14b1ca6ddbd9f8172b8f0",
+    "explorer_url": "https://solscan.io/token/FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT",
+    "ai_checked": true,
+    "ai_scan": {
+      "success": true,
       "chain": "solana",
-      "token_address": "DgCwjsDeXdTavDt3MeMe8BbhxaPeDTNBpdvsbB3K8ACb",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T22:29:49.427Z",
-      "explorer_link": "https://solscan.io/token/DgCwjsDeXdTavDt3MeMe8BbhxaPeDTNBpdvsbB3K8ACb"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\nNewdoge ($NEWDOGE)\nChain: Solana\nExplorer: https://solscan.io/token/DgCwjsDeXdTavDt3MeMe8BbhxaPeDTNBpdvsbB3K8ACb\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T22:29:49.440Z",
-        "level": "info",
-        "message": "Announcement queued for automatic posting."
+      "address": "FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT",
+      "tokenIdentity": {
+        "symbol": "DOG",
+        "name": "dog",
+        "address": "FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT",
+        "explorerUrl": "https://solscan.io/token/FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT"
       },
-      {
-        "at": "2026-04-18T22:30:04.364Z",
-        "level": "info",
-        "message": "Posting attempt 1 started."
+      "contractVerification": {
+        "available": false,
+        "verified": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
       },
-      {
-        "at": "2026-04-18T22:30:04.679Z",
-        "level": "info",
-        "message": "Announcement posted to the official DolphinX X account."
-      }
-    ],
-    "posted_at": "2026-04-18T22:30:04.679Z",
-    "x_post_id": "2045630980443046014",
-    "x_response": {
-      "data": {
-        "edit_history_tweet_ids": [
-          "2045630980443046014"
-        ],
-        "id": "2045630980443046014",
-        "text": "New token live on DolphinX\n\nNewdoge ($NEWDOGE)\nChain: Solana\nExplorer: https://t.co/5dGz0XbMcT\n\nMinted via @DolphinX"
-      }
-    }
+      "holderConcentration": {
+        "available": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
+      },
+      "liquidityLock": {
+        "available": false,
+        "source": "DexScreener",
+        "locked": null,
+        "reason": "Invalid param: could not find account"
+      },
+      "honeypot": {
+        "available": false,
+        "source": "none",
+        "reason": "Automated honeypot simulation is not implemented for Solana in this build."
+      },
+      "smartMoney": {
+        "available": false,
+        "source": "none",
+        "reason": "Unavailable",
+        "signals": []
+      },
+      "groundedSummary": [
+        "No onchain analysis signals were available for this token yet."
+      ]
+    },
+    "attributes": {
+      "category": "meme",
+      "chain": "solana",
+      "creatorAuthority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attributionProgram": "SaveMeme SPL launcher",
+      "vanityPrefix": "save, meme",
+      "vanityMatched": false,
+      "vanityAttempts": 1
+    },
+    "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "attribution_program": "SaveMeme SPL launcher",
+    "verified_source": "SaveMeme metadata + registry",
+    "vanity_prefix": "save, meme"
   },
   {
-    "id": "daf5c257-5054-4bb8-9322-49c94ed99f35",
-    "status": "failed",
-    "created_at": "2026-04-18T20:58:20.669Z",
-    "updated_at": "2026-04-18T21:06:43.377Z",
-    "attempts": 5,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "memetoken",
-      "symbol": "TOKEN",
+    "id": "e511d761-ab38-4f15-b32d-5d2e8fcb1bb8",
+    "token_address": "8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv",
+    "chain": "solana",
+    "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "name": "doge",
+    "symbol": "DOGE",]
+    "created_at": "2026-04-18T17:07:22.390Z",
+    "created_via": "SaveMeme",
+    "launch_source": "SaveMeme",
+    "category": "meme",
+    "timestamp": "2026-04-18T17:07:22.390Z",
+    "tx_hash": "66teGoGumwYXyRkYMo45V1SjoJgdVofVPFPwK9VeU6LAVyjLFoZBEFUA55D7yEwxa2Aq3S7cNGxtaXT9LnchUj4N",
+    "metadata_uri": "http://127.0.0.1:8000/api/token-metadata/666f06343fbc4ce18a2d99fd230b2892",
+    "explorer_url": "https://solscan.io/token/8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv",
+    "ai_checked": true,
+    "ai_scan": {
+      "success": true,
       "chain": "solana",
-      "token_address": "AJ7kPXMKmEmEiwwUadkg3Th77N7j2mTYbfnzERRzw5aM",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T20:58:20.657Z",
-      "explorer_link": "https://solscan.io/token/AJ7kPXMKmEmEiwwUadkg3Th77N7j2mTYbfnzERRzw5aM"
+      "address": "8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv",
+      "tokenIdentity": {
+        "symbol": "DOGE",
+        "name": "doge",
+        "address": "8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv",
+        "explorerUrl": "https://solscan.io/token/8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv"
+      },
+      "contractVerification": {
+        "available": false,
+        "verified": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
+      },
+      "holderConcentration": {
+        "available": false,
+        "source": "Solana RPC",
+        "reason": "Invalid param: could not find account"
+      },
+      "liquidityLock": {
+        "available": false,
+        "source": "DexScreener",
+        "locked": null,
+        "reason": "Invalid param: could not find account"
+      },
+      "honeypot": {
+        "available": false,
+        "source": "none",
+        "reason": "Automated honeypot simulation is not implemented for Solana in this build."
+      },
+      "smartMoney": {
+        "available": false,
+        "source": "none",
+        "reason": "Unavailable",
+        "signals": []
+      },
+      "groundedSummary": [
+        "No onchain analysis signals were available for this token yet."
+      ]
     },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\nmemetoken ($TOKEN)\nChain: Solana\nExplorer: https://solscan.io/token/AJ7kPXMKmEmEiwwUadkg3Th77N7j2mTYbfnzERRzw5aM\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T20:58:20.669Z",
-        "level": "info",
-        "message": "Announcement queued for automatic posting."
-      },
-      {
-        "at": "2026-04-18T20:58:22.385Z",
-        "level": "info",
-        "message": "Posting attempt 1 started."
-      },
-      {
-        "at": "2026-04-18T20:58:22.508Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T20:59:07.404Z",
-        "level": "info",
-        "message": "Posting attempt 2 started."
-      },
-      {
-        "at": "2026-04-18T20:59:07.538Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T21:00:22.462Z",
-        "level": "info",
-        "message": "Posting attempt 3 started."
-      },
-      {
-        "at": "2026-04-18T21:00:22.585Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T21:02:37.548Z",
-        "level": "info",
-        "message": "Posting attempt 4 started."
-      },
-      {
-        "at": "2026-04-18T21:02:37.678Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T21:06:43.054Z",
-        "level": "info",
-        "message": "Posting attempt 5 started."
-      },
-      {
-        "at": "2026-04-18T21:06:43.377Z",
-        "level": "error",
-        "message": "Announcement permanently failed after max retries."
-      }
-    ],
-    "last_error": "X API post failed with status 403: {\"title\":\"Forbidden\",\"status\":403,\"detail\":\"Your client app is not configured with the appropriate oauth1 app permissions for this endpoint.\",\"type\":\"https://api.twitter.com/2/problems/oauth1-permissions\"}"
-  },
-  {
-    "id": "4e39ac6e-e032-48ae-b847-90e6a401be48",
-    "status": "failed",
-    "created_at": "2026-04-18T20:53:21.381Z",
-    "updated_at": "2026-04-18T21:01:52.724Z",
-    "attempts": 5,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "MemeDog",
-      "symbol": "MD",
+    "attributes": {
+      "category": "meme",
       "chain": "solana",
-      "token_address": "943QeMEME2SrzPCSvdD4KXm6UvmthoHiN1pPXFgjkARu",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T20:53:21.344Z",
-      "explorer_link": "https://solscan.io/token/943QeMEME2SrzPCSvdD4KXm6UvmthoHiN1pPXFgjkARu"
+      "creatorAuthority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+      "attributionProgram": "SaveMeme SPL launcher",
+      "vanityPrefix": "save",
+      "vanityMatched": false,
+      "vanityAttempts": 25000
     },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\nMemeDog ($MD)\nChain: Solana\nExplorer: https://solscan.io/token/943QeMEME2SrzPCSvdD4KXm6UvmthoHiN1pPXFgjkARu\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T20:53:21.381Z",
-        "level": "info",
-        "message": "Announcement queued for automatic posting."
-      },
-      {
-        "at": "2026-04-18T20:53:22.210Z",
-        "level": "info",
-        "message": "Posting attempt 1 started."
-      },
-      {
-        "at": "2026-04-18T20:53:22.559Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T20:54:07.238Z",
-        "level": "info",
-        "message": "Posting attempt 2 started."
-      },
-      {
-        "at": "2026-04-18T20:54:07.373Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T20:55:22.276Z",
-        "level": "info",
-        "message": "Posting attempt 3 started."
-      },
-      {
-        "at": "2026-04-18T20:55:22.407Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T20:57:37.368Z",
-        "level": "info",
-        "message": "Posting attempt 4 started."
-      },
-      {
-        "at": "2026-04-18T20:57:37.615Z",
-        "level": "warn",
-        "message": "Announcement posting failed; will retry."
-      },
-      {
-        "at": "2026-04-18T21:01:52.512Z",
-        "level": "info",
-        "message": "Posting attempt 5 started."
-      },
-      {
-        "at": "2026-04-18T21:01:52.724Z",
-        "level": "error",
-        "message": "Announcement permanently failed after max retries."
-      }
-    ],
-    "last_error": "X API post failed with status 403: {\"title\":\"Forbidden\",\"status\":403,\"detail\":\"Your client app is not configured with the appropriate oauth1 app permissions for this endpoint.\",\"type\":\"https://api.twitter.com/2/problems/oauth1-permissions\"}"
-  },
-  {
-    "id": "19df611d-5fa7-4add-8e98-2797b05f37c7",
-    "status": "skipped",
-    "created_at": "2026-04-18T20:48:54.499Z",
-    "updated_at": "2026-04-18T20:48:54.499Z",
-    "attempts": 0,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "newdoge",
-      "symbol": "NDOGE",
-      "chain": "solana",
-      "token_address": "AXMEmEMABPmLqpiU4n6PMvxa6y6WZtvJ8Fu7eMpdU3UU",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T20:48:54.483Z",
-      "explorer_link": "https://solscan.io/token/AXMEmEMABPmLqpiU4n6PMvxa6y6WZtvJ8Fu7eMpdU3UU"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\nnewdoge ($NDOGE)\nChain: Solana\nExplorer: https://solscan.io/token/AXMEmEMABPmLqpiU4n6PMvxa6y6WZtvJ8Fu7eMpdU3UU\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T20:48:54.499Z",
-        "level": "warn",
-        "message": "DolphinX X posting is disabled by configuration."
-      }
-    ]
-  },
-  {
-    "id": "ba68fdd9-419b-462a-be8b-8efa83600bc4",
-    "status": "skipped",
-    "created_at": "2026-04-18T20:40:03.922Z",
-    "updated_at": "2026-04-18T20:40:03.922Z",
-    "attempts": 0,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "new meme",
-      "symbol": "NEW",
-      "chain": "solana",
-      "token_address": "DwTnDp9RtB3JakYmEMeVhiZ8RCwwZUV5Wh5kTJ8s5sfy",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T20:40:03.910Z",
-      "explorer_link": "https://solscan.io/token/DwTnDp9RtB3JakYmEMeVhiZ8RCwwZUV5Wh5kTJ8s5sfy"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\nnew meme ($NEW)\nChain: Solana\nExplorer: https://solscan.io/token/DwTnDp9RtB3JakYmEMeVhiZ8RCwwZUV5Wh5kTJ8s5sfy\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T20:40:03.922Z",
-        "level": "warn",
-        "message": "DolphinX X posting is disabled by configuration."
-      }
-    ]
-  },
-  {
-    "id": "4d581bc9-92ba-4aac-ad84-faf7ed8715af",
-    "status": "skipped",
-    "created_at": "2026-04-18T18:08:55.199Z",
-    "updated_at": "2026-04-18T18:08:55.199Z",
-    "attempts": 0,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "doggy",
-      "symbol": "DOG",
-      "chain": "solana",
-      "token_address": "5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T18:08:55.189Z",
-      "explorer_link": "https://solscan.io/token/5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\ndoggy ($DOG)\nChain: Solana\nExplorer: https://solscan.io/token/5SHYMzLVmjRWNUYSCsAveu4uHdQubxnyVXSBgLKydDrb\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T18:08:55.199Z",
-        "level": "warn",
-        "message": "DolphinX X posting is disabled by configuration."
-      }
-    ]
-  },
-  {
-    "id": "d249287d-3ef6-4a65-8add-cb4b86398910",
-    "status": "skipped",
-    "created_at": "2026-04-18T17:57:31.199Z",
-    "updated_at": "2026-04-18T17:57:31.199Z",
-    "attempts": 0,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "dog",
-      "symbol": "DOG",
-      "chain": "solana",
-      "token_address": "FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T17:57:31.118Z",
-      "explorer_link": "https://solscan.io/token/FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\ndog ($DOG)\nChain: Solana\nExplorer: https://solscan.io/token/FZvC6ijucy2Pw3rPL1PszUitWSByQ6Q97wkS9WyvVKVT\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T17:57:31.199Z",
-        "level": "warn",
-        "message": "DolphinX X posting is disabled by configuration."
-      }
-    ]
-  },
-  {
-    "id": "523ad5e9-08f4-48d9-bc31-ad552105936e",
-    "status": "skipped",
-    "created_at": "2026-04-18T17:07:22.410Z",
-    "updated_at": "2026-04-18T17:07:22.410Z",
-    "attempts": 0,
-    "approval_required": false,
-    "approval_status": "not_required",
-    "token": {
-      "name": "doge",
-      "symbol": "DOGE",
-      "chain": "solana",
-      "token_address": "8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv",
-      "creator_wallet": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
-      "created_at": "2026-04-18T17:07:22.390Z",
-      "explorer_link": "https://solscan.io/token/8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv"
-    },
-    "validation": {
-      "safe_name": true,
-      "safe_symbol": true,
-      "banned_word_matches": [],
-      "ai_score_passed": true,
-      "passed": true,
-      "reasons": []
-    },
-    "tweet_text": "New token live on DolphinX\n\ndoge ($DOGE)\nChain: Solana\nExplorer: https://solscan.io/token/8PVDJHY8tpdyuY8hUfHfQLVQH3TJU8Ympwqb1ScnqZHv\n\nMinted via @DolphinX",
-    "logs": [
-      {
-        "at": "2026-04-18T17:07:22.410Z",
-        "level": "warn",
-        "message": "DolphinX X posting is disabled by configuration."
-      }
-    ]
+    "creator_authority": "JDv3K5vWYPVo2nrrtFAvT9azh2eZWF2FvT84Ue8ki5Dw",
+    "attribution_program": "SaveMeme SPL launcher",
+    "verified_source": "SaveMeme metadata + registry",
+    "vanity_prefix": "save"
   }
 ]

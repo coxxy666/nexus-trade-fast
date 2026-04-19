@@ -355,24 +355,20 @@ export async function enqueueTokenAnnouncement(input: TokenAnnouncementInput): P
   const validation = validateAnnouncement(normalizedInput);
   const now = new Date().toISOString();
   let status: TokenAnnouncementRecord["status"] = "queued";
-  let approvalStatus: TokenAnnouncementRecord["approval_status"] = APPROVAL_MODE ? "pending" : "not_required";
+  let approvalStatus: TokenAnnouncementRecord["approval_status"] = "not_required";
   const logs: TokenAnnouncementRecord["logs"] = [];
 
   if (!ENABLED) {
     status = "skipped";
     approvalStatus = "not_required";
     logs.push({ at: now, level: "warn", message: "DolphinX X posting is disabled by configuration." });
-  } else if (!validation.passed) {
-    status = "skipped";
-    approvalStatus = "not_required";
-    logs.push({ at: now, level: "warn", message: `Announcement skipped: ${validation.reasons.join(" ")}` });
   } else if (!hasXCredentials()) {
     status = "failed";
     logs.push({ at: now, level: "error", message: "DolphinX X credentials are missing." });
-  } else if (APPROVAL_MODE) {
-    status = "pending_approval";
-    logs.push({ at: now, level: "info", message: "Announcement queued for admin approval." });
   } else {
+    if (!validation.passed) {
+      logs.push({ at: now, level: "warn", message: `Validation warnings ignored for auto-post: ${validation.reasons.join(" ")}` });
+    }
     logs.push({ at: now, level: "info", message: "Announcement queued for automatic posting." });
   }
 
@@ -385,7 +381,7 @@ export async function enqueueTokenAnnouncement(input: TokenAnnouncementInput): P
     next_attempt_at: status === "queued" ? now : undefined,
     attempts: 0,
     last_error: status === "failed" ? "DolphinX X credentials are missing." : undefined,
-    approval_required: APPROVAL_MODE,
+    approval_required: false,
     approval_status: approvalStatus,
     token: {
       name: normalizedInput.name,
@@ -615,5 +611,6 @@ export async function retryTokenAnnouncement(req: Request, id: string): Promise<
     return json({ error: message }, message === "Unauthorized" ? 401 : 400);
   }
 }
+
 
 

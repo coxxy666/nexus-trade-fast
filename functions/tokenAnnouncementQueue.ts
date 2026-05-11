@@ -50,7 +50,7 @@ export type TokenAnnouncementRecord = {
   token: {
     name: string;
     symbol: string;
-    chain: "solana" | "bsc";
+    chain: "solana" | "bsc" | "base";
     token_address: string;
     creator_wallet: string;
     created_at: string;
@@ -79,7 +79,7 @@ export type TokenAnnouncementRecord = {
 export type TokenAnnouncementInput = {
   name: string;
   symbol: string;
-  chain: "solana" | "bsc";
+  chain: "solana" | "bsc" | "base";
   token_address: string;
   creator_wallet: string;
   created_at: string;
@@ -98,10 +98,11 @@ function sanitizeText(value: unknown, fallback = ""): string {
   return String(value ?? fallback).trim();
 }
 
-function normalizeChain(value: unknown): "solana" | "bsc" | "" {
+function normalizeChain(value: unknown): "solana" | "bsc" | "base" | "" {
   const chain = sanitizeText(value).toLowerCase();
   if (["solana", "spl"].includes(chain)) return "solana";
   if (["bsc", "bnb", "bnb chain", "bnb smart chain", "bep20"].includes(chain)) return "bsc";
+  if (["base", "base mainnet", "ethereum l2", "erc20-base"].includes(chain)) return "base";
   return "";
 }
 
@@ -232,7 +233,7 @@ function extractAiSafetyScore(aiScan: Record<string, unknown> | null | undefined
 }
 
 function buildTweetText(input: TokenAnnouncementInput): string {
-  const chainLabel = input.chain === "solana" ? "Solana" : "BNB Chain";
+  const chainLabel = input.chain === "solana" ? "Solana" : input.chain === "base" ? "Base" : "BNB Chain";
   const symbol = String(input.symbol || "").toUpperCase();
   return [
     `New token mint dolphin dex platform(SAVEMEME) at https://dolphinx2.ai/`,
@@ -629,6 +630,7 @@ export async function retryTokenAnnouncement(req: Request, id: string): Promise<
     return json({ error: message }, message === "Unauthorized" ? 401 : 400);
   }
 }
+
 
 
 

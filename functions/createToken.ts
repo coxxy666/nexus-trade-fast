@@ -1,3 +1,4 @@
+import { buildBaseTokenPackageResponse } from "./baseTokenPackage.ts";
 const EVM_ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
 const SOLANA_ADDRESS_RE = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 
@@ -41,7 +42,7 @@ export async function createToken(req: Request): Promise<Response> {
   try {
     const body = await req.json();
     const chainRaw = sanitizeText(body?.chain, "").toLowerCase();
-    const chain = chainRaw === "solana" ? "solana" : ["bep20", "bsc", "bnb"].includes(chainRaw) ? "bsc" : "";
+    const chain = chainRaw === "solana" ? "solana" : ["bep20", "bsc", "bnb"].includes(chainRaw) ? "bsc" : chainRaw === "base" ? "base" : "";
     const name = sanitizeText(body?.name);
     const symbol = sanitizeText(body?.symbol).toUpperCase();
     const ownerAddress = sanitizeText(body?.ownerAddress || body?.creator_wallet);
@@ -59,7 +60,7 @@ export async function createToken(req: Request): Promise<Response> {
     const createdAt = new Date().toISOString();
 
     if (!chain) {
-      return Response.json({ error: "Invalid chain. Use 'solana' or 'bsc'." }, { status: 400 });
+      return Response.json({ error: "Invalid chain. Use 'solana', 'bsc', or 'base'." }, { status: 400 });
     }
     if (!name || name.length > MAX_NAME_LENGTH) {
       return Response.json({ error: `Token name is required and must be <= ${MAX_NAME_LENGTH} chars.` }, { status: 400 });
@@ -83,6 +84,21 @@ export async function createToken(req: Request): Promise<Response> {
       factory_address: chain === "bsc" ? "Bep20Factory.sol" : undefined,
       verified_source: chain === "bsc" ? "SaveMeme factory / verified source" : "SaveMeme metadata + registry",
     };
+
+    if (chain === "base") {
+      return buildBaseTokenPackageResponse({
+        name,
+        symbol,
+        decimals,
+        ownerAddress,
+        initialSupply,
+        logoUrl,
+        description,
+        metadataUri,
+        category,
+        createdAt,
+      });
+    }
 
     if (chain === "bsc") {
       if (!EVM_ADDRESS_RE.test(ownerAddress)) {
@@ -175,3 +191,4 @@ export async function createToken(req: Request): Promise<Response> {
     return Response.json({ error: (error as Error)?.message || "Failed to create token package" }, { status: 500 });
   }
 }
+

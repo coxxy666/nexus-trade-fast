@@ -25,7 +25,7 @@ async function getKv(): Promise<Deno.Kv | null> {
 export type SaveMemeMintedTokenRecord = {
   id: string;
   token_address: string;
-  chain: "solana" | "bsc";
+  chain: "solana" | "bsc" | "base";
   creator_wallet: string;
   name: string;
   symbol: string;
@@ -59,10 +59,11 @@ function sanitizeText(value: unknown, fallback = ""): string {
   return String(value ?? fallback).trim();
 }
 
-function normalizeChain(value: unknown): "solana" | "bsc" | "" {
+function normalizeChain(value: unknown): "solana" | "bsc" | "base" | "" {
   const chain = sanitizeText(value).toLowerCase();
   if (["solana", "spl"].includes(chain)) return "solana";
   if (["bsc", "bnb", "bnb chain", "bnb smart chain", "bep20"].includes(chain)) return "bsc";
+  if (["base", "base mainnet", "ethereum l2", "erc20-base"].includes(chain)) return "base";
   return "";
 }
 
@@ -74,13 +75,14 @@ function isEvmAddress(value: string): boolean {
   return /^0x[a-fA-F0-9]{40}$/.test(String(value || "").trim());
 }
 
-function normalizeAddress(address: string, chain: "solana" | "bsc"): string {
+function normalizeAddress(address: string, chain: "solana" | "bsc" | "base"): string {
   const clean = sanitizeText(address);
-  return chain === "bsc" ? clean.toLowerCase() : clean;
+  return chain === "solana" ? clean : clean.toLowerCase();
 }
 
-function explorerFor(chain: "solana" | "bsc", address: string): string {
+function explorerFor(chain: "solana" | "bsc" | "base", address: string): string {
   if (chain === "solana") return `https://solscan.io/token/${address}`;
+  if (chain === "base") return `https://basescan.org/token/${address}`;
   return `https://bscscan.com/token/${address}`;
 }
 
@@ -142,7 +144,7 @@ async function writeStore(records: SaveMemeMintedTokenRecord[]): Promise<void> {
 
 function buildRecord(body: Record<string, unknown>): SaveMemeMintedTokenRecord {
   const chain = normalizeChain(body?.chain);
-  if (!chain) throw new Error("chain must be 'solana' or 'bsc'");
+  if (!chain) throw new Error("chain must be 'solana', 'bsc', or 'base'");
 
   const tokenAddress = normalizeAddress(sanitizeText(body?.token_address || body?.address), chain);
   const creatorWallet = sanitizeText(body?.creator_wallet || body?.creatorWallet);
@@ -156,9 +158,9 @@ function buildRecord(body: Record<string, unknown>): SaveMemeMintedTokenRecord {
   if (!name) throw new Error("name is required");
   if (!symbol) throw new Error("symbol is required");
   if (chain === "solana" && !isSolanaAddress(tokenAddress)) throw new Error("Invalid Solana token address");
-  if (chain === "bsc" && !isEvmAddress(tokenAddress)) throw new Error("Invalid BSC token address");
+  if ((chain === "bsc" || chain === "base") && !isEvmAddress(tokenAddress)) throw new Error(chain === "base" ? "Invalid Base token address" : "Invalid BSC token address");
   if (chain === "solana" && !isSolanaAddress(creatorWallet)) throw new Error("Invalid Solana creator wallet");
-  if (chain === "bsc" && !isEvmAddress(creatorWallet)) throw new Error("Invalid BSC creator wallet");
+  if ((chain === "bsc" || chain === "base") && !isEvmAddress(creatorWallet)) throw new Error(chain === "base" ? "Invalid Base creator wallet" : "Invalid BSC creator wallet");
 
   return {
     id: sanitizeText(body?.id) || crypto.randomUUID(),
@@ -296,3 +298,5 @@ export async function generateSaveMemeVanity(req: Request): Promise<Response> {
     return json({ error: String((error as Error)?.message || error || "Failed to build vanity guidance") }, 500);
   }
 }
+
+

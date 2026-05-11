@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { apiUrl } from '@/lib/apiUrl';
 import { useWallet } from '@/components/WalletContext';
+import { handleDirectBaseCreate, baseExplorerTokenUrl, baseExplorerTxUrl } from '@/components/tokens/base/directBaseCreate';
+import { handleDirectBep20Create } from '@/components/tokens/bsc/directBep20Create';
 
 const TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 const TOKEN_METADATA_PROGRAM_ID = 'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s';
@@ -433,7 +435,8 @@ function SaveMemeBadge({ children, tone = 'cyan' }) {
 }
 
 function normalizeRecentMintRecord(token) {
-  const chain = String(token?.chain || '').toLowerCase() === 'solana' ? 'solana' : 'bsc';
+  const rawChain = String(token?.chain || '').toLowerCase();
+  const chain = rawChain === 'solana' ? 'solana' : rawChain === 'base' ? 'base' : 'bsc';
   const tokenAddress = String(token?.token_address || token?.address || '').trim();
   if (!tokenAddress) return null;
 
@@ -462,9 +465,11 @@ export default function CreateTokenPanel() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isDirectMinting, setIsDirectMinting] = React.useState(false);
   const [isDirectBep20Creating, setIsDirectBep20Creating] = React.useState(false);
+  const [isDirectBaseCreating, setIsDirectBaseCreating] = React.useState(false);
   const [result, setResult] = React.useState(null);
   const [directResult, setDirectResult] = React.useState(null);
   const [directBep20Result, setDirectBep20Result] = React.useState(null);
+  const [directBaseResult, setDirectBaseResult] = React.useState(null);
   const [recentMints, setRecentMints] = React.useState([]);
   const [isAiScanning, setIsAiScanning] = React.useState(false);
   const [fieldErrors, setFieldErrors] = React.useState({});
@@ -504,7 +509,7 @@ export default function CreateTokenPanel() {
         if (!String(prev.vanityPrefix || '').trim()) next.vanityPrefix = 'save,meme';
         return next;
       }
-      if (prev.chain === 'bsc' && String(prev.decimals) === '9') {
+      if (prev.chain !== 'solana' && String(prev.decimals) === '9') {
         return { ...prev, decimals: '18' };
       }
       return prev;
@@ -518,15 +523,40 @@ export default function CreateTokenPanel() {
     const tokenName = String(form.name || '').trim();
     const tokenSymbol = String(form.symbol || '').trim().toUpperCase();
     const owner = String(form.ownerAddress || '').trim();
+    const decimalsRaw = String(form.decimals || '').trim();
+    const initialSupplyRaw = String(form.initialSupply || '').trim();
+    const decimals = Number(decimalsRaw);
 
     if (!tokenName) errors.name = 'Token name is required';
     if (!tokenSymbol) errors.symbol = 'Symbol is required';
     if (!owner) {
       errors.ownerAddress = 'Owner address is required';
-    } else if (chain === 'bsc' && !/^0x[a-fA-F0-9]{40}$/.test(owner)) {
+
+    } else if ((chain === 'bsc' || chain === 'base') && !/^0x[a-fA-F0-9]{40}$/.test(owner)) {
       errors.ownerAddress = 'Owner must be a valid EVM address (0x...)';
     } else if (chain === 'solana' && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(owner)) {
       errors.ownerAddress = 'Owner must be a valid Solana address';
+    }
+
+    if (!Number.isInteger(decimals)) {
+      errors.decimals = 'Decimals must be a whole number';
+    } else if (chain === 'solana' && (decimals < 0 || decimals > 9)) {
+      errors.decimals = 'Solana decimals must be between 0 and 9';
+    } else if (chain !== 'solana' && (decimals < 0 || decimals > 18)) {
+      errors.decimals = 'EVM token decimals must be between 0 and 18';
+    }
+
+    if (!initialSupplyRaw) {
+      errors.initialSupply = 'Initial supply is required';
+    } else {
+      try {
+        const initialSupply = BigInt(initialSupplyRaw);
+        if (initialSupply <= 0n) {
+          errors.initialSupply = 'Initial supply must be greater than 0';
+        }
+      } catch {
+        errors.initialSupply = 'Initial supply must be a whole number';
+      }
     }
 
     setFieldErrors(errors);
@@ -584,8 +614,16 @@ export default function CreateTokenPanel() {
     creator_wallet: String(form.ownerAddress || account || '').trim(),
     creator_authority: form.chain === 'solana' ? String(form.ownerAddress || account || '').trim() : '',
     attribution_program: form.chain === 'solana' ? 'SaveMeme SPL launcher' : '',
-    factory_address: form.chain === 'bsc' ? String(import.meta.env.VITE_BEP20_FACTORY_ADDRESS || '') : '',
-    verified_source: form.chain === 'bsc' ? 'SaveMeme factory / verified source' : 'SaveMeme metadata + registry',
+    factory_address: form.chain === 'bsc'
+      ? String(import.meta.env.VITE_BEP20_FACTORY_ADDRESS || '')
+      : form.chain === 'base'
+        ? String(import.meta.env.VITE_BASE_ERC20_FACTORY_ADDRESS || '')
+        : '',
+    verified_source: form.chain === 'bsc'
+      ? 'SaveMeme factory / verified source'
+      : form.chain === 'base'
+        ? 'SaveMeme Base factory / verified source'
+        : 'SaveMeme metadata + registry',
     vanity_prefix: form.chain === 'solana' && form.enableVanityPrefix ? formatVanityPrefixes(parseVanityPrefixes(form.vanityPrefix)) : '',
     timestamp: new Date().toISOString(),
   }), [account, form]);
@@ -613,14 +651,30 @@ export default function CreateTokenPanel() {
         ...prev.filter((item) => String(item?.token_address || '').toLowerCase() !== String(normalizedToken.token_address || '').toLowerCase()),
       ].slice(0, 6));
     }
+
+    const announcement = data?.announcement;
+    if (announcement?.status === 'queued' || announcement?.status === 'pending_approval') {
+      toast.success('Mint registered and queued for DolphinX X posting.');
+    } else if (announcement?.status === 'posted') {
+      toast.success('Mint registered and posted to DolphinX X.');
+    } else if (announcement?.status === 'skipped') {
+      toast.message('Mint registered, but DolphinX X posting is currently disabled.');
+    } else if (announcement?.status === 'failed' || announcement?.status === 'error') {
+      toast.warning('Mint registered, but DolphinX X sync needs attention: ' + (announcement?.error || announcement?.status));
+    }
+
     loadRecentMints().catch(() => {
       // keep optimistic state if the follow-up refresh fails
     });
-    return data.token;
+    return data;
   }, [loadRecentMints]);
 
   const runOptionalAiScan = React.useCallback(async ({ address, chain, name, symbol }) => {
     if (!form.aiSafetyScan || !address) return null;
+    if (chain === 'base') {
+      console.info('[SaveMeme] Skipping optional AI scan for Base until /api/token-onchain-analysis supports Base.');
+      return null;
+    }
     setIsAiScanning(true);
     try {
       const res = await fetch(apiUrl('/api/token-onchain-analysis'), {
@@ -628,8 +682,16 @@ export default function CreateTokenPanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: { address, chain, name, symbol } }),
       });
-      const data = await res.json();
-      if (!res.ok || !data?.success) return null;
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        console.warn('[SaveMeme] Optional AI scan request did not succeed', {
+          chain,
+          address,
+          status: res.status,
+          data,
+        });
+        return null;
+      }
       return data;
     } finally {
       setIsAiScanning(false);
@@ -655,8 +717,16 @@ export default function CreateTokenPanel() {
       ai_scan: aiScan,
       creator_authority: chain === 'solana' ? (form.ownerAddress || account) : undefined,
       attribution_program: chain === 'solana' ? 'SaveMeme SPL launcher' : undefined,
-      factory_address: chain === 'bsc' ? String(import.meta.env.VITE_BEP20_FACTORY_ADDRESS || '') : undefined,
-      verified_source: chain === 'bsc' ? 'SaveMeme factory / verified source' : 'SaveMeme metadata + registry',
+      factory_address: chain === 'bsc'
+        ? String(import.meta.env.VITE_BEP20_FACTORY_ADDRESS || '')
+        : chain === 'base'
+          ? String(import.meta.env.VITE_BASE_ERC20_FACTORY_ADDRESS || '')
+          : undefined,
+      verified_source: chain === 'bsc'
+        ? 'SaveMeme factory / verified source'
+        : chain === 'base'
+          ? 'SaveMeme Base factory / verified source'
+          : 'SaveMeme metadata + registry',
       vanity_prefix: chain === 'solana' && form.enableVanityPrefix ? formatVanityPrefixes(parseVanityPrefixes(form.vanityPrefix)) : undefined,
       attributes: { category: form.category, chain, ...extra },
     });
@@ -1044,307 +1114,19 @@ export default function CreateTokenPanel() {
     }
   };
 
-  const handleDirectBep20Create = async () => {
-    if (form.chain !== 'bsc') {
-      toast.error('Direct create is only available for BNB Chain in this section');
-      return;
-    }
-    console.log('[BEP20] Create clicked', {
-      chain: form.chain,
-      walletType,
+  const handleBep20CreateClick = async () => {
+    await handleDirectBep20Create({
       account,
-      ownerAddress: form.ownerAddress,
-      factoryAddress: import.meta.env.VITE_BEP20_FACTORY_ADDRESS,
+      walletType,
+      form,
+      getConnectedEvmProvider,
+      validateCreateForm,
+      buildMetadataPayload,
+      runOptionalAiScan,
+      saveMintRecord,
+      setIsDirectBep20Creating,
+      setDirectBep20Result,
     });
-    toast.message('Preparing BEP20 transaction...');
-
-    const factoryAddress = import.meta.env.VITE_BEP20_FACTORY_ADDRESS;
-    if (!factoryAddress) {
-      toast.error('Set VITE_BEP20_FACTORY_ADDRESS in .env.local');
-      return;
-    }
-
-    setIsDirectBep20Creating(true);
-    setDirectBep20Result(null);
-    try {
-      console.log('[BEP20] Step 1: validating inputs');
-      const check = validateCreateForm('bsc');
-      if (!check.valid) {
-        throw new Error('Please fix highlighted fields');
-      }
-      const { tokenName, tokenSymbol } = check;
-
-      const provider = await getConnectedEvmProvider(account || form.ownerAddress);
-      if (!provider?.request) {
-        throw new Error('No EVM wallet provider found. Use MetaMask/Trust/Binance extension.');
-      }
-      console.log('[BEP20] Provider selected', {
-        providerName: provider?.providerName || provider?.name || 'unknown',
-        isPhantom: !!provider?.isPhantom,
-        isMetaMask: !!provider?.isMetaMask,
-        isTrust: !!provider?.isTrust || !!provider?.isTrustWallet,
-        isBinance: !!provider?.isBinance || !!provider?.isBinanceWallet || !!provider?.isBinanceChain,
-      });
-
-      console.log('[BEP20] Step 2: resolving account');
-      let sender = String(account || '').trim();
-      let accounts = [];
-      try {
-        accounts = await provider.request({ method: 'eth_accounts' });
-      } catch {
-        accounts = [];
-      }
-      if (!Array.isArray(accounts) || !accounts.length) {
-        accounts = await provider.request({ method: 'eth_requestAccounts' });
-      }
-      console.log('[BEP20] Accounts resolved', { accounts, senderBeforeFallback: sender });
-      if (!Array.isArray(accounts) || !accounts.length) {
-        throw new Error('No EVM account available. Unlock your wallet and retry.');
-      }
-      if (!sender) sender = String(accounts[0] || '');
-      if (!/^0x[a-fA-F0-9]{40}$/.test(sender)) {
-        throw new Error('Active wallet account is not a valid EVM address.');
-      }
-
-      console.log('[BEP20] Step 3: ensuring BSC network');
-      const chainId = String(await provider.request({ method: 'eth_chainId' }) || '').toLowerCase();
-      console.log('[BEP20] Chain ID before switch', { chainId });
-      if (chainId !== '0x38') {
-        await provider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x38' }],
-        });
-      }
-      const finalChain = String(await provider.request({ method: 'eth_chainId' }) || '').toLowerCase();
-      console.log('[BEP20] Chain ID final', { finalChain });
-
-      console.log('[BEP20] Step 4: creating/reading metadata URI');
-      const decimals = Number(form.decimals);
-      const initialSupply = BigInt(Math.floor(Number(form.initialSupply)));
-      const multiplier = 10n ** BigInt(decimals);
-      const totalSupply = (initialSupply * multiplier).toString();
-      const explicitMetadataUri = String(form.metadataUri || '').trim();
-      let metadataUri = explicitMetadataUri;
-      if (!metadataUri) {
-        try {
-          const metadataRes = await fetch(apiUrl('/api/token-metadata'), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(buildMetadataPayload()),
-          });
-          const metadataData = await metadataRes.json();
-          if (metadataRes.ok && metadataData?.uri) {
-            metadataUri = String(metadataData.uri);
-          }
-        } catch {
-          // Metadata endpoint is optional for BEP20 creation.
-        }
-      }
-
-      console.log('[BEP20] Step 5: factory contract check');
-      const codeAtFactory = await provider.request({
-        method: 'eth_getCode',
-        params: [factoryAddress, 'latest'],
-      });
-      console.log('[BEP20] Factory code check', {
-        factoryAddress,
-        codePrefix: String(codeAtFactory || '').slice(0, 18),
-        codeLength: String(codeAtFactory || '').length,
-      });
-      if (!codeAtFactory || String(codeAtFactory).toLowerCase() === '0x') {
-        throw new Error('Factory contract not found at VITE_BEP20_FACTORY_ADDRESS on BSC.');
-      }
-
-      console.log('[BEP20] Step 6: encoding calldata');
-      const abiDataWithMetadata = encodeCreateTokenCallData({
-        name: tokenName,
-        symbol: tokenSymbol,
-        decimals,
-        totalSupply,
-        ownerAddress: form.ownerAddress || account,
-        metadataUri,
-        useMetadata: true,
-      });
-      const abiDataLegacy = encodeCreateTokenCallData({
-        name: tokenName,
-        symbol: tokenSymbol,
-        decimals,
-        totalSupply,
-        ownerAddress: form.ownerAddress || account,
-        useMetadata: false,
-      });
-      console.log('[BEP20] Step 7: selecting supported factory method');
-      let dataToSend = abiDataLegacy;
-      let methodUsed = 'createToken(name,symbol,decimals,supply,owner)';
-      try {
-        await provider.request({
-          method: 'eth_estimateGas',
-          params: [{
-            from: sender,
-            to: factoryAddress,
-            data: abiDataWithMetadata,
-          }],
-        });
-        dataToSend = abiDataWithMetadata;
-        methodUsed = 'createToken(name,symbol,decimals,supply,owner,metadataUri)';
-      } catch {
-        // keep legacy fallback for factories without metadata support
-      }
-      console.log('[BEP20] Method selected', { methodUsed, hasMetadataUri: !!metadataUri });
-
-      let mintedCountBefore = null;
-      try {
-        mintedCountBefore = await getBep20FactoryMintCount(provider, factoryAddress);
-        console.log('[BEP20] Factory mint count before send', { mintedCountBefore });
-      } catch (countError) {
-        console.warn('[BEP20] Failed to read factory mint count before send', countError);
-      }
-
-      console.log('[BEP20] Step 8: estimating gas');
-      let gas = null;
-      try {
-        gas = await provider.request({
-          method: 'eth_estimateGas',
-          params: [{
-            from: sender,
-            to: factoryAddress,
-            data: dataToSend,
-          }],
-        });
-      } catch {
-        // some wallets estimate internally; ignore
-      }
-      console.log('[BEP20] Gas estimate', { gas });
-
-      console.log('[BEP20] Step 9: sending transaction');
-      const txHash = await provider.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: sender,
-          to: factoryAddress,
-          data: dataToSend,
-          ...(gas ? { gas } : {}),
-        }],
-      });
-      console.log('[BEP20] Transaction sent', { txHash });
-
-      if (!txHash) throw new Error('No transaction hash returned');
-      const receipt = await waitForTransactionReceipt(provider, txHash);
-      let tokenAddress = extractCreatedTokenAddress(receipt, factoryAddress);
-      if (!tokenAddress && mintedCountBefore != null) {
-        try {
-          const mintedRecord = await getBep20FactoryMintRecord(provider, factoryAddress, mintedCountBefore);
-          const fallbackAddress = String(mintedRecord?.token || '').trim();
-          if (/^0x[a-fA-F0-9]{40}$/.test(fallbackAddress)) {
-            tokenAddress = fallbackAddress;
-            console.log('[BEP20] Token address recovered from factory record', {
-              mintedCountBefore,
-              tokenAddress,
-            });
-          }
-        } catch (factoryReadError) {
-          console.warn('[BEP20] Failed to recover token address from factory record', factoryReadError);
-        }
-      }
-      const aiScan = tokenAddress ? await runOptionalAiScan({
-        address: tokenAddress,
-        chain: 'bsc',
-        name: tokenName,
-        symbol: tokenSymbol,
-      }) : null;
-      let registryRecord = null;
-      let registryError = '';
-      if (tokenAddress) {
-        try {
-          console.log('[BEP20] Registering minted token with SaveMeme registry', {
-            tokenAddress,
-            chain: 'bsc',
-            creatorWallet: form.ownerAddress || account,
-            txHash,
-            metadataUri,
-            tokenName,
-            tokenSymbol,
-          });
-          registryRecord = await saveMintRecord({
-            address: tokenAddress,
-            chain: 'bsc',
-            txHash,
-            metadataUri,
-            name: tokenName,
-            symbol: tokenSymbol,
-            aiScan,
-            extra: {
-              factoryAddress,
-              verifiedSource: 'SaveMeme factory / verified source',
-              methodUsed,
-            },
-          });
-        } catch (registrationError) {
-          registryError = String(
-            registrationError?.message ||
-            registrationError ||
-            'SaveMeme registry save failed after token creation.'
-          );
-          console.error('[BEP20] Registry save failed after successful create', {
-            tokenAddress,
-            txHash,
-            registryError,
-            raw: registrationError,
-          });
-        }
-      }
-      setDirectBep20Result({
-        txHash,
-        factoryAddress,
-        metadataUri,
-        methodUsed,
-        tokenAddress,
-        explorerUrl: tokenAddress ? explorerTokenUrl('bsc', tokenAddress) : '',
-        txExplorerUrl: explorerTxUrl('bsc', txHash),
-        aiChecked: Boolean(aiScan),
-        aiScan,
-        registryRecord,
-        registryError,
-        verifiedSource: 'SaveMeme factory / verified source',
-      });
-      toast.success(tokenAddress
-        ? `SaveMeme BEP20 token created: ${tokenAddress}`
-        : 'BEP20 create transaction submitted');
-      if (!tokenAddress) {
-        toast.warning('BEP20 token transaction succeeded, but the new token address could not be recovered. SaveMeme registry and X auto-post were skipped for this mint.', { duration: 12000 });
-      } else if (registryError) {
-        toast.warning(`Token created on BNB Chain, but SaveMeme registry/X sync failed: ${registryError}`, { duration: 12000 });
-      }
-    } catch (error) {
-      const message = extractEvmErrorMessage(error) || String(error || '');
-      const debugPayload = {
-        message,
-        code: error?.code,
-        reason: error?.reason,
-        shortMessage: error?.shortMessage,
-        data: error?.data,
-        error: error?.error,
-        info: error?.info,
-        stack: error?.stack,
-      };
-      let debugJson = '';
-      try {
-        debugJson = JSON.stringify(debugPayload, null, 2);
-      } catch {
-        debugJson = '[unserializable error payload]';
-      }
-      console.error('[BEP20] Create failed', {
-        ...debugPayload,
-        raw: error,
-      });
-      console.error('[BEP20] Create failed details', debugJson);
-      if (error?.code === 4001 || message.toLowerCase().includes('user rejected')) {
-        return;
-      }
-      toast.error(message || 'BEP20 direct create failed', { duration: 12000 });
-    } finally {
-      setIsDirectBep20Creating(false);
-    }
   };
 
   const copyText = async (text) => {
@@ -1354,6 +1136,20 @@ export default function CreateTokenPanel() {
     } catch {
       toast.error('Copy failed');
     }
+  };
+
+  const handleBaseCreateClick = async () => {
+    await handleDirectBaseCreate({
+      account,
+      form,
+      getConnectedEvmProvider,
+      validateCreateForm,
+      buildMetadataPayload,
+      runOptionalAiScan,
+      saveMintRecord,
+      setIsDirectBaseCreating,
+      setDirectBaseResult,
+    });
   };
 
   const submit = async (e) => {
@@ -1408,7 +1204,7 @@ export default function CreateTokenPanel() {
         </div>
         <div>
           <h2 className="text-2xl font-bold">Create Meme Token</h2>
-          <p className="text-sm text-gray-400">Generate SaveMeme launch packages for Solana or BNB Chain</p>
+          <p className="text-sm text-gray-400">Generate SaveMeme launch packages for Solana, BNB Chain, or Base</p>
         </div>
       </div>
 
@@ -1421,8 +1217,9 @@ export default function CreateTokenPanel() {
               onChange={(e) => onChange('chain', e.target.value)}
               className="w-full mt-2 h-10 rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white shadow-inner focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             >
-              <option value="bsc" className="bg-slate-950 text-white">BNB Chain</option>
               <option value="solana" className="bg-slate-950 text-white">Solana</option>
+              <option value="bsc" className="bg-slate-950 text-white">BNB Chain</option>
+              <option value="base" className="bg-slate-950 text-white">Base</option>
             </select>
           </div>
           <div>
@@ -1452,10 +1249,12 @@ export default function CreateTokenPanel() {
               required
             />
             {form.chain === 'solana' && <p className="text-xs text-gray-400 mt-1">Solana defaults to 9 decimals for standard SPL token display.</p>}
+            {fieldErrors.decimals && <p className="text-xs text-red-400 mt-1">{fieldErrors.decimals}</p>}
           </div>
           <div>
             <Label>Initial Supply</Label>
             <Input type="number" min="1" value={form.initialSupply} onChange={(e) => onChange('initialSupply', e.target.value)} className="mt-2" required />
+            {fieldErrors.initialSupply && <p className="text-xs text-red-400 mt-1">{fieldErrors.initialSupply}</p>}
           </div>
         </div>
 
@@ -1585,7 +1384,7 @@ export default function CreateTokenPanel() {
           {result.contractSource && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm font-semibold">BEP20 Contract Template</p>
+                <p className="text-sm font-semibold">{result?.chain === 'base' ? 'Base ERC20 Contract Template' : 'BEP20 Contract Template'}</p>
                 <button onClick={() => copyText(result.contractSource)} className="text-xs text-cyan-400 inline-flex items-center gap-1">
                   <Copy className="w-3 h-3" />
                   Copy
@@ -1743,7 +1542,7 @@ export default function CreateTokenPanel() {
           <p className="text-sm text-cyan-300">Direct SaveMeme Create (BNB Chain)</p>
           <Button
             type="button"
-            onClick={handleDirectBep20Create}
+            onClick={handleBep20CreateClick}
             disabled={isDirectBep20Creating}
             className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500"
           >
@@ -1778,6 +1577,13 @@ export default function CreateTokenPanel() {
                 <p><span className="text-gray-400">Factory address:</span> <span className="break-all">{directBep20Result.factoryAddress}</span></p>
                 <p><span className="text-gray-400">Verified source:</span> {directBep20Result.verifiedSource}</p>
                 <p><span className="text-gray-400">Transaction:</span> <span className="break-all">{directBep20Result.txHash}</span></p>
+                {directBep20Result.registryRecord?.announcement?.status && (
+                  <p>
+                    <span className="text-gray-400">DolphinX X:</span>{' '}
+                    <span className="text-cyan-200">{directBep20Result.registryRecord.announcement.status}</span>
+                    {directBep20Result.registryRecord.announcement.approval_status ? ' (' + directBep20Result.registryRecord.announcement.approval_status + ')' : ''}
+                  </p>
+                )}
                 {directBep20Result.registryError && (
                   <p className="text-amber-300">
                     <span className="text-gray-400">Registry/X sync:</span>{' '}
@@ -1801,6 +1607,86 @@ export default function CreateTokenPanel() {
                 )}
                 {directBep20Result.txExplorerUrl && (
                   <a href={directBep20Result.txExplorerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200">
+                    <ExternalLink className="w-3 h-3" />
+                    View tx
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {form.chain === 'base' && (
+        <div className="mt-4 p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 space-y-3">
+          <p className="text-sm text-indigo-300">Direct SaveMeme Create (Base)</p>
+          <Button
+            type="button"
+            onClick={handleBaseCreateClick}
+            disabled={isDirectBaseCreating}
+            className="bg-gradient-to-r from-indigo-500 to-sky-600 hover:from-indigo-400 hover:to-sky-500"
+          >
+            {isDirectBaseCreating ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+            Create & Mint on SaveMeme
+          </Button>
+          {(!account || !['bnb', 'walletconnect'].includes(walletType)) && (
+            <p className="text-xs text-gray-400">Connect an EVM wallet to mint through the SaveMeme Base factory.</p>
+          )}
+          {!import.meta.env.VITE_BASE_ERC20_FACTORY_ADDRESS && (
+            <p className="text-xs text-gray-400">Missing `VITE_BASE_ERC20_FACTORY_ADDRESS` in your env.</p>
+          )}
+
+          {directBaseResult && (
+            <div className="rounded-xl border border-indigo-400/20 bg-black/20 p-4 space-y-3 text-sm text-gray-200">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-medium text-white">SaveMeme token created on Base</p>
+                  <p className="text-xs text-gray-400">Standard ERC20 contract deployed through the SaveMeme Base factory and registry.</p>
+                </div>
+                <div className="flex flex-wrap justify-end gap-2">
+                  <SaveMemeBadge tone="cyan">Minted on SaveMeme</SaveMemeBadge>
+                  <SaveMemeBadge tone="emerald">Meme Token</SaveMemeBadge>
+                  {directBaseResult.aiChecked && <SaveMemeBadge tone="amber">AI-checked</SaveMemeBadge>}
+                  <SaveMemeBadge tone="cyan">Verified Factory</SaveMemeBadge>
+                </div>
+              </div>
+
+              <div className="grid gap-2 text-xs">
+                {directBaseResult.tokenAddress && <p><span className="text-gray-400">Token address:</span> <span className="break-all">{directBaseResult.tokenAddress}</span></p>}
+                <p><span className="text-gray-400">Chain:</span> Base</p>
+                <p><span className="text-gray-400">Factory address:</span> <span className="break-all">{directBaseResult.factoryAddress}</span></p>
+                <p><span className="text-gray-400">Verified source:</span> {directBaseResult.verifiedSource}</p>
+                <p><span className="text-gray-400">Transaction:</span> <span className="break-all">{directBaseResult.txHash}</span></p>
+                {directBaseResult.registryRecord?.announcement?.status && (
+                  <p>
+                    <span className="text-gray-400">DolphinX X:</span>{' '}
+                    <span className="text-indigo-200">{directBaseResult.registryRecord.announcement.status}</span>
+                    {directBaseResult.registryRecord.announcement.approval_status ? ' (' + directBaseResult.registryRecord.announcement.approval_status + ')' : ''}
+                  </p>
+                )}
+                {directBaseResult.registryError && (
+                  <p className="text-amber-300">
+                    <span className="text-gray-400">Registry/X sync:</span>{' '}
+                    {directBaseResult.registryError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-3 text-xs">
+                {directBaseResult.tokenAddress && (
+                  <button onClick={() => copyText(directBaseResult.tokenAddress)} className="inline-flex items-center gap-1 text-indigo-300 hover:text-indigo-200">
+                    <Copy className="w-3 h-3" />
+                    Copy address
+                  </button>
+                )}
+                {directBaseResult.explorerUrl && (
+                  <a href={directBaseResult.explorerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-indigo-300 hover:text-indigo-200">
+                    <ExternalLink className="w-3 h-3" />
+                    View token
+                  </a>
+                )}
+                {directBaseResult.txExplorerUrl && (
+                  <a href={directBaseResult.txExplorerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-indigo-300 hover:text-indigo-200">
                     <ExternalLink className="w-3 h-3" />
                     View tx
                   </a>
@@ -1837,7 +1723,7 @@ export default function CreateTokenPanel() {
                       <SaveMemeBadge tone="emerald">{token.category || 'meme'}</SaveMemeBadge>
                       {token.ai_checked && <SaveMemeBadge tone="amber">AI-checked</SaveMemeBadge>}
                     </div>
-                    <p className="text-xs text-gray-400">{token.chain === 'solana' ? 'Solana' : 'BNB Chain'}</p>
+                    <p className="text-xs text-gray-400">{token.chain === 'solana' ? 'Solana' : token.chain === 'base' ? 'Base' : 'BNB Chain'}</p>
                     <p className="text-xs text-gray-300 break-all">{token.token_address}</p>
                   </div>
 
@@ -1865,6 +1751,11 @@ export default function CreateTokenPanel() {
     </div>
   );
 }
+
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@ export default function WalletButton({ compact = false }) {
 
   if (account) {
     return (
-        <DropdownMenu>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className={`bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium ${compact ? 'px-3' : 'px-4'}`}>
             <Wallet className="w-4 h-4 mr-2" />
@@ -31,7 +31,7 @@ export default function WalletButton({ compact = false }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#12121a] border-white/10 text-white">
           <div className="px-2 py-1.5 text-xs text-gray-400">
-            {walletType === 'solana' ? 'Solana' : 'EVM Wallet'}
+            {walletType === 'solana' ? 'Solana Wallet' : 'EVM Wallet (BNB / Base / Ethereum)'}
           </div>
           <DropdownMenuItem onClick={disconnectWallet} className="cursor-pointer">
             <LogOut className="w-4 h-4 mr-2" />
@@ -44,20 +44,23 @@ export default function WalletButton({ compact = false }) {
 
   return (
     <>
-      <Button 
+      <Button
         type="button"
         onClick={() => {
           if (!isConnecting) setShowWalletModal(true);
         }}
         className={`relative z-[80] pointer-events-auto touch-manipulation bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white border-0 rounded-xl font-medium transition-all duration-300 hover:scale-105 ${compact ? 'px-3' : 'px-6'}`}
       >
-        {isConnecting ? 'Connecting...' : (compact ? 'Connect' : 'Connect Wallet')}
+        {isConnecting ? 'Connecting...' : compact ? 'Connect' : 'Connect Wallet'}
       </Button>
 
       <Dialog open={showWalletModal} onOpenChange={setShowWalletModal}>
         <DialogContent className="z-[120] bg-[#12121a] border-white/10 text-white w-[95vw] max-w-md max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Connect Wallet</DialogTitle>
+            <p className="text-sm text-gray-400">
+              Use any EVM wallet below for BNB Chain, Base, or Ethereum. The app will prompt the right network switch when needed.
+            </p>
           </DialogHeader>
           <div className="space-y-3 mt-4">
             <button
@@ -95,7 +98,7 @@ export default function WalletButton({ compact = false }) {
               </div>
               <div>
                 <p className="font-semibold">Binance Web3</p>
-                <p className="text-xs text-gray-400">Connect to BNB Smart Chain</p>
+                <p className="text-xs text-gray-400">Best for BNB Chain minting</p>
               </div>
             </button>
 
@@ -108,7 +111,7 @@ export default function WalletButton({ compact = false }) {
               </div>
               <div>
                 <p className="font-semibold">MetaMask</p>
-                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+                <p className="text-xs text-gray-400">Connect to Base / BNB Chain / Ethereum</p>
               </div>
             </button>
 
@@ -121,7 +124,7 @@ export default function WalletButton({ compact = false }) {
               </div>
               <div>
                 <p className="font-semibold">Trust Wallet</p>
-                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+                <p className="text-xs text-gray-400">Connect to Base / BNB Chain / Ethereum</p>
               </div>
             </button>
 
@@ -134,14 +137,12 @@ export default function WalletButton({ compact = false }) {
               </div>
               <div>
                 <p className="font-semibold">Ethereum Wallet</p>
-                <p className="text-xs text-gray-400">Connect to BNB Smart Chain / Ethereum Smart Chain</p>
+                <p className="text-xs text-gray-400">Connect to Base / Ethereum</p>
               </div>
             </button>
-
           </div>
         </DialogContent>
       </Dialog>
     </>
   );
 }
-

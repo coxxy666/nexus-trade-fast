@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { apiUrl } from '@/lib/apiUrl';
+import { BASE_EVM_NETWORK } from '@/components/wallet/base/baseNetworkConfig';
 
 const WalletContext = createContext();
 
 const NETWORKS = {
   bsc: { id: '0x38', chainId: 56, name: 'BNB Smart Chain', icon: 'BNB', rpc: 'https://bsc-dataseed.binance.org/' },
+  base: BASE_EVM_NETWORK,
   ethereum: { id: '0x1', chainId: 1, name: 'Ethereum', icon: 'ETH', rpc: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161' },
   solana: { id: 'solana', chainId: null, name: 'Solana', icon: 'SOL', rpc: null },
 };
@@ -53,6 +55,7 @@ export function WalletProvider({ children }) {
     const normalized = normalizeString(chainId);
     if (normalized === '0x1') return 'Ethereum Mainnet';
     if (normalized === '0x38') return 'BNB Smart Chain';
+    if (normalized === '0x2105') return 'Base';
     return `chain ${chainId}`;
   };
 
@@ -628,20 +631,20 @@ export function WalletProvider({ children }) {
         params: [{ chainId: network.id }],
       });
     } catch (switchError) {
-      if (switchError?.code === 4902 && networkKey === 'ethereum') {
+      if (switchError?.code === 4902 && network?.id && network?.rpc) {
         try {
           await provider.request({
             method: 'wallet_addEthereumChain',
             params: [{
-              chainId: NETWORKS.ethereum.id,
-              chainName: NETWORKS.ethereum.name,
-              nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-              rpcUrls: [NETWORKS.ethereum.rpc],
-              blockExplorerUrls: ['https://etherscan.io/'],
+              chainId: network.id,
+              chainName: network.name,
+              nativeCurrency: network.nativeCurrency || { name: 'Ether', symbol: 'ETH', decimals: 18 },
+              rpcUrls: [network.rpc],
+              blockExplorerUrls: network.blockExplorerUrls || [],
             }],
           });
         } catch (addError) {
-          console.error('Failed to add Ethereum network:', addError);
+          console.error(`Failed to add ${network.name} network:`, addError);
         }
       }
     }
@@ -685,3 +688,6 @@ export function useWallet() {
   }
   return context;
 }
+
+
+

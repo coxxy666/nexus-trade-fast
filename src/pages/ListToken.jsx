@@ -21,7 +21,7 @@ export default function ListToken() {
             <span className="gradient-text">Create Meme Token</span>
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Launch standard Solana SPL or BNB Chain BEP20 meme tokens with SaveMeme attribution.
+            Launch standard Solana SPL, BNB Chain BEP20, or Base ERC20 meme tokens with SaveMeme attribution.
           </p>
         </motion.div>
 
@@ -30,3 +30,4 @@ export default function ListToken() {
     </div>
   );
 }
+

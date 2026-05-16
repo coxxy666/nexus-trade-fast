@@ -178,11 +178,21 @@ function extractCreatedTokenAddress(receipt, factoryAddress = '') {
   const normalizedFactory = String(factoryAddress || '').toLowerCase();
   const eventLog = logs.find((log) => {
     const emitter = String(log?.address || '').toLowerCase();
-    const firstTopic = String(log?.topics?.[1] || '').replace(/^0x/i, '').slice(-40);
-    return emitter === normalizedFactory && /^[a-fA-F0-9]{40}$/.test(firstTopic);
+    const topicOne = String(log?.topics?.[1] || '').replace(/^0x/i, '').slice(-40);
+    const topicTwo = String(log?.topics?.[2] || '').replace(/^0x/i, '').slice(-40);
+    return emitter === normalizedFactory && (
+      /^[a-fA-F0-9]{40}$/.test(topicOne) ||
+      /^[a-fA-F0-9]{40}$/.test(topicTwo)
+    );
   });
-  const topicAddress = String(eventLog?.topics?.[1] || '').replace(/^0x/i, '').slice(-40);
-  return /^[a-fA-F0-9]{40}$/.test(topicAddress) ? `0x${topicAddress}` : null;
+  if (!eventLog) return null;
+
+  const topicCandidates = [eventLog?.topics?.[2], eventLog?.topics?.[1]]
+    .map((value) => String(value || '').replace(/^0x/i, '').slice(-40))
+    .filter((value) => /^[a-fA-F0-9]{40}$/.test(value))
+    .map((value) => `0x${value}`);
+
+  return topicCandidates.find((value) => String(value || '').toLowerCase() !== normalizedFactory) || null;
 }
 
 function isIgnorableBaseProviderRpcError(error, method = '') {
@@ -299,6 +309,14 @@ async function getBaseFactoryMintRecord(provider, factoryAddress, index) {
     params: [{ to: factoryAddress, data: callData }, 'latest'],
   });
   if (!raw || raw === '0x') return null;
+
+  const compactRaw = String(raw).trim();
+  if (/^0x[a-fA-F0-9]{64}$/.test(compactRaw)) {
+    const candidate = `0x${compactRaw.slice(-40)}`;
+    return {
+      token: candidate,
+    };
+  }
 
   const { Web3 } = await import('web3');
   const decoded = Web3.eth.abi.decodeParameters(
@@ -677,3 +695,5 @@ export async function handleDirectBaseCreate({
     setIsDirectBaseCreating(false);
   }
 }
+
+
